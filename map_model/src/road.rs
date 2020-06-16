@@ -354,6 +354,16 @@ impl Road {
         self.get_thick_polyline(map)
             .map(|(pl, width)| pl.make_polygons(width))
     }
+    pub fn get_thicker_polygon(&self, map: &Map) -> Option<Polygon> {
+        /*let fwd = self.width_fwd(map);
+        let back = self.width_back(map);
+        let right = map.right_shift(self.center_pts.clone(), fwd + crate::NORMAL_LANE_THICKNESS / 2.0).unwrap().make_polygons(crate::NORMAL_LANE_THICKNESS);
+        let left = map.left_shift(self.center_pts.clone(), back + crate::NORMAL_LANE_THICKNESS / 2.0).unwrap().make_polygons(crate::NORMAL_LANE_THICKNESS);
+        right.union(left)*/
+
+        let (pl, width) = self.get_thick_polyline(map).unwrap();
+        pl.to_thick_boundary(width + Distance::meters(4.0), Distance::meters(2.0))
+    }
 
     pub fn get_name(&self) -> String {
         if let Some(name) = self.osm_tags.get(osm::NAME) {
@@ -430,5 +440,23 @@ impl Road {
             stops.extend(map.get_l(id).bus_stops.iter().cloned());
         }
         stops
+    }
+
+    // Returns [-1.0, 1.0]. 0 is flat, positive is uphill, negative is downhill.
+    // TODO Or do we care about the total up/down along the possibly long road?
+    pub fn percent_grade(&self, map: &Map) -> f64 {
+        let rise = map.get_i(self.dst_i).elevation - map.get_i(self.src_i).elevation;
+        let run = self.center_pts.length();
+        let grade = rise / run;
+        if grade <= -1.0 || grade >= 1.0 {
+            // TODO Panic
+            println!("Grade of {} is {}%", self.id, grade * 100.0);
+            if grade < 0.0 {
+                return -1.0;
+            } else {
+                return 1.0;
+            }
+        }
+        grade
     }
 }

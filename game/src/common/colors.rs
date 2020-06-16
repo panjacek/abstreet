@@ -119,9 +119,9 @@ impl ColorerBuilder {
 
     pub fn add_r(&mut self, r: RoadID, color: Color, map: &Map) {
         self.roads.insert(r, color);
-        for l in map.get_r(r).all_lanes() {
+        /*for l in map.get_r(r).all_lanes() {
             self.lanes.insert(l, color);
-        }
+        }*/
     }
 
     pub fn add_i(&mut self, i: IntersectionID, color: Color) {
@@ -165,18 +165,30 @@ impl ColorerBuilder {
         unzoomed.push(app.cs.fade_map_dark, map.get_boundary_polygon().clone());
 
         for (l, color) in self.lanes {
-            zoomed.push(
+            /*zoomed.push(
                 color.alpha(0.4),
                 app.primary.draw_map.get_l(l).polygon.clone(),
-            );
+            );*/
         }
         for (r, color) in self.roads {
             unzoomed.push(color, map.get_r(r).get_thick_polygon(&map).unwrap());
+
+            //zoomed.push(color.alpha(0.4), map.get_r(r).get_thick_polygon(&map).unwrap());
+
+            if let Some(p) = map.get_r(r).get_thicker_polygon(&map) {
+                zoomed.push(color.alpha(0.7), p);
+            }
         }
 
         for (i, color) in self.intersections {
-            zoomed.push(color.alpha(0.4), map.get_i(i).polygon.clone());
             unzoomed.push(color, map.get_i(i).polygon.clone());
+
+            //zoomed.push(color.alpha(0.4), map.get_i(i).polygon.clone());
+
+            zoomed.push(
+                color.alpha(0.7),
+                map.get_i(i).polygon.to_outline(Distance::meters(2.0)),
+            );
         }
         for (b, color) in self.buildings {
             zoomed.push(color.alpha(0.4), map.get_b(b).polygon.clone());
