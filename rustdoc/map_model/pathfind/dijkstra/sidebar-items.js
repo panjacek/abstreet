@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["calc_path",""],["pathfind",""],["pathfind_avoiding_zones",""],["pathfind_walking",""]]});
