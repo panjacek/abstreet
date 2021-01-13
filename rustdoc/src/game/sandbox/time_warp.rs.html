@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `game/src/sandbox/time_warp.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>time_warp.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../game/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `game/src/sandbox/time_warp.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>time_warp.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../game/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -461,20 +464,33 @@
 <span id="461">461</span>
 <span id="462">462</span>
 <span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">app</span>::{<span class="ident">App</span>, <span class="ident">FindDelayedIntersections</span>, <span class="ident">ShowEverything</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">common</span>::<span class="ident">Warping</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">game</span>::{<span class="ident">DrawBaselayer</span>, <span class="ident">PopupMsg</span>, <span class="ident">State</span>, <span class="ident">Transition</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">helpers</span>::<span class="ident">ID</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">render</span>::<span class="ident">DrawOptions</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">sandbox</span>::{<span class="ident">GameplayMode</span>, <span class="ident">SandboxMode</span>};
+<span class="kw">use</span> <span class="ident">instant</span>::<span class="ident">Instant</span>;
+
 <span class="kw">use</span> <span class="ident">abstutil</span>::<span class="ident">prettyprint_usize</span>;
 <span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Duration</span>, <span class="ident">Polygon</span>, <span class="ident">Pt2D</span>, <span class="ident">Ring</span>, <span class="ident">Time</span>};
-<span class="kw">use</span> <span class="ident">instant</span>::<span class="ident">Instant</span>;
+<span class="kw">use</span> <span class="ident">map_gui</span>::<span class="ident">render</span>::<span class="ident">DrawOptions</span>;
+<span class="kw">use</span> <span class="ident">map_gui</span>::<span class="ident">tools</span>::{<span class="ident">grey_out_map</span>, <span class="ident">PopupMsg</span>};
+<span class="kw">use</span> <span class="ident">map_gui</span>::<span class="ident">ID</span>;
 <span class="kw">use</span> <span class="ident">widgetry</span>::{
-    <span class="ident">AreaSlider</span>, <span class="ident">Btn</span>, <span class="ident">Checkbox</span>, <span class="ident">Choice</span>, <span class="ident">Color</span>, <span class="ident">EventCtx</span>, <span class="ident">GeomBatch</span>, <span class="ident">GfxCtx</span>, <span class="ident">Key</span>, <span class="ident">Line</span>, <span class="ident">Outcome</span>,
-    <span class="ident">Panel</span>, <span class="ident">Text</span>, <span class="ident">UpdateType</span>, <span class="ident">Widget</span>,
+    <span class="ident">Btn</span>, <span class="ident">Checkbox</span>, <span class="ident">Choice</span>, <span class="ident">Color</span>, <span class="ident">DrawBaselayer</span>, <span class="ident">EventCtx</span>, <span class="ident">GeomBatch</span>, <span class="ident">GfxCtx</span>, <span class="ident">Key</span>, <span class="ident">Line</span>, <span class="ident">Outcome</span>,
+    <span class="ident">Panel</span>, <span class="ident">Slider</span>, <span class="ident">State</span>, <span class="ident">Text</span>, <span class="ident">UpdateType</span>, <span class="ident">Widget</span>,
 };
+
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">app</span>::{<span class="ident">App</span>, <span class="ident">FindDelayedIntersections</span>, <span class="ident">ShowEverything</span>, <span class="ident">Transition</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">common</span>::<span class="ident">Warping</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">sandbox</span>::{<span class="ident">GameplayMode</span>, <span class="ident">SandboxMode</span>};
 
 <span class="comment">// TODO Text entry would be great</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">JumpToTime</span> {
@@ -484,16 +500,18 @@
 }
 
 <span class="kw">impl</span> <span class="ident">JumpToTime</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">App</span>, <span class="ident">maybe_mode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GameplayMode</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">State</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
+        <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>,
+        <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">App</span>,
+        <span class="ident">maybe_mode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GameplayMode</span><span class="op">&gt;</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">App</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">target</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">primary</span>.<span class="ident">sim</span>.<span class="ident">time</span>();
         <span class="kw">let</span> <span class="ident">end_of_day</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">primary</span>.<span class="ident">sim</span>.<span class="ident">get_end_of_day</span>();
         <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">JumpToTime</span> {
             <span class="ident">target</span>,
             <span class="ident">maybe_mode</span>,
             <span class="ident">panel</span>: <span class="ident">Panel</span>::<span class="ident">new</span>(<span class="ident">Widget</span>::<span class="ident">col</span>(<span class="macro">vec</span><span class="macro">!</span>[
-                <span class="ident">Btn</span>::<span class="ident">plaintext</span>(<span class="string">&quot;X&quot;</span>)
-                    .<span class="ident">build</span>(<span class="ident">ctx</span>, <span class="string">&quot;close&quot;</span>, <span class="ident">Key</span>::<span class="ident">Escape</span>)
-                    .<span class="ident">align_right</span>(),
+                <span class="ident">Btn</span>::<span class="ident">close</span>(<span class="ident">ctx</span>),
                 <span class="ident">Widget</span>::<span class="ident">custom_row</span>(<span class="macro">vec</span><span class="macro">!</span>[
                     <span class="ident">Btn</span>::<span class="ident">text_bg2</span>(<span class="string">&quot;Jump to time&quot;</span>).<span class="ident">inactive</span>(<span class="ident">ctx</span>),
                     <span class="ident">Btn</span>::<span class="ident">text_bg2</span>(<span class="string">&quot;Jump to delay&quot;</span>).<span class="ident">build_def</span>(<span class="ident">ctx</span>, <span class="ident">Key</span>::<span class="ident">D</span>),
@@ -517,7 +535,7 @@
                     <span class="ident">Widget</span>::<span class="ident">nothing</span>()
                 },
                 <span class="comment">// TODO Auto-fill width?</span>
-                <span class="ident">AreaSlider</span>::<span class="ident">new</span>(
+                <span class="ident">Slider</span>::<span class="ident">area</span>(
                     <span class="ident">ctx</span>,
                     <span class="number">0.25</span> <span class="op">*</span> <span class="ident">ctx</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span>,
                     <span class="ident">target</span>.<span class="ident">to_percent</span>(<span class="ident">end_of_day</span>).<span class="ident">min</span>(<span class="number">1.0</span>),
@@ -539,7 +557,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">State</span> <span class="kw">for</span> <span class="ident">JumpToTime</span> {
+<span class="kw">impl</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">App</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">JumpToTime</span> {
     <span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">App</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Transition</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">panel</span>.<span class="ident">event</span>(<span class="ident">ctx</span>) {
             <span class="ident">Outcome</span>::<span class="ident">Clicked</span>(<span class="ident">x</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">x</span>.<span class="ident">as_ref</span>() {
@@ -549,10 +567,20 @@
                 <span class="string">&quot;jump to time&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="self">self</span>.<span class="ident">target</span> <span class="op">&lt;</span> <span class="ident">app</span>.<span class="ident">primary</span>.<span class="ident">sim</span>.<span class="ident">time</span>() {
                         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">mode</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">maybe_mode</span>.<span class="ident">take</span>() {
-                            <span class="kw">return</span> <span class="ident">Transition</span>::<span class="ident">Multi</span>(<span class="macro">vec</span><span class="macro">!</span>[
-                                <span class="ident">Transition</span>::<span class="ident">Replace</span>(<span class="ident">SandboxMode</span>::<span class="ident">new</span>(<span class="ident">ctx</span>, <span class="ident">app</span>, <span class="ident">mode</span>)),
-                                <span class="ident">Transition</span>::<span class="ident">Push</span>(<span class="ident">TimeWarpScreen</span>::<span class="ident">new</span>(<span class="ident">ctx</span>, <span class="ident">app</span>, <span class="self">self</span>.<span class="ident">target</span>, <span class="prelude-val">None</span>)),
-                            ]);
+                            <span class="kw">let</span> <span class="ident">target_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">target</span>;
+                            <span class="kw">return</span> <span class="ident">Transition</span>::<span class="ident">Replace</span>(<span class="ident">SandboxMode</span>::<span class="ident">async_new</span>(
+                                <span class="ident">ctx</span>,
+                                <span class="ident">app</span>,
+                                <span class="ident">mode</span>,
+                                <span class="ident">Box</span>::<span class="ident">new</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">ctx</span>, <span class="ident">app</span><span class="op">|</span> {
+                                    <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transition</span>::<span class="ident">Push</span>(<span class="ident">TimeWarpScreen</span>::<span class="ident">new</span>(
+                                        <span class="ident">ctx</span>,
+                                        <span class="ident">app</span>,
+                                        <span class="ident">target_time</span>,
+                                        <span class="prelude-val">None</span>,
+                                    ))]
+                                }),
+                            ));
                         } <span class="kw">else</span> {
                             <span class="kw">return</span> <span class="ident">Transition</span>::<span class="ident">Replace</span>(<span class="ident">PopupMsg</span>::<span class="ident">new</span>(
                                 <span class="ident">ctx</span>,
@@ -577,7 +605,7 @@
             .<span class="ident">primary</span>
             .<span class="ident">sim</span>
             .<span class="ident">get_end_of_day</span>()
-            .<span class="ident">percent_of</span>(<span class="self">self</span>.<span class="ident">panel</span>.<span class="ident">area_slider</span>(<span class="string">&quot;time slider&quot;</span>).<span class="ident">get_percent</span>())
+            .<span class="ident">percent_of</span>(<span class="self">self</span>.<span class="ident">panel</span>.<span class="ident">slider</span>(<span class="string">&quot;time slider&quot;</span>).<span class="ident">get_percent</span>())
             .<span class="ident">round_seconds</span>(<span class="number">600.0</span>);
         <span class="kw">if</span> <span class="ident">target</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">target</span> {
             <span class="self">self</span>.<span class="ident">target</span> <span class="op">=</span> <span class="ident">target</span>;
@@ -593,7 +621,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GfxCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">App</span>) {
-        <span class="ident">State</span>::<span class="ident">grey_out_map</span>(<span class="ident">g</span>, <span class="ident">app</span>);
+        <span class="ident">grey_out_map</span>(<span class="ident">g</span>, <span class="ident">app</span>);
         <span class="self">self</span>.<span class="ident">panel</span>.<span class="ident">draw</span>(<span class="ident">g</span>);
     }
 }
@@ -604,13 +632,15 @@
 }
 
 <span class="kw">impl</span> <span class="ident">JumpToDelay</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">App</span>, <span class="ident">maybe_mode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GameplayMode</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">State</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
+        <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>,
+        <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">App</span>,
+        <span class="ident">maybe_mode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GameplayMode</span><span class="op">&gt;</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">App</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">JumpToDelay</span> {
             <span class="ident">maybe_mode</span>,
             <span class="ident">panel</span>: <span class="ident">Panel</span>::<span class="ident">new</span>(<span class="ident">Widget</span>::<span class="ident">col</span>(<span class="macro">vec</span><span class="macro">!</span>[
-                <span class="ident">Btn</span>::<span class="ident">plaintext</span>(<span class="string">&quot;X&quot;</span>)
-                    .<span class="ident">build</span>(<span class="ident">ctx</span>, <span class="string">&quot;close&quot;</span>, <span class="ident">Key</span>::<span class="ident">Escape</span>)
-                    .<span class="ident">align_right</span>(),
+                <span class="ident">Btn</span>::<span class="ident">close</span>(<span class="ident">ctx</span>),
                 <span class="ident">Widget</span>::<span class="ident">custom_row</span>(<span class="macro">vec</span><span class="macro">!</span>[
                     <span class="ident">Btn</span>::<span class="ident">text_bg2</span>(<span class="string">&quot;Jump to time&quot;</span>).<span class="ident">build_def</span>(<span class="ident">ctx</span>, <span class="ident">Key</span>::<span class="ident">T</span>),
                     <span class="ident">Btn</span>::<span class="ident">text_bg2</span>(<span class="string">&quot;Jump to delay&quot;</span>).<span class="ident">inactive</span>(<span class="ident">ctx</span>),
@@ -647,7 +677,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">State</span> <span class="kw">for</span> <span class="ident">JumpToDelay</span> {
+<span class="kw">impl</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">App</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">JumpToDelay</span> {
     <span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">App</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Transition</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">panel</span>.<span class="ident">event</span>(<span class="ident">ctx</span>) {
             <span class="ident">Outcome</span>::<span class="ident">Clicked</span>(<span class="ident">x</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">x</span>.<span class="ident">as_ref</span>() {
@@ -688,7 +718,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GfxCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">App</span>) {
-        <span class="ident">State</span>::<span class="ident">grey_out_map</span>(<span class="ident">g</span>, <span class="ident">app</span>);
+        <span class="ident">grey_out_map</span>(<span class="ident">g</span>, <span class="ident">app</span>);
         <span class="self">self</span>.<span class="ident">panel</span>.<span class="ident">draw</span>(<span class="ident">g</span>);
     }
 }
@@ -708,7 +738,7 @@
         <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">App</span>,
         <span class="ident">target</span>: <span class="ident">Time</span>,
         <span class="kw-2">mut</span> <span class="ident">halt_upon_delay</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">State</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">App</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">halt_limit</span>) <span class="op">=</span> <span class="ident">halt_upon_delay</span> {
             <span class="kw">if</span> <span class="ident">app</span>.<span class="ident">primary</span>.<span class="ident">sim_cb</span>.<span class="ident">is_none</span>() {
                 <span class="ident">app</span>.<span class="ident">primary</span>.<span class="ident">sim_cb</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">FindDelayedIntersections</span> {
@@ -743,7 +773,7 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">State</span> <span class="kw">for</span> <span class="ident">TimeWarpScreen</span> {
+<span class="kw">impl</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">App</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TimeWarpScreen</span> {
     <span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">App</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Transition</span> {
         <span class="kw">if</span> <span class="ident">ctx</span>.<span class="ident">input</span>.<span class="ident">nonblocking_is_update_event</span>().<span class="ident">is_some</span>() {
             <span class="ident">ctx</span>.<span class="ident">input</span>.<span class="ident">use_update_event</span>();
@@ -766,11 +796,11 @@
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">i</span>, <span class="ident">t</span>)) <span class="op">=</span> <span class="ident">di</span>.<span class="ident">currently_delayed</span>.<span class="ident">get</span>(<span class="number">0</span>) {
                     <span class="kw">if</span> <span class="ident">app</span>.<span class="ident">primary</span>.<span class="ident">sim</span>.<span class="ident">time</span>() <span class="op">-</span> <span class="kw-2">*</span><span class="ident">t</span> <span class="op">&gt;</span> <span class="ident">di</span>.<span class="ident">halt_limit</span> {
                         <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">ID</span>::<span class="ident">Intersection</span>(<span class="kw-2">*</span><span class="ident">i</span>);
-                        <span class="ident">app</span>.<span class="ident">layer</span> <span class="op">=</span>
+                        <span class="ident">app</span>.<span class="ident">primary</span>.<span class="ident">layer</span> <span class="op">=</span>
                             <span class="prelude-val">Some</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="kw">crate</span>::<span class="ident">layer</span>::<span class="ident">traffic</span>::<span class="ident">TrafficJams</span>::<span class="ident">new</span>(<span class="ident">ctx</span>, <span class="ident">app</span>)));
                         <span class="kw">return</span> <span class="ident">Transition</span>::<span class="ident">Replace</span>(<span class="ident">Warping</span>::<span class="ident">new</span>(
                             <span class="ident">ctx</span>,
-                            <span class="ident">id</span>.<span class="ident">canonical_point</span>(<span class="kw-2">&amp;</span><span class="ident">app</span>.<span class="ident">primary</span>).<span class="ident">unwrap</span>(),
+                            <span class="ident">app</span>.<span class="ident">primary</span>.<span class="ident">canonical_point</span>(<span class="ident">id</span>.<span class="ident">clone</span>()).<span class="ident">unwrap</span>(),
                             <span class="prelude-val">Some</span>(<span class="number">10.0</span>),
                             <span class="prelude-val">Some</span>(<span class="ident">id</span>),
                             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">app</span>.<span class="ident">primary</span>,
@@ -824,7 +854,7 @@
                 },
             ]);
 
-            <span class="self">self</span>.<span class="ident">panel</span>.<span class="ident">replace</span>(<span class="ident">ctx</span>, <span class="string">&quot;text&quot;</span>, <span class="ident">txt</span>.<span class="ident">draw</span>(<span class="ident">ctx</span>).<span class="ident">named</span>(<span class="string">&quot;text&quot;</span>));
+            <span class="self">self</span>.<span class="ident">panel</span>.<span class="ident">replace</span>(<span class="ident">ctx</span>, <span class="string">&quot;text&quot;</span>, <span class="ident">txt</span>.<span class="ident">draw</span>(<span class="ident">ctx</span>));
         }
         <span class="comment">// &gt;= because of the case of resetting to midnight. GameplayMode::initialize takes a tiny</span>
         <span class="comment">// step past midnight after spawning things, so that agents initially appear on the map.</span>
@@ -857,13 +887,8 @@
         <span class="kw">if</span> <span class="ident">app</span>.<span class="ident">opts</span>.<span class="ident">dont_draw_time_warp</span> {
             <span class="ident">g</span>.<span class="ident">clear</span>(<span class="ident">app</span>.<span class="ident">cs</span>.<span class="ident">section_bg</span>);
         } <span class="kw">else</span> {
-            <span class="ident">app</span>.<span class="ident">draw</span>(
-                <span class="ident">g</span>,
-                <span class="ident">DrawOptions</span>::<span class="ident">new</span>(),
-                <span class="kw-2">&amp;</span><span class="ident">app</span>.<span class="ident">primary</span>.<span class="ident">sim</span>,
-                <span class="kw-2">&amp;</span><span class="ident">ShowEverything</span>::<span class="ident">new</span>(),
-            );
-            <span class="ident">State</span>::<span class="ident">grey_out_map</span>(<span class="ident">g</span>, <span class="ident">app</span>);
+            <span class="ident">app</span>.<span class="ident">draw</span>(<span class="ident">g</span>, <span class="ident">DrawOptions</span>::<span class="ident">new</span>(), <span class="kw-2">&amp;</span><span class="ident">ShowEverything</span>::<span class="ident">new</span>());
+            <span class="ident">grey_out_map</span>(<span class="ident">g</span>, <span class="ident">app</span>);
         }
 
         <span class="self">self</span>.<span class="ident">panel</span>.<span class="ident">draw</span>(<span class="ident">g</span>);

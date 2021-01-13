@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Options","The constraints on how we're moving."]],"struct":[["Isochrone","Represents the area reachable from a single building."]]});

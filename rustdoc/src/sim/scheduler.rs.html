@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `sim/src/scheduler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>scheduler.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sim/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sim/src/scheduler.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>scheduler.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../sim/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -249,60 +252,35 @@
 <span id="249">249</span>
 <span id="250">250</span>
 <span id="251">251</span>
-<span id="252">252</span>
-<span id="253">253</span>
-<span id="254">254</span>
-<span id="255">255</span>
-<span id="256">256</span>
-<span id="257">257</span>
-<span id="258">258</span>
-<span id="259">259</span>
-<span id="260">260</span>
-<span id="261">261</span>
-<span id="262">262</span>
-<span id="263">263</span>
-<span id="264">264</span>
-<span id="265">265</span>
-<span id="266">266</span>
-<span id="267">267</span>
-<span id="268">268</span>
-<span id="269">269</span>
-<span id="270">270</span>
-<span id="271">271</span>
-<span id="272">272</span>
-<span id="273">273</span>
-<span id="274">274</span>
-<span id="275">275</span>
-<span id="276">276</span>
-<span id="277">277</span>
-<span id="278">278</span>
-<span id="279">279</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">pandemic</span>, <span class="ident">AgentID</span>, <span class="ident">CarID</span>, <span class="ident">CreateCar</span>, <span class="ident">CreatePedestrian</span>, <span class="ident">PedestrianID</span>, <span class="ident">TripID</span>, <span class="ident">TripSpec</span>,
-};
-<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Duration</span>, <span class="ident">Histogram</span>, <span class="ident">Time</span>};
-<span class="kw">use</span> <span class="ident">map_model</span>::{<span class="ident">BusRouteID</span>, <span class="ident">IntersectionID</span>, <span class="ident">Path</span>, <span class="ident">PathRequest</span>};
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cmp</span>::<span class="ident">Ordering</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">btree_map</span>::<span class="ident">Entry</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BinaryHeap</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">hash_map</span>::<span class="ident">Entry</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BinaryHeap</span>, <span class="ident">HashMap</span>};
+
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+
+<span class="kw">use</span> <span class="ident">abstutil</span>::<span class="ident">Counter</span>;
+<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Duration</span>, <span class="ident">Histogram</span>, <span class="ident">Time</span>};
+<span class="kw">use</span> <span class="ident">map_model</span>::{<span class="ident">BusRouteID</span>, <span class="ident">IntersectionID</span>};
+
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">pandemic</span>, <span class="ident">AgentID</span>, <span class="ident">CarID</span>, <span class="ident">CreateCar</span>, <span class="ident">CreatePedestrian</span>, <span class="ident">PedestrianID</span>, <span class="ident">StartTripArgs</span>, <span class="ident">TripID</span>,
+};
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">PartialEq</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Command</span> {
-    <span class="comment">// If true, retry when there&#39;s no room to spawn somewhere</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">Command</span> {
+    <span class="doccomment">/// If true, retry when there&#39;s no room to spawn somewhere</span>
     <span class="ident">SpawnCar</span>(<span class="ident">CreateCar</span>, <span class="ident">bool</span>),
     <span class="ident">SpawnPed</span>(<span class="ident">CreatePedestrian</span>),
-    <span class="ident">StartTrip</span>(<span class="ident">TripID</span>, <span class="ident">TripSpec</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PathRequest</span><span class="op">&gt;</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>),
+    <span class="ident">StartTrip</span>(<span class="ident">TripID</span>, <span class="ident">StartTripArgs</span>),
     <span class="ident">UpdateCar</span>(<span class="ident">CarID</span>),
-    <span class="comment">// Distinguish this from UpdateCar to avoid confusing things</span>
+    <span class="doccomment">/// Distinguish this from UpdateCar to avoid confusing things</span>
     <span class="ident">UpdateLaggyHead</span>(<span class="ident">CarID</span>),
     <span class="ident">UpdatePed</span>(<span class="ident">PedestrianID</span>),
     <span class="ident">UpdateIntersection</span>(<span class="ident">IntersectionID</span>),
     <span class="ident">Callback</span>(<span class="ident">Duration</span>),
     <span class="ident">Pandemic</span>(<span class="ident">pandemic</span>::<span class="ident">Cmd</span>),
-    <span class="ident">FinishRemoteTrip</span>(<span class="ident">TripID</span>),
-    <span class="comment">// The Time is redundant, just used to dedupe commands</span>
+    <span class="doccomment">/// The Time is redundant, just used to dedupe commands</span>
     <span class="ident">StartBus</span>(<span class="ident">BusRouteID</span>, <span class="ident">Time</span>),
 }
 
@@ -315,27 +293,41 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CommandType</span> {
+    <span class="kw">fn</span> <span class="ident">to_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CommandType</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">Command</span>::<span class="ident">SpawnCar</span>(<span class="kw-2">ref</span> <span class="ident">create</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">Car</span>(<span class="ident">create</span>.<span class="ident">vehicle</span>.<span class="ident">id</span>),
             <span class="ident">Command</span>::<span class="ident">SpawnPed</span>(<span class="kw-2">ref</span> <span class="ident">create</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">Ped</span>(<span class="ident">create</span>.<span class="ident">id</span>),
-            <span class="ident">Command</span>::<span class="ident">StartTrip</span>(<span class="ident">id</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">StartTrip</span>(<span class="kw-2">*</span><span class="ident">id</span>),
+            <span class="ident">Command</span>::<span class="ident">StartTrip</span>(<span class="ident">id</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">StartTrip</span>(<span class="kw-2">*</span><span class="ident">id</span>),
             <span class="ident">Command</span>::<span class="ident">UpdateCar</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">Car</span>(<span class="kw-2">*</span><span class="ident">id</span>),
             <span class="ident">Command</span>::<span class="ident">UpdateLaggyHead</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">CarLaggyHead</span>(<span class="kw-2">*</span><span class="ident">id</span>),
             <span class="ident">Command</span>::<span class="ident">UpdatePed</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">Ped</span>(<span class="kw-2">*</span><span class="ident">id</span>),
             <span class="ident">Command</span>::<span class="ident">UpdateIntersection</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">Intersection</span>(<span class="kw-2">*</span><span class="ident">id</span>),
             <span class="ident">Command</span>::<span class="ident">Callback</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">Callback</span>,
             <span class="ident">Command</span>::<span class="ident">Pandemic</span>(<span class="kw-2">ref</span> <span class="ident">p</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">Pandemic</span>(<span class="ident">p</span>.<span class="ident">clone</span>()),
-            <span class="ident">Command</span>::<span class="ident">FinishRemoteTrip</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">FinishRemoteTrip</span>(<span class="kw-2">*</span><span class="ident">t</span>),
             <span class="ident">Command</span>::<span class="ident">StartBus</span>(<span class="ident">r</span>, <span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">CommandType</span>::<span class="ident">StartBus</span>(<span class="kw-2">*</span><span class="ident">r</span>, <span class="kw-2">*</span><span class="ident">t</span>),
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">to_simple_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">Command</span>::<span class="ident">SpawnCar</span>(<span class="kw">_</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">Car</span>,
+            <span class="ident">Command</span>::<span class="ident">SpawnPed</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">Ped</span>,
+            <span class="ident">Command</span>::<span class="ident">StartTrip</span>(<span class="kw">_</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">StartTrip</span>,
+            <span class="ident">Command</span>::<span class="ident">UpdateCar</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">Car</span>,
+            <span class="ident">Command</span>::<span class="ident">UpdateLaggyHead</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">CarLaggyHead</span>,
+            <span class="ident">Command</span>::<span class="ident">UpdatePed</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">Ped</span>,
+            <span class="ident">Command</span>::<span class="ident">UpdateIntersection</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">Intersection</span>,
+            <span class="ident">Command</span>::<span class="ident">Callback</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">Callback</span>,
+            <span class="ident">Command</span>::<span class="ident">Pandemic</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">Pandemic</span>,
+            <span class="ident">Command</span>::<span class="ident">StartBus</span>(<span class="kw">_</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SimpleCommandType</span>::<span class="ident">StartBus</span>,
         }
     }
 }
 
-<span class="comment">// A smaller version of Command that satisfies many more properties. Only one Command per</span>
-<span class="comment">// CommandType may exist at a time.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CommandType</span> {
+<span class="doccomment">/// A smaller version of Command that satisfies many more properties. Only one Command per</span>
+<span class="doccomment">/// CommandType may exist at a time.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="kw">enum</span> <span class="ident">CommandType</span> {
     <span class="ident">StartTrip</span>(<span class="ident">TripID</span>),
     <span class="ident">Car</span>(<span class="ident">CarID</span>),
     <span class="ident">CarLaggyHead</span>(<span class="ident">CarID</span>),
@@ -343,8 +335,20 @@
     <span class="ident">Intersection</span>(<span class="ident">IntersectionID</span>),
     <span class="ident">Callback</span>,
     <span class="ident">Pandemic</span>(<span class="ident">pandemic</span>::<span class="ident">Cmd</span>),
-    <span class="ident">FinishRemoteTrip</span>(<span class="ident">TripID</span>),
     <span class="ident">StartBus</span>(<span class="ident">BusRouteID</span>, <span class="ident">Time</span>),
+}
+
+<span class="doccomment">/// A more compressed form of CommandType, just used for keeping stats on event processing.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="kw">enum</span> <span class="ident">SimpleCommandType</span> {
+    <span class="ident">StartTrip</span>,
+    <span class="ident">Car</span>,
+    <span class="ident">CarLaggyHead</span>,
+    <span class="ident">Ped</span>,
+    <span class="ident">Intersection</span>,
+    <span class="ident">Callback</span>,
+    <span class="ident">Pandemic</span>,
+    <span class="ident">StartBus</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Clone</span>)]</span>
@@ -371,25 +375,31 @@
     }
 }
 
+<span class="doccomment">/// The priority queue driving the discrete event simulation. Different pieces of the simulation</span>
+<span class="doccomment">/// schedule Commands to happen at a specific time, and the Scheduler hands out the commands in</span>
+<span class="doccomment">/// order.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Scheduler</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Scheduler</span> {
     <span class="ident">items</span>: <span class="ident">BinaryHeap</span><span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span>,
-    <span class="ident">queued_commands</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">CommandType</span>, (<span class="ident">Command</span>, <span class="ident">Time</span>)<span class="op">&gt;</span>,
+    <span class="ident">queued_commands</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">CommandType</span>, (<span class="ident">Command</span>, <span class="ident">Time</span>)<span class="op">&gt;</span>,
 
     <span class="ident">latest_time</span>: <span class="ident">Time</span>,
     <span class="ident">last_time</span>: <span class="ident">Time</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing</span>, <span class="ident">skip_deserializing</span>)]</span>
     <span class="ident">delta_times</span>: <span class="ident">Histogram</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing</span>, <span class="ident">skip_deserializing</span>)]</span>
+    <span class="ident">cmd_type_counts</span>: <span class="ident">Counter</span><span class="op">&lt;</span><span class="ident">SimpleCommandType</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Scheduler</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Scheduler</span> {
         <span class="ident">Scheduler</span> {
             <span class="ident">items</span>: <span class="ident">BinaryHeap</span>::<span class="ident">new</span>(),
-            <span class="ident">queued_commands</span>: <span class="ident">BTreeMap</span>::<span class="ident">new</span>(),
+            <span class="ident">queued_commands</span>: <span class="ident">HashMap</span>::<span class="ident">new</span>(),
             <span class="ident">latest_time</span>: <span class="ident">Time</span>::<span class="ident">START_OF_DAY</span>,
             <span class="ident">last_time</span>: <span class="ident">Time</span>::<span class="ident">START_OF_DAY</span>,
             <span class="ident">delta_times</span>: <span class="ident">Histogram</span>::<span class="ident">new</span>(),
+            <span class="ident">cmd_type_counts</span>: <span class="ident">Counter</span>::<span class="ident">new</span>(),
         }
     }
 
@@ -402,6 +412,7 @@
         }
         <span class="self">self</span>.<span class="ident">last_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">last_time</span>.<span class="ident">max</span>(<span class="ident">time</span>);
         <span class="self">self</span>.<span class="ident">delta_times</span>.<span class="ident">add</span>(<span class="ident">time</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">latest_time</span>);
+        <span class="self">self</span>.<span class="ident">cmd_type_counts</span>.<span class="ident">inc</span>(<span class="ident">cmd</span>.<span class="ident">to_simple_type</span>());
 
         <span class="kw">let</span> <span class="ident">cmd_type</span> <span class="op">=</span> <span class="ident">cmd</span>.<span class="ident">to_type</span>();
 
@@ -448,19 +459,8 @@
         <span class="self">self</span>.<span class="ident">queued_commands</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">cmd</span>.<span class="ident">to_type</span>());
     }
 
-    <span class="comment">// TODO Should panic if a command of this type isn&#39;t scheduled. But currently failing</span>
-    <span class="comment">// unexpectedly.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">must_cancel_by_type</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cmd</span>: <span class="ident">CommandType</span>) {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">queued_commands</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">cmd</span>).<span class="ident">is_none</span>() {
-            <span class="macro">println</span><span class="macro">!</span>(
-                <span class="string">&quot;must_cancel_by_type({:?}) didn&#39;t find a matching command&quot;</span>,
-                <span class="ident">cmd</span>
-            );
-        }
-    }
-
-    <span class="comment">// This next command might&#39;ve actually been rescheduled to a later time; the caller won&#39;t know</span>
-    <span class="comment">// that here.</span>
+    <span class="doccomment">/// This next command might&#39;ve actually been rescheduled to a later time; the caller won&#39;t know</span>
+    <span class="doccomment">/// that here.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">peek_next_time</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Time</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">items</span>.<span class="ident">peek</span>().<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">cmd</span><span class="op">|</span> <span class="ident">cmd</span>.<span class="ident">time</span>)
     }
@@ -469,9 +469,9 @@
         <span class="self">self</span>.<span class="ident">last_time</span>
     }
 
-    <span class="comment">// This API is safer than handing out a batch of items at a time, because while processing one</span>
-    <span class="comment">// item, we might change the priority of other items or add new items. Don&#39;t make the caller</span>
-    <span class="comment">// reconcile those changes -- just keep pulling items from here, one at a time.</span>
+    <span class="doccomment">/// This API is safer than handing out a batch of items at a time, because while processing one</span>
+    <span class="doccomment">/// item, we might change the priority of other items or add new items. Don&#39;t make the caller</span>
+    <span class="doccomment">/// reconcile those changes -- just keep pulling items from here, one at a time.</span>
     <span class="comment">//</span>
     <span class="comment">// TODO Above description is a little vague. This should be used with peek_next_time in a</span>
     <span class="comment">// particular way...</span>
@@ -493,68 +493,15 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">describe_stats</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
-        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;delta times for events: {}&quot;</span>, <span class="self">self</span>.<span class="ident">delta_times</span>.<span class="ident">describe</span>())
-    }
-
-    <span class="comment">// It&#39;s much more efficient to save without the paths, and to recalculate them when loading</span>
-    <span class="comment">// later.</span>
-    <span class="comment">// TODO Why not just implement Default on Path and use skip_serializing? Because we want to</span>
-    <span class="comment">// serialize paths inside Router for live agents. We need to defer calling make_router and just</span>
-    <span class="comment">// store the input in CreateCar.</span>
-    <span class="comment">// TODO Rethink all of this; probably broken by StartTrip.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_requests_for_savestate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PathRequest</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reqs</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
-        <span class="kw">for</span> (<span class="ident">cmd</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">queued_commands</span>.<span class="ident">values</span>() {
-            <span class="kw">match</span> <span class="ident">cmd</span> {
-                <span class="ident">Command</span>::<span class="ident">SpawnCar</span>(<span class="kw-2">ref</span> <span class="ident">create_car</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">reqs</span>.<span class="ident">push</span>(<span class="ident">create_car</span>.<span class="ident">req</span>.<span class="ident">clone</span>());
-                }
-                <span class="ident">Command</span>::<span class="ident">SpawnPed</span>(<span class="kw-2">ref</span> <span class="ident">create_ped</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">reqs</span>.<span class="ident">push</span>(<span class="ident">create_ped</span>.<span class="ident">req</span>.<span class="ident">clone</span>());
-                }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
-            }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">describe_stats</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stats</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;delta times for events: {}&quot;</span>, <span class="self">self</span>.<span class="ident">delta_times</span>.<span class="ident">describe</span>()),
+            <span class="string">&quot;count for each command type:&quot;</span>.<span class="ident">to_string</span>(),
+        ];
+        <span class="kw">for</span> (<span class="ident">cmd</span>, <span class="ident">cnt</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">cmd_type_counts</span>.<span class="ident">borrow</span>() {
+            <span class="ident">stats</span>.<span class="ident">push</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:?}: {}&quot;</span>, <span class="ident">cmd</span>, <span class="ident">abstutil</span>::<span class="ident">prettyprint_usize</span>(<span class="kw-2">*</span><span class="ident">cnt</span>)));
         }
-        <span class="ident">reqs</span>
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">before_savestate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">restore</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
-        <span class="kw">for</span> (<span class="ident">cmd</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">queued_commands</span>.<span class="ident">values_mut</span>() {
-            <span class="kw">match</span> <span class="ident">cmd</span> {
-                <span class="ident">Command</span>::<span class="ident">SpawnCar</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">create_car</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">restore</span>.<span class="ident">push</span>(
-                        <span class="ident">create_car</span>
-                            .<span class="ident">router</span>
-                            .<span class="ident">replace_path_for_serialization</span>(<span class="ident">Path</span>::<span class="ident">dummy</span>()),
-                    );
-                }
-                <span class="ident">Command</span>::<span class="ident">SpawnPed</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">create_ped</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">restore</span>.<span class="ident">push</span>(<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">create_ped</span>.<span class="ident">path</span>, <span class="ident">Path</span>::<span class="ident">dummy</span>()));
-                }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
-            }
-        }
-        <span class="ident">restore</span>
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">after_savestate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">restore</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>) {
-        <span class="ident">restore</span>.<span class="ident">reverse</span>();
-        <span class="kw">for</span> (<span class="ident">cmd</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">queued_commands</span>.<span class="ident">values_mut</span>() {
-            <span class="kw">match</span> <span class="ident">cmd</span> {
-                <span class="ident">Command</span>::<span class="ident">SpawnCar</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">create_car</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">create_car</span>
-                        .<span class="ident">router</span>
-                        .<span class="ident">replace_path_for_serialization</span>(<span class="ident">restore</span>.<span class="ident">pop</span>().<span class="ident">unwrap</span>());
-                }
-                <span class="ident">Command</span>::<span class="ident">SpawnPed</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">create_ped</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">create_ped</span>.<span class="ident">path</span> <span class="op">=</span> <span class="ident">restore</span>.<span class="ident">pop</span>().<span class="ident">unwrap</span>();
-                }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
-            }
-        }
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">restore</span>.<span class="ident">is_empty</span>());
+        <span class="ident">stats</span>
     }
 }
 </pre></div>

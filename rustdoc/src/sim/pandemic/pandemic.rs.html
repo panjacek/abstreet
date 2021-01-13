@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `sim/src/pandemic/pandemic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>pandemic.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../sim/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sim/src/pandemic/pandemic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>pandemic.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../sim/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -444,41 +447,18 @@
 <span id="444">444</span>
 <span id="445">445</span>
 <span id="446">446</span>
-<span id="447">447</span>
-<span id="448">448</span>
-<span id="449">449</span>
-<span id="450">450</span>
-<span id="451">451</span>
-<span id="452">452</span>
-<span id="453">453</span>
-<span id="454">454</span>
-<span id="455">455</span>
-<span id="456">456</span>
-<span id="457">457</span>
-<span id="458">458</span>
-<span id="459">459</span>
-<span id="460">460</span>
-<span id="461">461</span>
-<span id="462">462</span>
-<span id="463">463</span>
-<span id="464">464</span>
-<span id="465">465</span>
-<span id="466">466</span>
-<span id="467">467</span>
-<span id="468">468</span>
-<span id="469">469</span>
-<span id="470">470</span>
-<span id="471">471</span>
-<span id="472">472</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pandemic</span>::{<span class="ident">AnyTime</span>, <span class="ident">State</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">CarID</span>, <span class="ident">Event</span>, <span class="ident">OffMapLocation</span>, <span class="ident">Person</span>, <span class="ident">PersonID</span>, <span class="ident">Scheduler</span>, <span class="ident">TripPhaseType</span>};
-<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Duration</span>, <span class="ident">Time</span>};
-<span class="kw">use</span> <span class="ident">map_model</span>::{<span class="ident">BuildingID</span>, <span class="ident">BusStopID</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">BTreeMap</span>;
+
 <span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">Rng</span>;
 <span class="kw">use</span> <span class="ident">rand_xorshift</span>::<span class="ident">XorShiftRng</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">BTreeMap</span>;
+
+<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Duration</span>, <span class="ident">Time</span>};
+<span class="kw">use</span> <span class="ident">map_model</span>::{<span class="ident">BuildingID</span>, <span class="ident">BusStopID</span>};
+
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pandemic</span>::{<span class="ident">AnyTime</span>, <span class="ident">State</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">CarID</span>, <span class="ident">Event</span>, <span class="ident">Person</span>, <span class="ident">PersonID</span>, <span class="ident">Scheduler</span>, <span class="ident">TripPhaseType</span>};
 
 <span class="comment">// TODO This does not model transmission by surfaces; only person-to-person.</span>
 <span class="comment">// TODO If two people are in the same shared space indefinitely and neither leaves, we don&#39;t model</span>
@@ -489,7 +469,6 @@
     <span class="ident">pop</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">PersonID</span>, <span class="ident">State</span><span class="op">&gt;</span>,
 
     <span class="ident">bldgs</span>: <span class="ident">SharedSpace</span><span class="op">&lt;</span><span class="ident">BuildingID</span><span class="op">&gt;</span>,
-    <span class="ident">remote_bldgs</span>: <span class="ident">SharedSpace</span><span class="op">&lt;</span><span class="ident">OffMapLocation</span><span class="op">&gt;</span>,
     <span class="ident">bus_stops</span>: <span class="ident">SharedSpace</span><span class="op">&lt;</span><span class="ident">BusStopID</span><span class="op">&gt;</span>,
     <span class="ident">buses</span>: <span class="ident">SharedSpace</span><span class="op">&lt;</span><span class="ident">CarID</span><span class="op">&gt;</span>,
     <span class="ident">person_to_bus</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">PersonID</span>, <span class="ident">CarID</span><span class="op">&gt;</span>,
@@ -499,7 +478,7 @@
 }
 
 <span class="comment">// You can schedule callbacks in the future by doing scheduler.push(future time, one of these)</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Cmd</span> {
     <span class="ident">BecomeHospitalized</span>(<span class="ident">PersonID</span>),
     <span class="ident">BecomeQuarantined</span>(<span class="ident">PersonID</span>),
@@ -519,7 +498,6 @@
             <span class="ident">pop</span>: <span class="ident">BTreeMap</span>::<span class="ident">new</span>(),
 
             <span class="ident">bldgs</span>: <span class="ident">SharedSpace</span>::<span class="ident">new</span>(),
-            <span class="ident">remote_bldgs</span>: <span class="ident">SharedSpace</span>::<span class="ident">new</span>(),
             <span class="ident">bus_stops</span>: <span class="ident">SharedSpace</span>::<span class="ident">new</span>(),
             <span class="ident">buses</span>: <span class="ident">SharedSpace</span>::<span class="ident">new</span>(),
             <span class="ident">person_to_bus</span>: <span class="ident">BTreeMap</span>::<span class="ident">new</span>(),
@@ -531,7 +509,7 @@
 
     <span class="comment">// Sorry, initialization order of simulations is still a bit messy. This&#39;ll be called at</span>
     <span class="comment">// Time::START_OF_DAY after all of the people have been created from a Scenario.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">initialize</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">population</span>: <span class="kw-2">&amp;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span>, <span class="ident">_scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Scheduler</span>) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">initialize</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">population</span>: <span class="kw-2">&amp;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Person</span><span class="op">&gt;</span>, <span class="ident">_scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Scheduler</span>) {
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">initialized</span>);
         <span class="self">self</span>.<span class="ident">initialized</span> <span class="op">=</span> <span class="bool-val">true</span>;
 
@@ -626,7 +604,7 @@
             <span class="op">+</span> <span class="self">self</span>.<span class="ident">count_dead</span>()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">now</span>: <span class="ident">Time</span>, <span class="ident">ev</span>: <span class="kw-2">&amp;</span><span class="ident">Event</span>, <span class="ident">scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Scheduler</span>) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">handle_event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">now</span>: <span class="ident">Time</span>, <span class="ident">ev</span>: <span class="kw-2">&amp;</span><span class="ident">Event</span>, <span class="ident">scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Scheduler</span>) {
         <span class="macro">assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">initialized</span>);
 
         <span class="kw">match</span> <span class="ident">ev</span> {
@@ -638,20 +616,6 @@
                     <span class="self">self</span>.<span class="ident">transmission</span>(<span class="ident">now</span>, <span class="kw-2">*</span><span class="ident">person</span>, <span class="ident">others</span>, <span class="ident">scheduler</span>);
                 } <span class="kw">else</span> {
                     <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{} left {}, but they weren&#39;t inside&quot;</span>, <span class="ident">person</span>, <span class="ident">bldg</span>);
-                }
-            }
-            <span class="ident">Event</span>::<span class="ident">PersonEntersRemoteBuilding</span>(<span class="ident">person</span>, <span class="ident">loc</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">remote_bldgs</span>
-                    .<span class="ident">person_enters_space</span>(<span class="ident">now</span>, <span class="kw-2">*</span><span class="ident">person</span>, <span class="ident">loc</span>.<span class="ident">clone</span>());
-            }
-            <span class="ident">Event</span>::<span class="ident">PersonLeavesRemoteBuilding</span>(<span class="ident">person</span>, <span class="ident">loc</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">others</span>) <span class="op">=</span>
-                    <span class="self">self</span>.<span class="ident">remote_bldgs</span>
-                        .<span class="ident">person_leaves_space</span>(<span class="ident">now</span>, <span class="kw-2">*</span><span class="ident">person</span>, <span class="ident">loc</span>.<span class="ident">clone</span>())
-                {
-                    <span class="self">self</span>.<span class="ident">transmission</span>(<span class="ident">now</span>, <span class="kw-2">*</span><span class="ident">person</span>, <span class="ident">others</span>, <span class="ident">scheduler</span>);
-                } <span class="kw">else</span> {
-                    <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;{} left {:?}, but they weren&#39;t inside&quot;</span>, <span class="ident">person</span>, <span class="ident">loc</span>);
                 }
             }
             <span class="ident">Event</span>::<span class="ident">TripPhaseStarting</span>(<span class="kw">_</span>, <span class="ident">p</span>, <span class="kw">_</span>, <span class="ident">tpt</span>) <span class="op">=</span><span class="op">&gt;</span> {
@@ -684,24 +648,11 @@
                     }
                 }
             }
-            <span class="ident">Event</span>::<span class="ident">PersonLeavesMap</span>(<span class="ident">_person</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">loc</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">_loc</span>) <span class="op">=</span> <span class="ident">loc</span> {
-                    <span class="comment">// TODO Could make a SharedSpace for loc.parcel_id, representing buildings</span>
-                    <span class="comment">// off-map.</span>
-                }
-            }
-            <span class="ident">Event</span>::<span class="ident">PersonEntersMap</span>(<span class="ident">_person</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="ident">loc</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">_loc</span>) <span class="op">=</span> <span class="ident">loc</span> {
-                    <span class="comment">// TODO But we don&#39;t know how long the person spent at these parcels. They</span>
-                    <span class="comment">// could&#39;ve taken tons of trips to other off-map parcels in between</span>
-                    <span class="comment">// PersonLeavesMap and PersonEntersMap.</span>
-                }
-            }
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_cmd</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_now</span>: <span class="ident">Time</span>, <span class="ident">cmd</span>: <span class="ident">Cmd</span>, <span class="ident">_scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Scheduler</span>) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">handle_cmd</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_now</span>: <span class="ident">Time</span>, <span class="ident">cmd</span>: <span class="ident">Cmd</span>, <span class="ident">_scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Scheduler</span>) {
         <span class="macro">assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">initialized</span>);
 
         <span class="comment">// TODO Here we might enforce policies. Like severe -&gt; become hospitalized</span>
@@ -760,9 +711,9 @@
     }
 
     <span class="kw">fn</span> <span class="ident">infectious_contact</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">person</span>: <span class="ident">PersonID</span>, <span class="ident">other</span>: <span class="ident">PersonID</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PersonID</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_sane</span>(<span class="ident">person</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">is_infectious</span>(<span class="ident">other</span>) {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_sane</span>(<span class="ident">person</span>) <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">is_infectious</span>(<span class="ident">other</span>) {
             <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">person</span>);
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_infectious</span>(<span class="ident">person</span>) <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">is_sane</span>(<span class="ident">other</span>) {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_infectious</span>(<span class="ident">person</span>) <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">is_sane</span>(<span class="ident">other</span>) {
             <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">other</span>);
         }
         <span class="prelude-val">None</span>

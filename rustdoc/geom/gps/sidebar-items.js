@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["LonLat",""]]});
+initSidebarItems({"struct":[["LonLat","Represents a (longitude, latitude) point."]]});

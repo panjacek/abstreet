@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `widgetry/src/event_ctx.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>event_ctx.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../widgetry/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `widgetry/src/event_ctx.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>event_ctx.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../widgetry/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -252,15 +255,31 @@
 <span id="252">252</span>
 <span id="253">253</span>
 <span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">svg</span>, <span class="ident">text</span>, <span class="ident">Canvas</span>, <span class="ident">Color</span>, <span class="ident">Drawable</span>, <span class="ident">Event</span>, <span class="ident">GeomBatch</span>, <span class="ident">GfxCtx</span>, <span class="ident">HorizontalAlignment</span>, <span class="ident">Line</span>, <span class="ident">Panel</span>,
-    <span class="ident">Prerender</span>, <span class="ident">ScreenDims</span>, <span class="ident">Style</span>, <span class="ident">Text</span>, <span class="ident">UserInput</span>, <span class="ident">VerticalAlignment</span>, <span class="ident">Widget</span>,
-};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">VecDeque</span>;
+
+<span class="kw">use</span> <span class="ident">instant</span>::<span class="ident">Instant</span>;
+
 <span class="kw">use</span> <span class="ident">abstutil</span>::{<span class="ident">elapsed_seconds</span>, <span class="ident">Timer</span>, <span class="ident">TimerSink</span>};
 <span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Percent</span>, <span class="ident">Polygon</span>};
-<span class="kw">use</span> <span class="ident">instant</span>::<span class="ident">Instant</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">VecDeque</span>;
+
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">svg</span>, <span class="ident">text</span>, <span class="ident">Canvas</span>, <span class="ident">Color</span>, <span class="ident">Drawable</span>, <span class="ident">Event</span>, <span class="ident">GeomBatch</span>, <span class="ident">GfxCtx</span>, <span class="ident">HorizontalAlignment</span>, <span class="ident">Key</span>, <span class="ident">Line</span>,
+    <span class="ident">Panel</span>, <span class="ident">Prerender</span>, <span class="ident">ScreenDims</span>, <span class="ident">Style</span>, <span class="ident">Text</span>, <span class="ident">UserInput</span>, <span class="ident">VerticalAlignment</span>, <span class="ident">Widget</span>,
+};
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">UpdateType</span> {
@@ -270,8 +289,10 @@
     <span class="ident">ScreenCaptureEverything</span> {
         <span class="ident">dir</span>: <span class="ident">String</span>,
         <span class="ident">zoom</span>: <span class="ident">f64</span>,
-        <span class="ident">max_x</span>: <span class="ident">f64</span>,
-        <span class="ident">max_y</span>: <span class="ident">f64</span>,
+        <span class="ident">dims</span>: <span class="ident">ScreenDims</span>,
+        <span class="doccomment">/// If true, name files in a simple scheme intended for Leaflet. If false, include the</span>
+        <span class="doccomment">/// optional drawing suffix returned by the app.</span>
+        <span class="ident">leaflet_naming</span>: <span class="ident">bool</span>,
     },
 }
 
@@ -335,7 +356,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">redo_mouseover</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">fake_mouseover</span>
             <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">input</span>.<span class="ident">window_lost_cursor</span>()
-            <span class="op">|</span><span class="op">|</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">is_dragging</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">input</span>.<span class="ident">get_moved_mouse</span>().<span class="ident">is_some</span>())
+            <span class="op">|</span><span class="op">|</span> (<span class="op">!</span><span class="self">self</span>.<span class="ident">is_dragging</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">input</span>.<span class="ident">get_moved_mouse</span>().<span class="ident">is_some</span>())
             <span class="op">|</span><span class="op">|</span> <span class="self">self</span>
                 .<span class="ident">input</span>
                 .<span class="ident">get_mouse_scroll</span>()
@@ -347,7 +368,7 @@
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">input</span>.<span class="ident">has_been_consumed</span>() {
             <span class="kw">return</span> <span class="bool-val">false</span>;
         }
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">is_dragging</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">input</span>.<span class="ident">left_mouse_button_released</span>() {
+        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">is_dragging</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">input</span>.<span class="ident">left_mouse_button_released</span>() {
             <span class="self">self</span>.<span class="ident">input</span>.<span class="ident">consume_event</span>();
             <span class="kw">return</span> <span class="bool-val">true</span>;
         }
@@ -356,6 +377,10 @@
 
     <span class="kw">fn</span> <span class="ident">is_dragging</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">drag_canvas_from</span>.<span class="ident">is_some</span>() <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">drag_just_ended</span>
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_key_down</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="ident">Key</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">keys_held</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>)
     }
 
     <span class="comment">// Delegation to assets</span>
@@ -381,9 +406,61 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_style</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">style</span>: <span class="ident">Style</span>) {
         <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">style</span> <span class="op">=</span> <span class="ident">style</span>;
     }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_loading_screen</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">txt</span>: <span class="ident">Text</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Panel</span> {
+        <span class="kw">let</span> <span class="ident">border</span> <span class="op">=</span> <span class="ident">Color</span>::<span class="ident">hex</span>(<span class="string">&quot;#F4DA22&quot;</span>);
+        <span class="ident">Panel</span>::<span class="ident">new</span>(<span class="ident">Widget</span>::<span class="ident">row</span>(<span class="macro">vec</span><span class="macro">!</span>[
+            <span class="ident">Widget</span>::<span class="ident">custom_col</span>(<span class="macro">vec</span><span class="macro">!</span>[
+                <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
+                    <span class="self">self</span>,
+                    <span class="ident">GeomBatch</span>::<span class="ident">from_svg_contents</span>(<span class="macro">include_bytes</span><span class="macro">!</span>(<span class="string">&quot;../icons/loading.svg&quot;</span>).<span class="ident">to_vec</span>())
+                        .<span class="ident">scale</span>(<span class="number">5.0</span>),
+                )
+                .<span class="ident">container</span>()
+                .<span class="ident">bg</span>(<span class="ident">Color</span>::<span class="ident">BLACK</span>)
+                .<span class="ident">padding</span>(<span class="number">15</span>)
+                .<span class="ident">outline</span>(<span class="number">5.0</span>, <span class="ident">border</span>)
+                .<span class="ident">centered_horiz</span>()
+                .<span class="ident">margin_below</span>(<span class="number">5</span>),
+                <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
+                    <span class="self">self</span>,
+                    <span class="ident">GeomBatch</span>::<span class="ident">from</span>(<span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">Color</span>::<span class="ident">grey</span>(<span class="number">0.5</span>), <span class="ident">Polygon</span>::<span class="ident">rectangle</span>(<span class="number">10.0</span>, <span class="number">30.0</span>))]),
+                )
+                .<span class="ident">centered_horiz</span>(),
+                <span class="self">self</span>.<span class="ident">style</span>
+                    .<span class="ident">loading_tips</span>
+                    .<span class="ident">clone</span>()
+                    .<span class="ident">wrap_to_pct</span>(<span class="self">self</span>, <span class="number">25</span>)
+                    .<span class="ident">draw</span>(<span class="self">self</span>)
+                    .<span class="ident">container</span>()
+                    .<span class="ident">bg</span>(<span class="ident">Color</span>::<span class="ident">BLACK</span>)
+                    .<span class="ident">padding</span>(<span class="number">15</span>)
+                    .<span class="ident">outline</span>(<span class="number">5.0</span>, <span class="ident">Color</span>::<span class="ident">YELLOW</span>)
+                    .<span class="ident">force_width_pct</span>(<span class="self">self</span>, <span class="ident">Percent</span>::<span class="ident">int</span>(<span class="number">30</span>))
+                    .<span class="ident">margin_below</span>(<span class="number">5</span>),
+                <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
+                    <span class="self">self</span>,
+                    <span class="ident">GeomBatch</span>::<span class="ident">from</span>(<span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">Color</span>::<span class="ident">grey</span>(<span class="number">0.5</span>), <span class="ident">Polygon</span>::<span class="ident">rectangle</span>(<span class="number">10.0</span>, <span class="number">100.0</span>))]),
+                )
+                .<span class="ident">centered_horiz</span>(),
+            ])
+            .<span class="ident">centered_vert</span>(),
+            <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
+                <span class="self">self</span>,
+                <span class="ident">txt</span>.<span class="ident">inner_render</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">prerender</span>.<span class="ident">assets</span>, <span class="ident">svg</span>::<span class="ident">LOW_QUALITY</span>),
+            )
+            .<span class="ident">container</span>()
+            .<span class="ident">fill_width</span>()
+            .<span class="ident">padding</span>(<span class="number">16</span>)
+            .<span class="ident">bg</span>(<span class="ident">text</span>::<span class="ident">BG_COLOR</span>),
+        ]))
+        .<span class="ident">exact_size_percent</span>(<span class="number">80</span>, <span class="number">80</span>)
+        .<span class="ident">aligned</span>(<span class="ident">HorizontalAlignment</span>::<span class="ident">Center</span>, <span class="ident">VerticalAlignment</span>::<span class="ident">Center</span>)
+        .<span class="ident">build_custom</span>(<span class="self">self</span>)
+    }
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LoadingScreen</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+<span class="kw">struct</span> <span class="ident">LoadingScreen</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="ident">canvas</span>: <span class="ident">Canvas</span>,
     <span class="ident">style</span>: <span class="ident">Style</span>,
     <span class="ident">prerender</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Prerender</span>,
@@ -394,7 +471,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">LoadingScreen</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
+    <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">prerender</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Prerender</span>,
         <span class="ident">style</span>: <span class="ident">Style</span>,
         <span class="ident">initial_size</span>: <span class="ident">ScreenDims</span>,
@@ -434,55 +511,7 @@
         <span class="kw">for</span> <span class="ident">l</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">lines</span> {
             <span class="ident">txt</span>.<span class="ident">add</span>(<span class="ident">Line</span>(<span class="ident">l</span>));
         }
-        <span class="kw">let</span> <span class="ident">border</span> <span class="op">=</span> <span class="ident">Color</span>::<span class="ident">hex</span>(<span class="string">&quot;#F4DA22&quot;</span>);
-        <span class="kw">let</span> <span class="ident">panel</span> <span class="op">=</span> <span class="ident">Panel</span>::<span class="ident">new</span>(<span class="ident">Widget</span>::<span class="ident">row</span>(<span class="macro">vec</span><span class="macro">!</span>[
-            <span class="ident">Widget</span>::<span class="ident">custom_col</span>(<span class="macro">vec</span><span class="macro">!</span>[
-                <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
-                    <span class="kw-2">&amp;</span><span class="ident">ctx</span>,
-                    <span class="ident">GeomBatch</span>::<span class="ident">load_svg</span>(<span class="ident">ctx</span>.<span class="ident">prerender</span>, <span class="string">&quot;system/assets/map/dont_walk.svg&quot;</span>)
-                        .<span class="ident">scale</span>(<span class="number">5.0</span>),
-                )
-                .<span class="ident">container</span>()
-                .<span class="ident">bg</span>(<span class="ident">Color</span>::<span class="ident">BLACK</span>)
-                .<span class="ident">padding</span>(<span class="number">15</span>)
-                .<span class="ident">outline</span>(<span class="number">5.0</span>, <span class="ident">border</span>)
-                .<span class="ident">centered_horiz</span>()
-                .<span class="ident">margin_below</span>(<span class="number">5</span>),
-                <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
-                    <span class="kw-2">&amp;</span><span class="ident">ctx</span>,
-                    <span class="ident">GeomBatch</span>::<span class="ident">from</span>(<span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">Color</span>::<span class="ident">grey</span>(<span class="number">0.5</span>), <span class="ident">Polygon</span>::<span class="ident">rectangle</span>(<span class="number">10.0</span>, <span class="number">30.0</span>))]),
-                )
-                .<span class="ident">centered_horiz</span>(),
-                <span class="ident">ctx</span>.<span class="ident">style</span>
-                    .<span class="ident">loading_tips</span>
-                    .<span class="ident">clone</span>()
-                    .<span class="ident">wrap_to_pct</span>(<span class="kw-2">&amp;</span><span class="ident">ctx</span>, <span class="number">25</span>)
-                    .<span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="ident">ctx</span>)
-                    .<span class="ident">container</span>()
-                    .<span class="ident">bg</span>(<span class="ident">Color</span>::<span class="ident">BLACK</span>)
-                    .<span class="ident">padding</span>(<span class="number">15</span>)
-                    .<span class="ident">outline</span>(<span class="number">5.0</span>, <span class="ident">Color</span>::<span class="ident">YELLOW</span>)
-                    .<span class="ident">force_width_pct</span>(<span class="kw-2">&amp;</span><span class="ident">ctx</span>, <span class="ident">Percent</span>::<span class="ident">int</span>(<span class="number">30</span>))
-                    .<span class="ident">margin_below</span>(<span class="number">5</span>),
-                <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
-                    <span class="kw-2">&amp;</span><span class="ident">ctx</span>,
-                    <span class="ident">GeomBatch</span>::<span class="ident">from</span>(<span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">Color</span>::<span class="ident">grey</span>(<span class="number">0.5</span>), <span class="ident">Polygon</span>::<span class="ident">rectangle</span>(<span class="number">10.0</span>, <span class="number">100.0</span>))]),
-                )
-                .<span class="ident">centered_horiz</span>(),
-            ])
-            .<span class="ident">centered_vert</span>(),
-            <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
-                <span class="kw-2">&amp;</span><span class="ident">ctx</span>,
-                <span class="ident">txt</span>.<span class="ident">inner_render</span>(<span class="kw-2">&amp;</span><span class="ident">ctx</span>.<span class="ident">prerender</span>.<span class="ident">assets</span>, <span class="ident">svg</span>::<span class="ident">LOW_QUALITY</span>),
-            )
-            .<span class="ident">container</span>()
-            .<span class="ident">fill_width</span>()
-            .<span class="ident">padding</span>(<span class="number">16</span>)
-            .<span class="ident">bg</span>(<span class="ident">text</span>::<span class="ident">BG_COLOR</span>),
-        ]))
-        .<span class="ident">exact_size_percent</span>(<span class="number">80</span>, <span class="number">80</span>)
-        .<span class="ident">aligned</span>(<span class="ident">HorizontalAlignment</span>::<span class="ident">Center</span>, <span class="ident">VerticalAlignment</span>::<span class="ident">Center</span>)
-        .<span class="ident">build_custom</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
+        <span class="kw">let</span> <span class="ident">panel</span> <span class="op">=</span> <span class="ident">ctx</span>.<span class="ident">make_loading_screen</span>(<span class="ident">txt</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">g</span> <span class="op">=</span> <span class="ident">GfxCtx</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">prerender</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">canvas</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">style</span>, <span class="bool-val">false</span>);
         <span class="ident">g</span>.<span class="ident">clear</span>(<span class="ident">Color</span>::<span class="ident">BLACK</span>);

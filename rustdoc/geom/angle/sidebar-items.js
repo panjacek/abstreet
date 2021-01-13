@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Angle",""]]});
+initSidebarItems({"struct":[["Angle","An angle, stored in radians."]]});

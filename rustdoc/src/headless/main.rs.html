@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `headless/src/main.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>main.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../headless/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `headless/src/main.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>main.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../headless/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -410,6 +413,171 @@
 <span id="410">410</span>
 <span id="411">411</span>
 <span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// This runs a simulation without any graphics and serves a very basic API to control things. See</span>
 <span class="comment">// https://dabreegster.github.io/abstreet/dev/api.html for documentation. To run this:</span>
@@ -423,33 +591,38 @@
 <span class="comment">// ... huge JSON blob</span>
 
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">anyhow</span>;
+<span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">log</span>;
 
-<span class="kw">use</span> <span class="ident">abstutil</span>::{<span class="ident">serialize_btreemap</span>, <span class="ident">CmdArgs</span>, <span class="ident">Timer</span>};
-<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Duration</span>, <span class="ident">LonLat</span>, <span class="ident">Time</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>, <span class="ident">HashMap</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">RwLock</span>;
+
+<span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
 <span class="kw">use</span> <span class="ident">hyper</span>::{<span class="ident">Body</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">Server</span>, <span class="ident">StatusCode</span>};
+<span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">SeedableRng</span>;
+<span class="kw">use</span> <span class="ident">rand_xorshift</span>::<span class="ident">XorShiftRng</span>;
+<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+
+<span class="kw">use</span> <span class="ident">abstio</span>::<span class="ident">MapName</span>;
+<span class="kw">use</span> <span class="ident">abstutil</span>::{<span class="ident">serialize_btreemap</span>, <span class="ident">CmdArgs</span>, <span class="ident">Parallelism</span>, <span class="ident">Timer</span>};
+<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Distance</span>, <span class="ident">Duration</span>, <span class="ident">LonLat</span>, <span class="ident">Time</span>};
 <span class="kw">use</span> <span class="ident">map_model</span>::{
     <span class="ident">CompressedMovementID</span>, <span class="ident">ControlTrafficSignal</span>, <span class="ident">EditCmd</span>, <span class="ident">EditIntersection</span>, <span class="ident">IntersectionID</span>, <span class="ident">Map</span>,
     <span class="ident">MovementID</span>, <span class="ident">PermanentMapEdits</span>, <span class="ident">RoadID</span>, <span class="ident">TurnID</span>,
 };
-<span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">SeedableRng</span>;
-<span class="kw">use</span> <span class="ident">rand_xorshift</span>::<span class="ident">XorShiftRng</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 <span class="kw">use</span> <span class="ident">sim</span>::{
-    <span class="ident">AgentID</span>, <span class="ident">AgentType</span>, <span class="ident">ExternalPerson</span>, <span class="ident">GetDrawAgents</span>, <span class="ident">PersonID</span>, <span class="ident">Scenario</span>, <span class="ident">ScenarioModifier</span>, <span class="ident">Sim</span>,
+    <span class="ident">AgentID</span>, <span class="ident">AgentType</span>, <span class="ident">DelayCause</span>, <span class="ident">ExternalPerson</span>, <span class="ident">PersonID</span>, <span class="ident">Scenario</span>, <span class="ident">ScenarioModifier</span>, <span class="ident">Sim</span>,
     <span class="ident">SimFlags</span>, <span class="ident">SimOptions</span>, <span class="ident">TripID</span>, <span class="ident">TripMode</span>, <span class="ident">VehicleType</span>,
 };
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>, <span class="ident">HashMap</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">RwLock</span>;
 
 <span class="ident">lazy_static</span>::<span class="macro">lazy_static</span><span class="macro">!</span> {
     <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">MAP</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">Map</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">RwLock</span>::<span class="ident">new</span>(<span class="ident">Map</span>::<span class="ident">blank</span>());
     <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">SIM</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">Sim</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">RwLock</span>::<span class="ident">new</span>(<span class="ident">Sim</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">Map</span>::<span class="ident">blank</span>(), <span class="ident">SimOptions</span>::<span class="ident">new</span>(<span class="string">&quot;tmp&quot;</span>), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>::<span class="ident">throwaway</span>()));
     <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">LOAD</span>: <span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">LoadSim</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">RwLock</span>::<span class="ident">new</span>({
         <span class="ident">LoadSim</span> {
-            <span class="ident">scenario</span>: <span class="ident">abstutil</span>::<span class="ident">path_scenario</span>(<span class="string">&quot;montlake&quot;</span>, <span class="string">&quot;weekday&quot;</span>),
+            <span class="ident">scenario</span>: <span class="ident">abstio</span>::<span class="ident">path_scenario</span>(<span class="kw-2">&amp;</span><span class="ident">MapName</span>::<span class="ident">seattle</span>(<span class="string">&quot;montlake&quot;</span>), <span class="string">&quot;weekday&quot;</span>),
             <span class="ident">modifiers</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
             <span class="ident">edits</span>: <span class="prelude-val">None</span>,
             <span class="ident">rng_seed</span>: <span class="ident">SimFlags</span>::<span class="ident">RNG_SEED</span>,
@@ -459,7 +632,7 @@
 }
 
 <span class="attribute">#[<span class="ident">tokio</span>::<span class="ident">main</span>]</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
+<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">main</span>() {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">CmdArgs</span>::<span class="ident">new</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">timer</span> <span class="op">=</span> <span class="ident">Timer</span>::<span class="ident">new</span>(<span class="string">&quot;setup headless&quot;</span>);
     <span class="kw">let</span> <span class="ident">rng_seed</span> <span class="op">=</span> <span class="ident">args</span>
@@ -481,15 +654,15 @@
 
     <span class="kw">let</span> <span class="ident">addr</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">SocketAddr</span>::<span class="ident">from</span>(([<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], <span class="ident">port</span>));
     <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Listening on http://{}&quot;</span>, <span class="ident">addr</span>);
-    <span class="kw">let</span> <span class="ident">serve_future</span> <span class="op">=</span> <span class="ident">Server</span>::<span class="ident">bind</span>(<span class="kw-2">&amp;</span><span class="ident">addr</span>).<span class="ident">serve</span>(<span class="ident">hyper</span>::<span class="ident">service</span>::<span class="ident">make_service_fn</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="kw">async</span> {
+    <span class="kw">let</span> <span class="ident">serve_future</span> <span class="op">=</span> <span class="ident">Server</span>::<span class="ident">bind</span>(<span class="kw-2">&amp;</span><span class="ident">addr</span>).<span class="ident">serve</span>(<span class="ident">hyper</span>::<span class="ident">service</span>::<span class="ident">make_service_fn</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">async</span> {
         <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">hyper</span>::<span class="ident">Error</span><span class="op">&gt;</span>(<span class="ident">hyper</span>::<span class="ident">service</span>::<span class="ident">service_fn</span>(<span class="ident">serve_req</span>))
     }));
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">serve_future</span>.<span class="kw">await</span> {
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">serve_future</span>.<span class="ident">await</span> {
         <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Server error: {}&quot;</span>, <span class="ident">err</span>);
     }
 }
 
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">serve_req</span>(<span class="ident">req</span>: <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">hyper</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="ident">async</span> <span class="kw">fn</span> <span class="ident">serve_req</span>(<span class="ident">req</span>: <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">hyper</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">req</span>.<span class="ident">uri</span>().<span class="ident">path</span>().<span class="ident">to_string</span>();
     <span class="comment">// Url::parse needs an absolute URL</span>
     <span class="kw">let</span> <span class="ident">params</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span>
@@ -498,7 +671,7 @@
             .<span class="ident">query_pairs</span>()
             .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">k</span>, <span class="ident">v</span>)<span class="op">|</span> (<span class="ident">k</span>.<span class="ident">to_string</span>(), <span class="ident">v</span>.<span class="ident">to_string</span>()))
             .<span class="ident">collect</span>();
-    <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">hyper</span>::<span class="ident">body</span>::<span class="ident">to_bytes</span>(<span class="ident">req</span>).<span class="kw">await</span><span class="question-mark">?</span>.<span class="ident">to_vec</span>();
+    <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">hyper</span>::<span class="ident">body</span>::<span class="ident">to_bytes</span>(<span class="ident">req</span>).<span class="ident">await</span><span class="question-mark">?</span>.<span class="ident">to_vec</span>();
     <span class="macro">info</span><span class="macro">!</span>(<span class="string">&quot;Handling {}&quot;</span>, <span class="ident">path</span>);
     <span class="prelude-val">Ok</span>(
         <span class="kw">match</span> <span class="ident">handle_command</span>(
@@ -528,7 +701,13 @@
     <span class="ident">sim</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Sim</span>,
     <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Map</span>,
     <span class="ident">load</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">LoadSim</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">get</span> <span class="op">=</span> <span class="op">|</span><span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">|</span> {
+        <span class="ident">params</span>
+            .<span class="ident">get</span>(<span class="ident">key</span>)
+            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">anyhow</span><span class="macro">!</span>(<span class="string">&quot;missing GET parameter {}&quot;</span>, <span class="ident">key</span>))
+    };
+
     <span class="kw">match</span> <span class="ident">path</span> {
         <span class="comment">// Controlling the simulation</span>
         <span class="string">&quot;/sim/reset&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
@@ -553,9 +732,9 @@
         }
         <span class="string">&quot;/sim/get-time&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">sim</span>.<span class="ident">time</span>().<span class="ident">to_string</span>()),
         <span class="string">&quot;/sim/goto-time&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Time</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">params</span>[<span class="string">&quot;t&quot;</span>])<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Time</span>::<span class="ident">parse</span>(<span class="ident">get</span>(<span class="string">&quot;t&quot;</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
             <span class="kw">if</span> <span class="ident">t</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">sim</span>.<span class="ident">time</span>() {
-                <span class="prelude-val">Err</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} is in the past. call /sim/reset first?&quot;</span>, <span class="ident">t</span>).<span class="ident">into</span>())
+                <span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;{} is in the past. call /sim/reset first?&quot;</span>, <span class="ident">t</span>)
             } <span class="kw">else</span> {
                 <span class="kw">let</span> <span class="ident">dt</span> <span class="op">=</span> <span class="ident">t</span> <span class="op">-</span> <span class="ident">sim</span>.<span class="ident">time</span>();
                 <span class="ident">sim</span>.<span class="ident">timed_step</span>(<span class="ident">map</span>, <span class="ident">dt</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>::<span class="ident">new</span>(<span class="string">&quot;goto-time&quot;</span>));
@@ -566,30 +745,30 @@
             <span class="kw">let</span> <span class="ident">input</span>: <span class="ident">ExternalPerson</span> <span class="op">=</span> <span class="ident">abstutil</span>::<span class="ident">from_json</span>(<span class="ident">body</span>)<span class="question-mark">?</span>;
             <span class="kw">for</span> <span class="ident">trip</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">input</span>.<span class="ident">trips</span> {
                 <span class="kw">if</span> <span class="ident">trip</span>.<span class="ident">departure</span> <span class="op">&lt;</span> <span class="ident">sim</span>.<span class="ident">time</span>() {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">format</span><span class="macro">!</span>(
+                    <span class="macro">bail</span><span class="macro">!</span>(
                         <span class="string">&quot;It&#39;s {} now, so you can&#39;t start a trip at {}&quot;</span>,
                         <span class="ident">sim</span>.<span class="ident">time</span>(),
                         <span class="ident">trip</span>.<span class="ident">departure</span>
                     )
-                    .<span class="ident">into</span>());
                 }
             }
 
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scenario</span> <span class="op">=</span> <span class="ident">Scenario</span>::<span class="ident">empty</span>(<span class="ident">map</span>, <span class="string">&quot;one-shot&quot;</span>);
             <span class="ident">scenario</span>.<span class="ident">people</span> <span class="op">=</span> <span class="ident">ExternalPerson</span>::<span class="ident">import</span>(<span class="ident">map</span>, <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">input</span>])<span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">PersonID</span>(<span class="ident">sim</span>.<span class="ident">get_all_people</span>().<span class="ident">len</span>());
-            <span class="ident">scenario</span>.<span class="ident">people</span>[<span class="number">0</span>].<span class="ident">id</span> <span class="op">=</span> <span class="ident">id</span>;
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">XorShiftRng</span>::<span class="ident">from_seed</span>([<span class="ident">load</span>.<span class="ident">rng_seed</span>; <span class="number">16</span>]);
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">XorShiftRng</span>::<span class="ident">seed_from_u64</span>(<span class="ident">load</span>.<span class="ident">rng_seed</span>);
             <span class="ident">scenario</span>.<span class="ident">instantiate</span>(<span class="ident">sim</span>, <span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>::<span class="ident">throwaway</span>());
-            <span class="prelude-val">Ok</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} created&quot;</span>, <span class="ident">id</span>))
+            <span class="prelude-val">Ok</span>(<span class="macro">format</span><span class="macro">!</span>(
+                <span class="string">&quot;{} created&quot;</span>,
+                <span class="ident">sim</span>.<span class="ident">get_all_people</span>().<span class="ident">last</span>().<span class="ident">unwrap</span>().<span class="ident">id</span>
+            ))
         }
         <span class="comment">// Traffic signals</span>
         <span class="string">&quot;/traffic-signals/get&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">IntersectionID</span>(<span class="ident">params</span>[<span class="string">&quot;id&quot;</span>].<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
+            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">IntersectionID</span>(<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ts</span>) <span class="op">=</span> <span class="ident">map</span>.<span class="ident">maybe_get_traffic_signal</span>(<span class="ident">i</span>) {
                 <span class="prelude-val">Ok</span>(<span class="ident">abstutil</span>::<span class="ident">to_json</span>(<span class="ident">ts</span>))
             } <span class="kw">else</span> {
-                <span class="prelude-val">Err</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} isn&#39;t a traffic signal&quot;</span>, <span class="ident">i</span>).<span class="ident">into</span>())
+                <span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;{} isn&#39;t a traffic signal&quot;</span>, <span class="ident">i</span>)
             }
         }
         <span class="string">&quot;/traffic-signals/set&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
@@ -610,13 +789,13 @@
             <span class="prelude-val">Ok</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} has been updated&quot;</span>, <span class="ident">id</span>))
         }
         <span class="string">&quot;/traffic-signals/get-delays&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">IntersectionID</span>(<span class="ident">params</span>[<span class="string">&quot;id&quot;</span>].<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
-            <span class="kw">let</span> <span class="ident">t1</span> <span class="op">=</span> <span class="ident">Time</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">params</span>[<span class="string">&quot;t1&quot;</span>])<span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">t2</span> <span class="op">=</span> <span class="ident">Time</span>::<span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="ident">params</span>[<span class="string">&quot;t2&quot;</span>])<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">IntersectionID</span>(<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
+            <span class="kw">let</span> <span class="ident">t1</span> <span class="op">=</span> <span class="ident">Time</span>::<span class="ident">parse</span>(<span class="ident">get</span>(<span class="string">&quot;t1&quot;</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">t2</span> <span class="op">=</span> <span class="ident">Time</span>::<span class="ident">parse</span>(<span class="ident">get</span>(<span class="string">&quot;t2&quot;</span>)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="ident">ts</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ts</span>) <span class="op">=</span> <span class="ident">map</span>.<span class="ident">maybe_get_traffic_signal</span>(<span class="ident">i</span>) {
                 <span class="ident">ts</span>
             } <span class="kw">else</span> {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} isn&#39;t a traffic signal&quot;</span>, <span class="ident">i</span>).<span class="ident">into</span>());
+                <span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;{} isn&#39;t a traffic signal&quot;</span>, <span class="ident">i</span>);
             };
             <span class="kw">let</span> <span class="ident">movements</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">MovementID</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">ts</span>.<span class="ident">movements</span>.<span class="ident">keys</span>().<span class="ident">collect</span>();
 
@@ -628,7 +807,7 @@
             }
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">list</span>) <span class="op">=</span> <span class="ident">sim</span>.<span class="ident">get_analytics</span>().<span class="ident">intersection_delays</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">i</span>) {
                 <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">t</span>, <span class="ident">dt</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="ident">list</span> {
-                    <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">t</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">t1</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="kw-2">*</span><span class="ident">t</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">t2</span> {
+                    <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">t</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">t1</span> <span class="op">&amp;&amp;</span> <span class="kw-2">*</span><span class="ident">t</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">t2</span> {
                         <span class="ident">delays</span>
                             .<span class="ident">per_direction</span>
                             .<span class="ident">get_mut</span>(<span class="ident">movements</span>[<span class="kw-2">*</span><span class="ident">idx</span> <span class="kw">as</span> <span class="ident">usize</span>])
@@ -640,11 +819,11 @@
             <span class="prelude-val">Ok</span>(<span class="ident">abstutil</span>::<span class="ident">to_json</span>(<span class="kw-2">&amp;</span><span class="ident">delays</span>))
         }
         <span class="string">&quot;/traffic-signals/get-cumulative-thruput&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">IntersectionID</span>(<span class="ident">params</span>[<span class="string">&quot;id&quot;</span>].<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
+            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">IntersectionID</span>(<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
             <span class="kw">let</span> <span class="ident">ts</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ts</span>) <span class="op">=</span> <span class="ident">map</span>.<span class="ident">maybe_get_traffic_signal</span>(<span class="ident">i</span>) {
                 <span class="ident">ts</span>
             } <span class="kw">else</span> {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} isn&#39;t a traffic signal&quot;</span>, <span class="ident">i</span>).<span class="ident">into</span>());
+                <span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;{} isn&#39;t a traffic signal&quot;</span>, <span class="ident">i</span>);
             };
 
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">thruput</span> <span class="op">=</span> <span class="ident">Throughput</span> {
@@ -676,7 +855,11 @@
                     <span class="ident">TrafficSignalState</span> {
                         <span class="ident">current_stage_idx</span>,
                         <span class="ident">remaining_time</span>,
-                        <span class="ident">accepted</span>: <span class="ident">sim</span>.<span class="ident">get_accepted_agents</span>(<span class="ident">i</span>.<span class="ident">id</span>).<span class="ident">into_iter</span>().<span class="ident">collect</span>(),
+                        <span class="ident">accepted</span>: <span class="ident">sim</span>
+                            .<span class="ident">get_accepted_agents</span>(<span class="ident">i</span>.<span class="ident">id</span>)
+                            .<span class="ident">into_iter</span>()
+                            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">a</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">a</span>)
+                            .<span class="ident">collect</span>(),
                         <span class="ident">waiting</span>: <span class="ident">sim</span>.<span class="ident">get_waiting_agents</span>(<span class="ident">i</span>.<span class="ident">id</span>),
                     },
                 );
@@ -686,11 +869,17 @@
         <span class="comment">// Querying data</span>
         <span class="string">&quot;/data/get-finished-trips&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">trips</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
-            <span class="kw">for</span> (<span class="kw">_</span>, <span class="ident">id</span>, <span class="ident">mode</span>, <span class="ident">duration</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">sim</span>.<span class="ident">get_analytics</span>().<span class="ident">finished_trips</span> {
+            <span class="kw">for</span> (<span class="kw">_</span>, <span class="ident">id</span>, <span class="ident">mode</span>, <span class="ident">maybe_duration</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">sim</span>.<span class="ident">get_analytics</span>().<span class="ident">finished_trips</span> {
                 <span class="kw">let</span> <span class="ident">info</span> <span class="op">=</span> <span class="ident">sim</span>.<span class="ident">trip_info</span>(<span class="kw-2">*</span><span class="ident">id</span>);
+                <span class="kw">let</span> <span class="ident">distance_crossed</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">maybe_duration</span>.<span class="ident">is_some</span>() {
+                    <span class="ident">sim</span>.<span class="ident">finished_trip_details</span>(<span class="kw-2">*</span><span class="ident">id</span>).<span class="ident">unwrap</span>().<span class="number">2</span>
+                } <span class="kw">else</span> {
+                    <span class="ident">Distance</span>::<span class="ident">ZERO</span>
+                };
                 <span class="ident">trips</span>.<span class="ident">push</span>(<span class="ident">FinishedTrip</span> {
                     <span class="ident">id</span>: <span class="kw-2">*</span><span class="ident">id</span>,
-                    <span class="ident">duration</span>: <span class="kw-2">*</span><span class="ident">duration</span>,
+                    <span class="ident">duration</span>: <span class="kw-2">*</span><span class="ident">maybe_duration</span>,
+                    <span class="ident">distance_crossed</span>,
                     <span class="ident">mode</span>: <span class="kw-2">*</span><span class="ident">mode</span>,
                     <span class="ident">capped</span>: <span class="ident">info</span>.<span class="ident">capped</span>,
                 });
@@ -702,8 +891,9 @@
                 .<span class="ident">get_unzoomed_agents</span>(<span class="ident">map</span>)
                 .<span class="ident">into_iter</span>()
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">a</span><span class="op">|</span> <span class="ident">AgentPosition</span> {
-                    <span class="ident">vehicle_type</span>: <span class="ident">a</span>.<span class="ident">vehicle_type</span>,
+                    <span class="ident">vehicle_type</span>: <span class="ident">a</span>.<span class="ident">id</span>.<span class="ident">to_vehicle_type</span>(),
                     <span class="ident">pos</span>: <span class="ident">a</span>.<span class="ident">pos</span>.<span class="ident">to_gps</span>(<span class="ident">map</span>.<span class="ident">get_gps_bounds</span>()),
+                    <span class="ident">distance_crossed</span>: <span class="ident">sim</span>.<span class="ident">agent_properties</span>(<span class="ident">map</span>, <span class="ident">a</span>.<span class="ident">id</span>).<span class="ident">dist_crossed</span>,
                     <span class="ident">person</span>: <span class="ident">a</span>.<span class="ident">person</span>,
                 })
                 .<span class="ident">collect</span>(),
@@ -717,22 +907,50 @@
                 .<span class="ident">map</span>(<span class="op">|</span>((<span class="ident">r</span>, <span class="ident">a</span>, <span class="ident">hr</span>), <span class="ident">cnt</span>)<span class="op">|</span> (<span class="kw-2">*</span><span class="ident">r</span>, <span class="kw-2">*</span><span class="ident">a</span>, <span class="kw-2">*</span><span class="ident">hr</span>, <span class="kw-2">*</span><span class="ident">cnt</span>))
                 .<span class="ident">collect</span>(),
         })),
+        <span class="string">&quot;/data/get-blocked-by-graph&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">abstutil</span>::<span class="ident">to_json</span>(<span class="kw-2">&amp;</span><span class="ident">BlockedByGraph</span> {
+            <span class="ident">blocked_by</span>: <span class="ident">sim</span>.<span class="ident">get_blocked_by_graph</span>(<span class="ident">map</span>),
+        })),
+        <span class="string">&quot;/data/trip-time-lower-bound&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">TripID</span>(<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
+            <span class="kw">let</span> <span class="ident">duration</span> <span class="op">=</span> <span class="ident">sim</span>.<span class="ident">get_trip_time_lower_bound</span>(<span class="ident">map</span>, <span class="ident">id</span>)<span class="question-mark">?</span>;
+            <span class="prelude-val">Ok</span>(<span class="ident">duration</span>.<span class="ident">inner_seconds</span>().<span class="ident">to_string</span>())
+        }
+        <span class="string">&quot;/data/all-trip-time-lower-bounds&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">results</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">TripID</span>, <span class="ident">Duration</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Timer</span>::<span class="ident">throwaway</span>()
+                .<span class="ident">parallelize</span>(
+                    <span class="string">&quot;calculate all trip time lower bounds&quot;</span>,
+                    <span class="ident">Parallelism</span>::<span class="ident">Fastest</span>,
+                    <span class="ident">sim</span>.<span class="ident">all_trip_info</span>(),
+                    <span class="op">|</span>(<span class="ident">id</span>, <span class="kw">_</span>)<span class="op">|</span> {
+                        <span class="ident">sim</span>.<span class="ident">get_trip_time_lower_bound</span>(<span class="ident">map</span>, <span class="ident">id</span>)
+                            .<span class="ident">ok</span>()
+                            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">dt</span><span class="op">|</span> (<span class="ident">id</span>, <span class="ident">dt</span>))
+                    },
+                )
+                .<span class="ident">into_iter</span>()
+                .<span class="ident">flatten</span>()
+                .<span class="ident">collect</span>();
+            <span class="prelude-val">Ok</span>(<span class="ident">abstutil</span>::<span class="ident">to_json</span>(<span class="kw-2">&amp;</span><span class="ident">results</span>))
+        }
         <span class="comment">// Controlling the map</span>
         <span class="string">&quot;/map/get-edits&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">edits</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_edits</span>().<span class="ident">clone</span>();
             <span class="ident">edits</span>.<span class="ident">commands</span>.<span class="ident">clear</span>();
             <span class="ident">edits</span>.<span class="ident">compress</span>(<span class="ident">map</span>);
-            <span class="prelude-val">Ok</span>(<span class="ident">abstutil</span>::<span class="ident">to_json</span>(<span class="kw-2">&amp;</span><span class="ident">PermanentMapEdits</span>::<span class="ident">to_permanent</span>(
-                <span class="kw-2">&amp;</span><span class="ident">edits</span>, <span class="ident">map</span>,
-            )))
+            <span class="prelude-val">Ok</span>(<span class="ident">abstutil</span>::<span class="ident">to_json</span>(<span class="kw-2">&amp;</span><span class="ident">edits</span>.<span class="ident">to_permanent</span>(<span class="ident">map</span>)))
         }
         <span class="string">&quot;/map/get-edit-road-command&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">RoadID</span>(<span class="ident">params</span>[<span class="string">&quot;id&quot;</span>].<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
+            <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">RoadID</span>(<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
             <span class="prelude-val">Ok</span>(<span class="ident">abstutil</span>::<span class="ident">to_json</span>(
                 <span class="kw-2">&amp;</span><span class="ident">map</span>.<span class="ident">edit_road_cmd</span>(<span class="ident">r</span>, <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {}).<span class="ident">to_perma</span>(<span class="ident">map</span>),
             ))
         }
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Unknown command&quot;</span>.<span class="ident">into</span>()),
+        <span class="string">&quot;/map/get-intersection-geometry&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">IntersectionID</span>(<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>)<span class="question-mark">?</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()<span class="question-mark">?</span>);
+            <span class="prelude-val">Ok</span>(<span class="ident">abstutil</span>::<span class="ident">to_json</span>(<span class="kw-2">&amp;</span><span class="ident">export_geometry</span>(<span class="ident">map</span>, <span class="ident">i</span>)))
+        }
+        <span class="string">&quot;/map/get-all-geometry&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">abstutil</span>::<span class="ident">to_json</span>(<span class="kw-2">&amp;</span><span class="ident">export_all_geometry</span>(<span class="ident">map</span>))),
+        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="macro">anyhow</span><span class="macro">!</span>(<span class="string">&quot;Unknown command&quot;</span>)),
     }
 }
 
@@ -741,9 +959,9 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>)]</span>
 <span class="kw">struct</span> <span class="ident">FinishedTrip</span> {
     <span class="ident">id</span>: <span class="ident">TripID</span>,
-    <span class="ident">duration</span>: <span class="ident">Duration</span>,
-    <span class="comment">// TODO Hack: No TripMode means aborted</span>
-    <span class="ident">mode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TripMode</span><span class="op">&gt;</span>,
+    <span class="ident">duration</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
+    <span class="ident">distance_crossed</span>: <span class="ident">Distance</span>,
+    <span class="ident">mode</span>: <span class="ident">TripMode</span>,
     <span class="ident">capped</span>: <span class="ident">bool</span>,
 }
 
@@ -766,10 +984,25 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>)]</span>
 <span class="kw">struct</span> <span class="ident">AgentPosition</span> {
-    <span class="comment">// None for pedestrians</span>
+    <span class="doccomment">/// None for pedestrians</span>
     <span class="ident">vehicle_type</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">VehicleType</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The agent&#39;s current position. For pedestrians, this is their center. For vehicles, this</span>
+    <span class="doccomment">/// represents the front of the vehicle.</span>
     <span class="ident">pos</span>: <span class="ident">LonLat</span>,
-    <span class="comment">// None for buses</span>
+    <span class="doccomment">/// The distance crossed so far by the agent, in meters. There are some caveats to this value:</span>
+    <span class="doccomment">/// - The distance along driveways between buildings/parking lots and the road doesn&#39;t count</span>
+    <span class="doccomment">///   here.</span>
+    <span class="doccomment">/// - The distance only represents the current leg of the trip. If somebody walks to a car, the</span>
+    <span class="doccomment">///   distance will reset when they begin driving, and also vehicle_type will change.</span>
+    <span class="doccomment">/// - No meaning for bus passengers currently.</span>
+    <span class="doccomment">/// - For buses and trains, the value will reset every time the vehicle reaches the next</span>
+    <span class="doccomment">///   transit stop.</span>
+    <span class="doccomment">/// - The value might be slightly undercounted or overcounted if the path crosses into or out</span>
+    <span class="doccomment">///   of an access-restricted or capped zone.</span>
+    <span class="doccomment">/// - At the very end of a driving trip, the agent may wind up crossing slightly more or less</span>
+    <span class="doccomment">///   than the total path length, due to where they park along that last road.</span>
+    <span class="ident">distance_crossed</span>: <span class="ident">Distance</span>,
+    <span class="doccomment">/// None for buses</span>
     <span class="ident">person</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PersonID</span><span class="op">&gt;</span>,
 }
 
@@ -788,6 +1021,14 @@
     <span class="ident">waiting</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">AgentID</span>, <span class="ident">TurnID</span>, <span class="ident">Time</span>)<span class="op">&gt;</span>,
 }
 
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>)]</span>
+<span class="kw">struct</span> <span class="ident">BlockedByGraph</span> {
+    <span class="doccomment">/// Each entry indicates that some agent has been stuck in one place for some amount of time,</span>
+    <span class="doccomment">/// due to being blocked by another agent or because they&#39;re waiting at an intersection.</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">serialize_with</span> <span class="op">=</span> <span class="string">&quot;serialize_btreemap&quot;</span>)]</span>
+    <span class="ident">blocked_by</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">AgentID</span>, (<span class="ident">Duration</span>, <span class="ident">DelayCause</span>)<span class="op">&gt;</span>,
+}
+
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
 <span class="kw">struct</span> <span class="ident">LoadSim</span> {
     <span class="ident">scenario</span>: <span class="ident">String</span>,
@@ -795,33 +1036,125 @@
     <span class="ident">edits</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PermanentMapEdits</span><span class="op">&gt;</span>,
     <span class="comment">// These are fixed from the initial command line flags</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_deserializing</span>)]</span>
-    <span class="ident">rng_seed</span>: <span class="ident">u8</span>,
+    <span class="ident">rng_seed</span>: <span class="ident">u64</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_deserializing</span>)]</span>
     <span class="ident">opts</span>: <span class="ident">SimOptions</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">LoadSim</span> {
     <span class="kw">fn</span> <span class="ident">setup</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Map</span>, <span class="ident">Sim</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scenario</span>: <span class="ident">Scenario</span> <span class="op">=</span> <span class="ident">abstutil</span>::<span class="ident">read_binary</span>(<span class="self">self</span>.<span class="ident">scenario</span>.<span class="ident">clone</span>(), <span class="ident">timer</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scenario</span>: <span class="ident">Scenario</span> <span class="op">=</span> <span class="ident">abstio</span>::<span class="ident">must_read_object</span>(<span class="self">self</span>.<span class="ident">scenario</span>.<span class="ident">clone</span>(), <span class="ident">timer</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">Map</span>::<span class="ident">new</span>(<span class="ident">abstutil</span>::<span class="ident">path_map</span>(<span class="kw-2">&amp;</span><span class="ident">scenario</span>.<span class="ident">map_name</span>), <span class="ident">timer</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">Map</span>::<span class="ident">new</span>(<span class="ident">scenario</span>.<span class="ident">map_name</span>.<span class="ident">path</span>(), <span class="ident">timer</span>);
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">perma</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">edits</span>.<span class="ident">clone</span>() {
-            <span class="kw">let</span> <span class="ident">edits</span> <span class="op">=</span> <span class="ident">PermanentMapEdits</span>::<span class="ident">from_permanent</span>(<span class="ident">perma</span>, <span class="kw-2">&amp;</span><span class="ident">map</span>).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">edits</span> <span class="op">=</span> <span class="ident">perma</span>.<span class="ident">to_edits</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>).<span class="ident">unwrap</span>();
             <span class="ident">map</span>.<span class="ident">must_apply_edits</span>(<span class="ident">edits</span>, <span class="ident">timer</span>);
             <span class="ident">map</span>.<span class="ident">recalculate_pathfinding_after_edits</span>(<span class="ident">timer</span>);
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modifier_rng</span> <span class="op">=</span> <span class="ident">XorShiftRng</span>::<span class="ident">from_seed</span>([<span class="self">self</span>.<span class="ident">rng_seed</span>; <span class="number">16</span>]);
         <span class="kw">for</span> <span class="ident">m</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">modifiers</span> {
-            <span class="ident">scenario</span> <span class="op">=</span> <span class="ident">m</span>.<span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>, <span class="ident">scenario</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">modifier_rng</span>);
+            <span class="ident">scenario</span> <span class="op">=</span> <span class="ident">m</span>.<span class="ident">apply</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>, <span class="ident">scenario</span>);
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">XorShiftRng</span>::<span class="ident">from_seed</span>([<span class="self">self</span>.<span class="ident">rng_seed</span>; <span class="number">16</span>]);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">XorShiftRng</span>::<span class="ident">seed_from_u64</span>(<span class="self">self</span>.<span class="ident">rng_seed</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sim</span> <span class="op">=</span> <span class="ident">Sim</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>, <span class="self">self</span>.<span class="ident">opts</span>.<span class="ident">clone</span>(), <span class="ident">timer</span>);
         <span class="ident">scenario</span>.<span class="ident">instantiate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sim</span>, <span class="kw-2">&amp;</span><span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rng</span>, <span class="ident">timer</span>);
 
         (<span class="ident">map</span>, <span class="ident">sim</span>)
     }
+}
+
+<span class="kw">fn</span> <span class="ident">export_geometry</span>(<span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">i</span>: <span class="ident">IntersectionID</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">geojson</span>::<span class="ident">GeoJson</span> {
+    <span class="kw">use</span> <span class="ident">geojson</span>::{<span class="ident">Feature</span>, <span class="ident">FeatureCollection</span>, <span class="ident">GeoJson</span>};
+
+    <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_i</span>(<span class="ident">i</span>);
+    <span class="comment">// Translate all geometry to center around the intersection, with distances in meters.</span>
+    <span class="kw">let</span> <span class="ident">center</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">polygon</span>.<span class="ident">center</span>();
+
+    <span class="comment">// The intersection itself</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">props</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">Map</span>::<span class="ident">new</span>();
+    <span class="ident">props</span>.<span class="ident">insert</span>(<span class="string">&quot;type&quot;</span>.<span class="ident">to_string</span>(), <span class="string">&quot;intersection&quot;</span>.<span class="ident">into</span>());
+    <span class="ident">props</span>.<span class="ident">insert</span>(<span class="string">&quot;id&quot;</span>.<span class="ident">to_string</span>(), <span class="ident">i</span>.<span class="ident">orig_id</span>.<span class="ident">to_string</span>().<span class="ident">into</span>());
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">features</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Feature</span> {
+        <span class="ident">bbox</span>: <span class="prelude-val">None</span>,
+        <span class="ident">geometry</span>: <span class="prelude-val">Some</span>(
+            <span class="ident">i</span>.<span class="ident">polygon</span>
+                .<span class="ident">translate</span>(<span class="op">-</span><span class="ident">center</span>.<span class="ident">x</span>(), <span class="op">-</span><span class="ident">center</span>.<span class="ident">y</span>())
+                .<span class="ident">into_ring</span>()
+                .<span class="ident">to_geojson</span>(<span class="prelude-val">None</span>),
+        ),
+        <span class="ident">id</span>: <span class="prelude-val">None</span>,
+        <span class="ident">properties</span>: <span class="prelude-val">Some</span>(<span class="ident">props</span>),
+        <span class="ident">foreign_members</span>: <span class="prelude-val">None</span>,
+    }];
+
+    <span class="comment">// Each connected road</span>
+    <span class="kw">for</span> <span class="ident">r</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">i</span>.<span class="ident">roads</span> {
+        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_r</span>(<span class="kw-2">*</span><span class="ident">r</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">props</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">Map</span>::<span class="ident">new</span>();
+        <span class="ident">props</span>.<span class="ident">insert</span>(<span class="string">&quot;type&quot;</span>.<span class="ident">to_string</span>(), <span class="string">&quot;road&quot;</span>.<span class="ident">into</span>());
+        <span class="ident">props</span>.<span class="ident">insert</span>(<span class="string">&quot;id&quot;</span>.<span class="ident">to_string</span>(), <span class="ident">r</span>.<span class="ident">orig_id</span>.<span class="ident">osm_way_id</span>.<span class="ident">to_string</span>().<span class="ident">into</span>());
+        <span class="ident">features</span>.<span class="ident">push</span>(<span class="ident">Feature</span> {
+            <span class="ident">bbox</span>: <span class="prelude-val">None</span>,
+            <span class="ident">geometry</span>: <span class="prelude-val">Some</span>(
+                <span class="ident">r</span>.<span class="ident">center_pts</span>
+                    .<span class="ident">to_thick_ring</span>(<span class="number">2.0</span> <span class="op">*</span> <span class="ident">r</span>.<span class="ident">get_half_width</span>(<span class="ident">map</span>))
+                    .<span class="ident">translate</span>(<span class="op">-</span><span class="ident">center</span>.<span class="ident">x</span>(), <span class="op">-</span><span class="ident">center</span>.<span class="ident">y</span>())
+                    .<span class="ident">to_geojson</span>(<span class="prelude-val">None</span>),
+            ),
+            <span class="ident">id</span>: <span class="prelude-val">None</span>,
+            <span class="ident">properties</span>: <span class="prelude-val">Some</span>(<span class="ident">props</span>),
+            <span class="ident">foreign_members</span>: <span class="prelude-val">None</span>,
+        });
+    }
+
+    <span class="ident">GeoJson</span>::<span class="ident">from</span>(<span class="ident">FeatureCollection</span> {
+        <span class="ident">bbox</span>: <span class="prelude-val">None</span>,
+        <span class="ident">features</span>,
+        <span class="ident">foreign_members</span>: <span class="prelude-val">None</span>,
+    })
+}
+
+<span class="kw">fn</span> <span class="ident">export_all_geometry</span>(<span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">geojson</span>::<span class="ident">GeoJson</span> {
+    <span class="kw">use</span> <span class="ident">geojson</span>::{<span class="ident">Feature</span>, <span class="ident">FeatureCollection</span>, <span class="ident">GeoJson</span>};
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">features</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+    <span class="kw">let</span> <span class="ident">gps_bounds</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">map</span>.<span class="ident">get_gps_bounds</span>());
+
+    <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">map</span>.<span class="ident">all_intersections</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">props</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">Map</span>::<span class="ident">new</span>();
+        <span class="ident">props</span>.<span class="ident">insert</span>(<span class="string">&quot;type&quot;</span>.<span class="ident">to_string</span>(), <span class="string">&quot;intersection&quot;</span>.<span class="ident">into</span>());
+        <span class="ident">props</span>.<span class="ident">insert</span>(<span class="string">&quot;id&quot;</span>.<span class="ident">to_string</span>(), <span class="ident">i</span>.<span class="ident">orig_id</span>.<span class="ident">to_string</span>().<span class="ident">into</span>());
+        <span class="ident">features</span>.<span class="ident">push</span>(<span class="ident">Feature</span> {
+            <span class="ident">bbox</span>: <span class="prelude-val">None</span>,
+            <span class="ident">geometry</span>: <span class="prelude-val">Some</span>(<span class="ident">i</span>.<span class="ident">polygon</span>.<span class="ident">clone</span>().<span class="ident">into_ring</span>().<span class="ident">to_geojson</span>(<span class="ident">gps_bounds</span>)),
+            <span class="ident">id</span>: <span class="prelude-val">None</span>,
+            <span class="ident">properties</span>: <span class="prelude-val">Some</span>(<span class="ident">props</span>),
+            <span class="ident">foreign_members</span>: <span class="prelude-val">None</span>,
+        });
+    }
+    <span class="kw">for</span> <span class="ident">r</span> <span class="kw">in</span> <span class="ident">map</span>.<span class="ident">all_roads</span>() {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">props</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">Map</span>::<span class="ident">new</span>();
+        <span class="ident">props</span>.<span class="ident">insert</span>(<span class="string">&quot;type&quot;</span>.<span class="ident">to_string</span>(), <span class="string">&quot;road&quot;</span>.<span class="ident">into</span>());
+        <span class="ident">props</span>.<span class="ident">insert</span>(<span class="string">&quot;id&quot;</span>.<span class="ident">to_string</span>(), <span class="ident">r</span>.<span class="ident">orig_id</span>.<span class="ident">osm_way_id</span>.<span class="ident">to_string</span>().<span class="ident">into</span>());
+        <span class="ident">features</span>.<span class="ident">push</span>(<span class="ident">Feature</span> {
+            <span class="ident">bbox</span>: <span class="prelude-val">None</span>,
+            <span class="ident">geometry</span>: <span class="prelude-val">Some</span>(
+                <span class="ident">r</span>.<span class="ident">center_pts</span>
+                    .<span class="ident">to_thick_ring</span>(<span class="number">2.0</span> <span class="op">*</span> <span class="ident">r</span>.<span class="ident">get_half_width</span>(<span class="ident">map</span>))
+                    .<span class="ident">to_geojson</span>(<span class="ident">gps_bounds</span>),
+            ),
+            <span class="ident">id</span>: <span class="prelude-val">None</span>,
+            <span class="ident">properties</span>: <span class="prelude-val">Some</span>(<span class="ident">props</span>),
+            <span class="ident">foreign_members</span>: <span class="prelude-val">None</span>,
+        });
+    }
+
+    <span class="ident">GeoJson</span>::<span class="ident">from</span>(<span class="ident">FeatureCollection</span> {
+        <span class="ident">bbox</span>: <span class="prelude-val">None</span>,
+        <span class="ident">features</span>,
+        <span class="ident">foreign_members</span>: <span class="prelude-val">None</span>,
+    })
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "headless";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

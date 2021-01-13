@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `widgetry/src/runner.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>runner.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../widgetry/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `widgetry/src/runner.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>runner.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../widgetry/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -340,35 +343,75 @@
 <span id="340">340</span>
 <span id="341">341</span>
 <span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">assets</span>::<span class="ident">Assets</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">tools</span>::<span class="ident">screenshot</span>::<span class="ident">screenshot_everything</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Canvas</span>, <span class="ident">Event</span>, <span class="ident">EventCtx</span>, <span class="ident">GfxCtx</span>, <span class="ident">Key</span>, <span class="ident">Prerender</span>, <span class="ident">Style</span>, <span class="ident">Text</span>, <span class="ident">UpdateType</span>, <span class="ident">UserInput</span>};
-<span class="kw">use</span> <span class="ident">geom</span>::<span class="ident">Duration</span>;
-<span class="kw">use</span> <span class="ident">image</span>::{<span class="ident">GenericImageView</span>, <span class="ident">Pixel</span>};
-<span class="kw">use</span> <span class="ident">instant</span>::<span class="ident">Instant</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::{<span class="ident">Cell</span>, <span class="ident">RefCell</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">panic</span>;
+
+<span class="kw">use</span> <span class="ident">image</span>::{<span class="ident">GenericImageView</span>, <span class="ident">Pixel</span>};
+<span class="kw">use</span> <span class="ident">instant</span>::<span class="ident">Instant</span>;
 <span class="kw">use</span> <span class="ident">winit</span>::<span class="ident">window</span>::<span class="ident">Icon</span>;
 
+<span class="kw">use</span> <span class="ident">abstutil</span>::{<span class="ident">elapsed_seconds</span>, <span class="ident">Timer</span>};
+<span class="kw">use</span> <span class="ident">geom</span>::<span class="ident">Duration</span>;
+
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">app_state</span>::<span class="ident">App</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">assets</span>::<span class="ident">Assets</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">tools</span>::<span class="ident">screenshot</span>::<span class="ident">screenshot_everything</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">Canvas</span>, <span class="ident">Event</span>, <span class="ident">EventCtx</span>, <span class="ident">GfxCtx</span>, <span class="ident">Prerender</span>, <span class="ident">SharedAppState</span>, <span class="ident">Style</span>, <span class="ident">Text</span>, <span class="ident">UpdateType</span>, <span class="ident">UserInput</span>,
+};
+
 <span class="kw">const</span> <span class="ident">UPDATE_FREQUENCY</span>: <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_millis</span>(<span class="number">1000</span> <span class="op">/</span> <span class="number">30</span>);
+<span class="comment">// Manually enable and then check STDOUT</span>
+<span class="kw">const</span> <span class="ident">DEBUG_PERFORMANCE</span>: <span class="ident">bool</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">GUI</span> {
-    <span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>);
-    <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GfxCtx</span>);
-    <span class="comment">// Will be called if event or draw panics.</span>
-    <span class="kw">fn</span> <span class="ident">dump_before_abort</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_canvas</span>: <span class="kw-2">&amp;</span><span class="ident">Canvas</span>) {}
-    <span class="comment">// Only before a normal exit, like window close</span>
-    <span class="kw">fn</span> <span class="ident">before_quit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_canvas</span>: <span class="kw-2">&amp;</span><span class="ident">Canvas</span>) {}
-}
-
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">G</span>: <span class="ident">GUI</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">gui</span>: <span class="ident">G</span>,
+<span class="comment">// TODO Rename this GUI or something</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">SharedAppState</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">app</span>: <span class="ident">App</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">canvas</span>: <span class="ident">Canvas</span>,
     <span class="ident">style</span>: <span class="ident">Style</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">G</span>: <span class="ident">GUI</span><span class="op">&gt;</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">G</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">SharedAppState</span><span class="op">&gt;</span> <span class="ident">State</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> {
     <span class="comment">// The bool indicates if the input was actually used.</span>
     <span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">ev</span>: <span class="ident">Event</span>, <span class="ident">prerender</span>: <span class="kw-2">&amp;</span><span class="ident">Prerender</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">UpdateType</span><span class="op">&gt;</span>, <span class="ident">bool</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Event</span>::<span class="ident">MouseWheelScroll</span>(<span class="ident">dx</span>, <span class="ident">dy</span>) <span class="op">=</span> <span class="ident">ev</span> {
@@ -417,17 +460,10 @@
                 <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">window_height</span> <span class="op">=</span> <span class="ident">inner_size</span>.<span class="ident">height</span>;
             }
 
-            <span class="kw">if</span> <span class="ident">input</span>.<span class="ident">event</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Event</span>::<span class="ident">KeyPress</span>(<span class="ident">Key</span>::<span class="ident">LeftControl</span>) {
-                <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">lctrl_held</span> <span class="op">=</span> <span class="bool-val">true</span>;
-            }
-            <span class="kw">if</span> <span class="ident">input</span>.<span class="ident">event</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Event</span>::<span class="ident">KeyRelease</span>(<span class="ident">Key</span>::<span class="ident">LeftControl</span>) {
-                <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">lctrl_held</span> <span class="op">=</span> <span class="bool-val">false</span>;
-            }
-            <span class="kw">if</span> <span class="ident">input</span>.<span class="ident">event</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Event</span>::<span class="ident">KeyPress</span>(<span class="ident">Key</span>::<span class="ident">LeftShift</span>) {
-                <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">lshift_held</span> <span class="op">=</span> <span class="bool-val">true</span>;
-            }
-            <span class="kw">if</span> <span class="ident">input</span>.<span class="ident">event</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Event</span>::<span class="ident">KeyRelease</span>(<span class="ident">Key</span>::<span class="ident">LeftShift</span>) {
-                <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">lshift_held</span> <span class="op">=</span> <span class="bool-val">false</span>;
+            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Event</span>::<span class="ident">KeyPress</span>(<span class="ident">key</span>) <span class="op">=</span> <span class="ident">input</span>.<span class="ident">event</span> {
+                <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">keys_held</span>.<span class="ident">insert</span>(<span class="ident">key</span>);
+            } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Event</span>::<span class="ident">KeyRelease</span>(<span class="ident">key</span>) <span class="op">=</span> <span class="ident">input</span>.<span class="ident">event</span> {
+                <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">keys_held</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">key</span>);
             }
 
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pt</span>) <span class="op">=</span> <span class="ident">input</span>.<span class="ident">get_moved_mouse</span>() {
@@ -451,7 +487,11 @@
                 <span class="ident">style</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">style</span>,
                 <span class="ident">updates_requested</span>: <span class="macro">vec</span><span class="macro">!</span>[],
             };
-            <span class="self">self</span>.<span class="ident">gui</span>.<span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
+            <span class="kw">let</span> <span class="ident">started</span> <span class="op">=</span> <span class="ident">Instant</span>::<span class="ident">now</span>();
+            <span class="self">self</span>.<span class="ident">app</span>.<span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
+            <span class="kw">if</span> <span class="ident">DEBUG_PERFORMANCE</span> {
+                <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;- event() took {}s&quot;</span>, <span class="ident">elapsed_seconds</span>(<span class="ident">started</span>));
+            }
             <span class="comment">// TODO We should always do has_been_consumed, but various hacks prevent this from being</span>
             <span class="comment">// true. For now, just avoid the specific annoying redraw case when a KeyRelease event</span>
             <span class="comment">// is unused.</span>
@@ -463,32 +503,34 @@
         })) {
             <span class="prelude-val">Ok</span>(<span class="ident">pair</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">pair</span>,
             <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">gui</span>.<span class="ident">dump_before_abort</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">canvas</span>);
+                <span class="self">self</span>.<span class="ident">app</span>.<span class="ident">shared_app_state</span>.<span class="ident">dump_before_abort</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">canvas</span>);
                 <span class="ident">panic</span>::<span class="ident">resume_unwind</span>(<span class="ident">err</span>);
             }
         }
     }
 
-    <span class="comment">// Returns naming hint. Logically consumes the number of uploads.</span>
+    <span class="doccomment">/// Returns naming hint. Logically consumes the number of uploads.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">prerender</span>: <span class="kw-2">&amp;</span><span class="ident">Prerender</span>, <span class="ident">screenshot</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">g</span> <span class="op">=</span> <span class="ident">GfxCtx</span>::<span class="ident">new</span>(<span class="ident">prerender</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">canvas</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">style</span>, <span class="ident">screenshot</span>);
 
         <span class="self">self</span>.<span class="ident">canvas</span>.<span class="ident">start_drawing</span>();
 
+        <span class="kw">let</span> <span class="ident">started</span> <span class="op">=</span> <span class="ident">Instant</span>::<span class="ident">now</span>();
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">panic</span>::<span class="ident">catch_unwind</span>(<span class="ident">panic</span>::<span class="ident">AssertUnwindSafe</span>(<span class="op">|</span><span class="op">|</span> {
-            <span class="self">self</span>.<span class="ident">gui</span>.<span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">g</span>);
+            <span class="self">self</span>.<span class="ident">app</span>.<span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">g</span>);
         })) {
-            <span class="self">self</span>.<span class="ident">gui</span>.<span class="ident">dump_before_abort</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">canvas</span>);
+            <span class="self">self</span>.<span class="ident">app</span>.<span class="ident">shared_app_state</span>.<span class="ident">dump_before_abort</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">canvas</span>);
             <span class="ident">panic</span>::<span class="ident">resume_unwind</span>(<span class="ident">err</span>);
         }
         <span class="kw">let</span> <span class="ident">naming_hint</span> <span class="op">=</span> <span class="ident">g</span>.<span class="ident">naming_hint</span>.<span class="ident">take</span>();
 
-        <span class="kw">if</span> <span class="bool-val">false</span> {
+        <span class="kw">if</span> <span class="ident">DEBUG_PERFORMANCE</span> {
             <span class="macro">println</span><span class="macro">!</span>(
-                <span class="string">&quot;----- {} uploads, {} draw calls, {} forks -----&quot;</span>,
+                <span class="string">&quot;----- {} uploads, {} draw calls, {} forks. draw() took {} -----&quot;</span>,
                 <span class="ident">g</span>.<span class="ident">get_num_uploads</span>(),
                 <span class="ident">g</span>.<span class="ident">num_draw_calls</span>,
-                <span class="ident">g</span>.<span class="ident">num_forks</span>
+                <span class="ident">g</span>.<span class="ident">num_forks</span>,
+                <span class="ident">elapsed_seconds</span>(<span class="ident">started</span>)
             );
         }
 
@@ -497,52 +539,83 @@
     }
 }
 
+<span class="doccomment">/// Customize how widgetry works. These settings can&#39;t be changed after starting.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Settings</span> {
     <span class="ident">window_title</span>: <span class="ident">String</span>,
-    <span class="ident">profiling_enabled</span>: <span class="ident">bool</span>,
     <span class="ident">dump_raw_events</span>: <span class="ident">bool</span>,
     <span class="ident">scale_factor</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
     <span class="ident">window_icon</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="ident">loading_tips</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Text</span><span class="op">&gt;</span>,
+    <span class="ident">read_svg</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Settings</span> {
+    <span class="doccomment">/// Specify the title of the window to open.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">window_title</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Settings</span> {
         <span class="ident">Settings</span> {
             <span class="ident">window_title</span>: <span class="ident">window_title</span>.<span class="ident">to_string</span>(),
-            <span class="ident">profiling_enabled</span>: <span class="bool-val">false</span>,
             <span class="ident">dump_raw_events</span>: <span class="bool-val">false</span>,
             <span class="ident">scale_factor</span>: <span class="prelude-val">None</span>,
             <span class="ident">window_icon</span>: <span class="prelude-val">None</span>,
             <span class="ident">loading_tips</span>: <span class="prelude-val">None</span>,
+            <span class="ident">read_svg</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="op">|</span><span class="ident">path</span><span class="op">|</span> {
+                <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Read</span>;
+
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">fs</span>::<span class="ident">File</span>::<span class="ident">open</span>(<span class="ident">path</span>).<span class="ident">expect</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Couldn&#39;t read {}&quot;</span>, <span class="ident">path</span>));
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+                <span class="ident">file</span>.<span class="ident">read_to_end</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buffer</span>)
+                    .<span class="ident">expect</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Couldn&#39;t read all of {}&quot;</span>, <span class="ident">path</span>));
+                <span class="ident">buffer</span>
+            }),
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_profiling</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">profiling_enabled</span>);
-        <span class="self">self</span>.<span class="ident">profiling_enabled</span> <span class="op">=</span> <span class="bool-val">true</span>;
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dump_raw_events</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+    <span class="doccomment">/// Log every raw winit event to the DEBUG level.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dump_raw_events</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">dump_raw_events</span>);
         <span class="self">self</span>.<span class="ident">dump_raw_events</span> <span class="op">=</span> <span class="bool-val">true</span>;
+        <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">scale_factor</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">scale_factor</span>: <span class="ident">f64</span>) {
+    <span class="doccomment">/// Override the initial HiDPI scale factor from whatever winit initially detects.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">scale_factor</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">scale_factor</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">scale_factor</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">scale_factor</span>);
+        <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">window_icon</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">path</span>: <span class="ident">String</span>) {
+    <span class="doccomment">/// Sets the window icon. This should be a 32x32 image.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">window_icon</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">path</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">window_icon</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">path</span>);
+        <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">loading_tips</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">txt</span>: <span class="ident">Text</span>) {
+    <span class="doccomment">/// Sets the text that&#39;ll appear during long `ctx.loading_screen` calls. You can use this as a</span>
+    <span class="doccomment">/// way to entertain your users while they&#39;re waiting.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">loading_tips</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">txt</span>: <span class="ident">Text</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">loading_tips</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">txt</span>);
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// When calling `Widget::draw_svg`, `Btn::svg`, and similar, use this function to transform</span>
+    <span class="doccomment">/// the filename given to the raw bytes of that SVG file. By default, this just reads the</span>
+    <span class="doccomment">/// file normally. You may want to override this to more conveniently locate the file</span>
+    <span class="doccomment">/// (transforming a short filename to a full path) or to handle reading files in WASM (where</span>
+    <span class="doccomment">/// regular filesystem IO doesn&#39;t work).</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read_svg</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">function</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">read_svg</span> <span class="op">=</span> <span class="ident">function</span>;
+        <span class="self">self</span>
     }
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span><span class="ident">G</span>: <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">GUI</span>, <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">G</span><span class="op">&gt;</span>(<span class="ident">settings</span>: <span class="ident">Settings</span>, <span class="ident">make_gui</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="op">!</span> {
-    <span class="kw">let</span> (<span class="ident">prerender_innards</span>, <span class="ident">event_loop</span>) <span class="op">=</span> <span class="kw">crate</span>::<span class="ident">backend</span>::<span class="ident">setup</span>(<span class="kw-2">&amp;</span><span class="ident">settings</span>.<span class="ident">window_title</span>);
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span><span class="op">&lt;</span>
+    <span class="ident">A</span>: <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">SharedAppState</span>,
+    <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">A</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="kw">crate</span>::<span class="ident">app_state</span>::<span class="ident">State</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>),
+<span class="op">&gt;</span>(
+    <span class="ident">settings</span>: <span class="ident">Settings</span>,
+    <span class="ident">make_app</span>: <span class="ident">F</span>,
+) <span class="op">-</span><span class="op">&gt;</span> <span class="op">!</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">timer</span> <span class="op">=</span> <span class="ident">Timer</span>::<span class="ident">new</span>(<span class="string">&quot;setup widgetry&quot;</span>);
+    <span class="kw">let</span> (<span class="ident">prerender_innards</span>, <span class="ident">event_loop</span>) <span class="op">=</span> <span class="kw">crate</span>::<span class="ident">backend</span>::<span class="ident">setup</span>(<span class="kw-2">&amp;</span><span class="ident">settings</span>.<span class="ident">window_title</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">timer</span>);
 
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">path</span>) <span class="op">=</span> <span class="ident">settings</span>.<span class="ident">window_icon</span> {
         <span class="kw">if</span> <span class="op">!</span><span class="macro">cfg</span><span class="macro">!</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>) {
@@ -559,7 +632,7 @@
 
     <span class="kw">let</span> <span class="ident">monitor_scale_factor</span> <span class="op">=</span> <span class="ident">prerender_innards</span>.<span class="ident">monitor_scale_factor</span>();
     <span class="kw">let</span> <span class="ident">prerender</span> <span class="op">=</span> <span class="ident">Prerender</span> {
-        <span class="ident">assets</span>: <span class="ident">Assets</span>::<span class="ident">new</span>(),
+        <span class="ident">assets</span>: <span class="ident">Assets</span>::<span class="ident">new</span>(<span class="ident">settings</span>.<span class="ident">read_svg</span>),
         <span class="ident">num_uploads</span>: <span class="ident">Cell</span>::<span class="ident">new</span>(<span class="number">0</span>),
         <span class="ident">inner</span>: <span class="ident">prerender_innards</span>,
         <span class="ident">scale_factor</span>: <span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">settings</span>.<span class="ident">scale_factor</span>.<span class="ident">unwrap_or</span>(<span class="ident">monitor_scale_factor</span>)),
@@ -571,7 +644,8 @@
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">canvas</span> <span class="op">=</span> <span class="ident">Canvas</span>::<span class="ident">new</span>(<span class="ident">initial_size</span>);
     <span class="ident">prerender</span>.<span class="ident">window_resized</span>(<span class="ident">initial_size</span>);
 
-    <span class="kw">let</span> <span class="ident">gui</span> <span class="op">=</span> <span class="ident">make_gui</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span> {
+    <span class="ident">timer</span>.<span class="ident">start</span>(<span class="string">&quot;setup app&quot;</span>);
+    <span class="kw">let</span> (<span class="ident">shared_app_state</span>, <span class="ident">states</span>) <span class="op">=</span> <span class="ident">make_app</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span> {
         <span class="ident">fake_mouseover</span>: <span class="bool-val">true</span>,
         <span class="ident">input</span>: <span class="ident">UserInput</span>::<span class="ident">new</span>(<span class="ident">Event</span>::<span class="ident">NoOp</span>, <span class="kw-2">&amp;</span><span class="ident">canvas</span>),
         <span class="ident">canvas</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">canvas</span>,
@@ -579,21 +653,22 @@
         <span class="ident">style</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">style</span>,
         <span class="ident">updates_requested</span>: <span class="macro">vec</span><span class="macro">!</span>[],
     });
+    <span class="ident">timer</span>.<span class="ident">stop</span>(<span class="string">&quot;setup app&quot;</span>);
+    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App</span> {
+        <span class="ident">shared_app_state</span>,
+        <span class="ident">states</span>,
+    };
+    <span class="ident">timer</span>.<span class="ident">done</span>();
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">State</span> { <span class="ident">canvas</span>, <span class="ident">gui</span>, <span class="ident">style</span> };
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">State</span> { <span class="ident">canvas</span>, <span class="ident">app</span>, <span class="ident">style</span> };
 
-    <span class="kw">if</span> <span class="ident">settings</span>.<span class="ident">profiling_enabled</span> {
-        <span class="ident">abstutil</span>::<span class="ident">start_profiler</span>();
-    }
-
-    <span class="kw">let</span> <span class="ident">profiling_enabled</span> <span class="op">=</span> <span class="ident">settings</span>.<span class="ident">profiling_enabled</span>;
     <span class="kw">let</span> <span class="ident">dump_raw_events</span> <span class="op">=</span> <span class="ident">settings</span>.<span class="ident">dump_raw_events</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">running</span> <span class="op">=</span> <span class="bool-val">true</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_update</span> <span class="op">=</span> <span class="ident">Instant</span>::<span class="ident">now</span>();
     <span class="ident">event_loop</span>.<span class="ident">run</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">event</span>, <span class="kw">_</span>, <span class="ident">control_flow</span><span class="op">|</span> {
         <span class="kw">if</span> <span class="ident">dump_raw_events</span> {
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Event: {:?}&quot;</span>, <span class="ident">event</span>);
+            <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;Event: {:?}&quot;</span>, <span class="ident">event</span>);
         }
         <span class="kw">let</span> <span class="ident">ev</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">event</span> {
             <span class="ident">winit</span>::<span class="ident">event</span>::<span class="ident">Event</span>::<span class="ident">WindowEvent</span> {
@@ -603,10 +678,7 @@
                 <span class="comment">// ControlFlow::Exit cleanly shuts things down, meaning on larger maps, lots of</span>
                 <span class="comment">// GPU stuff is dropped. Better to just abort violently and let the OS clean</span>
                 <span class="comment">// up.</span>
-                <span class="kw">if</span> <span class="ident">profiling_enabled</span> {
-                    <span class="ident">abstutil</span>::<span class="ident">stop_profiler</span>();
-                }
-                <span class="ident">state</span>.<span class="ident">gui</span>.<span class="ident">before_quit</span>(<span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">canvas</span>);
+                <span class="ident">state</span>.<span class="ident">app</span>.<span class="ident">shared_app_state</span>.<span class="ident">before_quit</span>(<span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">canvas</span>);
                 <span class="ident">std</span>::<span class="ident">process</span>::<span class="ident">exit</span>(<span class="number">0</span>);
             }
             <span class="ident">winit</span>::<span class="ident">event</span>::<span class="ident">Event</span>::<span class="ident">WindowEvent</span> { <span class="ident">event</span>, .. } <span class="op">=</span><span class="op">&gt;</span> {
@@ -674,10 +746,19 @@
                 <span class="ident">UpdateType</span>::<span class="ident">ScreenCaptureEverything</span> {
                     <span class="ident">dir</span>,
                     <span class="ident">zoom</span>,
-                    <span class="ident">max_x</span>,
-                    <span class="ident">max_y</span>,
+                    <span class="ident">dims</span>,
+                    <span class="ident">leaflet_naming</span>,
                 } <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">screenshot_everything</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">state</span>, <span class="kw-2">&amp;</span><span class="ident">dir</span>, <span class="kw-2">&amp;</span><span class="ident">prerender</span>, <span class="ident">zoom</span>, <span class="ident">max_x</span>, <span class="ident">max_y</span>);
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">screenshot_everything</span>(
+                        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">state</span>,
+                        <span class="kw-2">&amp;</span><span class="ident">dir</span>,
+                        <span class="kw-2">&amp;</span><span class="ident">prerender</span>,
+                        <span class="ident">zoom</span>,
+                        <span class="ident">dims</span>,
+                        <span class="ident">leaflet_naming</span>,
+                    ) {
+                        <span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Couldn&#39;t screenshot everything: {}&quot;</span>, <span class="ident">err</span>);
+                    }
                 }
             }
         }

@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `sim/src/sim/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../sim/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `sim/src/sim/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../sim/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1018,39 +1021,42 @@
 <span id="1018">1018</span>
 <span id="1019">1019</span>
 <span id="1020">1020</span>
-<span id="1021">1021</span>
-<span id="1022">1022</span>
-<span id="1023">1023</span>
-<span id="1024">1024</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">mod</span> <span class="ident">queries</span>;
+<span class="comment">// This file has a jumbled mess of queries, setup, and mutating methods.</span>
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">queries</span>::<span class="ident">AgentProperties</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">AgentID</span>, <span class="ident">AlertLocation</span>, <span class="ident">Analytics</span>, <span class="ident">CapSimState</span>, <span class="ident">CarID</span>, <span class="ident">Command</span>, <span class="ident">CreateCar</span>, <span class="ident">DrawCarInput</span>,
-    <span class="ident">DrawPedCrowdInput</span>, <span class="ident">DrawPedestrianInput</span>, <span class="ident">DrivingSimState</span>, <span class="ident">Event</span>, <span class="ident">GetDrawAgents</span>,
-    <span class="ident">IntersectionSimState</span>, <span class="ident">OrigPersonID</span>, <span class="ident">PandemicModel</span>, <span class="ident">ParkedCar</span>, <span class="ident">ParkingSim</span>, <span class="ident">ParkingSimState</span>,
-    <span class="ident">ParkingSpot</span>, <span class="ident">PedestrianID</span>, <span class="ident">Person</span>, <span class="ident">PersonID</span>, <span class="ident">Router</span>, <span class="ident">Scheduler</span>, <span class="ident">SidewalkPOI</span>, <span class="ident">SidewalkSpot</span>,
-    <span class="ident">TransitSimState</span>, <span class="ident">TripID</span>, <span class="ident">TripManager</span>, <span class="ident">TripPhaseType</span>, <span class="ident">TripSpawner</span>, <span class="ident">UnzoomedAgent</span>, <span class="ident">Vehicle</span>,
-    <span class="ident">VehicleSpec</span>, <span class="ident">VehicleType</span>, <span class="ident">WalkingSimState</span>, <span class="ident">BUS_LENGTH</span>, <span class="ident">LIGHT_RAIL_LENGTH</span>, <span class="ident">MIN_CAR_LENGTH</span>,
-    <span class="ident">SPAWN_DIST</span>,
-};
-<span class="kw">use</span> <span class="ident">abstutil</span>::{<span class="ident">prettyprint_usize</span>, <span class="ident">serialized_size_bytes</span>, <span class="ident">CmdArgs</span>, <span class="ident">Parallelism</span>, <span class="ident">Timer</span>};
-<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Distance</span>, <span class="ident">Duration</span>, <span class="ident">Speed</span>, <span class="ident">Time</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeSet</span>, <span class="ident">HashSet</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">panic</span>;
+
+<span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
 <span class="kw">use</span> <span class="ident">instant</span>::<span class="ident">Instant</span>;
-<span class="kw">use</span> <span class="ident">map_model</span>::{
-    <span class="ident">BuildingID</span>, <span class="ident">BusRoute</span>, <span class="ident">LaneID</span>, <span class="ident">Map</span>, <span class="ident">ParkingLotID</span>, <span class="ident">Path</span>, <span class="ident">PathConstraints</span>, <span class="ident">PathRequest</span>, <span class="ident">Position</span>,
-    <span class="ident">Traversable</span>,
-};
 <span class="kw">use</span> <span class="ident">rand</span>::<span class="ident">SeedableRng</span>;
 <span class="kw">use</span> <span class="ident">rand_xorshift</span>::<span class="ident">XorShiftRng</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::{<span class="ident">BTreeSet</span>, <span class="ident">HashSet</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">panic</span>;
+
+<span class="kw">use</span> <span class="ident">abstio</span>::<span class="ident">MapName</span>;
+<span class="kw">use</span> <span class="ident">abstutil</span>::{<span class="ident">prettyprint_usize</span>, <span class="ident">serialized_size_bytes</span>, <span class="ident">CmdArgs</span>, <span class="ident">Timer</span>};
+<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Distance</span>, <span class="ident">Duration</span>, <span class="ident">Speed</span>, <span class="ident">Time</span>};
+<span class="kw">use</span> <span class="ident">map_model</span>::{
+    <span class="ident">BuildingID</span>, <span class="ident">BusRoute</span>, <span class="ident">IntersectionID</span>, <span class="ident">LaneID</span>, <span class="ident">Map</span>, <span class="ident">ParkingLotID</span>, <span class="ident">Path</span>, <span class="ident">PathConstraints</span>,
+    <span class="ident">PathRequest</span>, <span class="ident">Position</span>, <span class="ident">Traversable</span>,
+};
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">queries</span>::{<span class="ident">AgentProperties</span>, <span class="ident">DelayCause</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">AgentID</span>, <span class="ident">AlertLocation</span>, <span class="ident">Analytics</span>, <span class="ident">CapSimState</span>, <span class="ident">CarID</span>, <span class="ident">Command</span>, <span class="ident">CreateCar</span>, <span class="ident">DrivingSimState</span>,
+    <span class="ident">Event</span>, <span class="ident">IntersectionSimState</span>, <span class="ident">OrigPersonID</span>, <span class="ident">PandemicModel</span>, <span class="ident">ParkedCar</span>, <span class="ident">ParkingSim</span>,
+    <span class="ident">ParkingSimState</span>, <span class="ident">ParkingSpot</span>, <span class="ident">Person</span>, <span class="ident">PersonID</span>, <span class="ident">Router</span>, <span class="ident">Scheduler</span>, <span class="ident">SidewalkPOI</span>, <span class="ident">SidewalkSpot</span>,
+    <span class="ident">StartTripArgs</span>, <span class="ident">TrafficRecorder</span>, <span class="ident">TransitSimState</span>, <span class="ident">TripID</span>, <span class="ident">TripInfo</span>, <span class="ident">TripManager</span>, <span class="ident">TripPhaseType</span>,
+    <span class="ident">Vehicle</span>, <span class="ident">VehicleSpec</span>, <span class="ident">VehicleType</span>, <span class="ident">WalkingSimState</span>, <span class="ident">BUS_LENGTH</span>, <span class="ident">LIGHT_RAIL_LENGTH</span>,
+    <span class="ident">MIN_CAR_LENGTH</span>,
+};
+
+<span class="kw">mod</span> <span class="ident">queries</span>;
 
 <span class="comment">// TODO Do something else.</span>
 <span class="kw">const</span> <span class="ident">BLIND_RETRY_TO_SPAWN</span>: <span class="ident">Duration</span> <span class="op">=</span> <span class="ident">Duration</span>::<span class="ident">const_seconds</span>(<span class="number">5.0</span>);
 
+<span class="doccomment">/// The Sim ties together all the pieces of the simulation. Its main property is the current time.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Sim</span> {
     <span class="ident">driving</span>: <span class="ident">DrivingSimState</span>,
@@ -1065,43 +1071,76 @@
     <span class="ident">scheduler</span>: <span class="ident">Scheduler</span>,
     <span class="ident">time</span>: <span class="ident">Time</span>,
 
-    <span class="comment">// TODO Reconsider these</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">map_name</span>: <span class="ident">String</span>,
+    <span class="comment">// These&#39;re needed to load from a savestate.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">map_name</span>: <span class="ident">MapName</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">edits_name</span>: <span class="ident">String</span>,
     <span class="comment">// Some tests deliberately set different scenario names for comparisons.</span>
     <span class="comment">// TODO Maybe get rid of this, now that savestates aren&#39;t used</span>
     <span class="ident">run_name</span>: <span class="ident">String</span>,
     <span class="ident">step_count</span>: <span class="ident">usize</span>,
 
-    <span class="comment">// Don&#39;t serialize, to reduce prebaked savestate size. Analytics are saved once covering the</span>
-    <span class="comment">// full day and can be trimmed to any time.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing</span>, <span class="ident">skip_deserializing</span>)]</span>
     <span class="ident">analytics</span>: <span class="ident">Analytics</span>,
+    <span class="comment">// This is created interactively, and there&#39;s no reason to preserve one for savestates.</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing</span>, <span class="ident">skip_deserializing</span>)]</span>
+    <span class="ident">recorder</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TrafficRecorder</span><span class="op">&gt;</span>,
 
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing</span>, <span class="ident">skip_deserializing</span>)]</span>
     <span class="ident">alerts</span>: <span class="ident">AlertHandler</span>,
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Ctx</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Ctx</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="ident">parking</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">ParkingSimState</span>,
     <span class="kw">pub</span> <span class="ident">intersections</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">IntersectionSimState</span>,
     <span class="kw">pub</span> <span class="ident">cap</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">CapSimState</span>,
     <span class="kw">pub</span> <span class="ident">scheduler</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">Scheduler</span>,
     <span class="kw">pub</span> <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Map</span>,
+    <span class="doccomment">/// If true, live map edits are being processed. Some regular work should maybe be skipped.</span>
+    <span class="kw">pub</span> <span class="ident">handling_live_edits</span>: <span class="ident">bool</span>,
 }
 
+<span class="doccomment">/// Options controlling the traffic simulation.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SimOptions</span> {
+    <span class="doccomment">/// Used to distinguish savestates for running the same scenario.</span>
     <span class="kw">pub</span> <span class="ident">run_name</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// Ignore all stop signs and traffic signals, instead using a &quot;freeform&quot; policy to control</span>
+    <span class="doccomment">/// access to intersections. If a requested turn doesn&#39;t conflict with an already accepted one,</span>
+    <span class="doccomment">/// immediately accept it. FIFO ordering, no balancing between different movements.</span>
     <span class="kw">pub</span> <span class="ident">use_freeform_policy_everywhere</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Prevent a vehicle from starting a turn if their target lane is already full, since this may</span>
+    <span class="doccomment">/// mean they&#39;ll get stuck blocking the intersection.</span>
     <span class="kw">pub</span> <span class="ident">dont_block_the_box</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// As a vehicle follows a route, opportunistically make small changes to use a different lane,</span>
+    <span class="doccomment">/// based on some score of &quot;least-loaded&quot; lane.</span>
     <span class="kw">pub</span> <span class="ident">recalc_lanechanging</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// If a cycle of vehicles depending on each other to turn is detected, temporarily allow</span>
+    <span class="doccomment">/// &quot;blocking the box&quot; to try to break gridlock.</span>
     <span class="kw">pub</span> <span class="ident">break_turn_conflict_cycles</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Enable experimental handling for &quot;uber-turns&quot;, sequences of turns through complex</span>
+    <span class="doccomment">/// intersections with short roads. &quot;Locks&quot; the entire movement before starting, and ignores</span>
+    <span class="doccomment">/// red lights after starting.</span>
     <span class="kw">pub</span> <span class="ident">handle_uber_turns</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Enable an experimental SEIR pandemic model.</span>
     <span class="kw">pub</span> <span class="ident">enable_pandemic_model</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">XorShiftRng</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// When a warning is encountered during simulation, specifies how to respond.</span>
     <span class="kw">pub</span> <span class="ident">alerts</span>: <span class="ident">AlertHandler</span>,
-    <span class="kw">pub</span> <span class="ident">pathfinding_upfront</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Ignore parking data in the map and instead treat every building as if it has unlimited</span>
+    <span class="doccomment">/// capacity for vehicles.</span>
     <span class="kw">pub</span> <span class="ident">infinite_parking</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Allow all agents to immediately proceed into an intersection, even if they&#39;d hit another</span>
+    <span class="doccomment">/// agent. Obviously this destroys realism of the simulation, but can be used to debug</span>
+    <span class="doccomment">/// gridlock. Also implies freeform_policy, so vehicles ignore traffic signals.</span>
+    <span class="kw">pub</span> <span class="ident">disable_turn_conflicts</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// If present, cancel any driving trips who will pass through a road currently experiencing</span>
+    <span class="doccomment">/// delays beyond this threshold.</span>
+    <span class="kw">pub</span> <span class="ident">cancel_drivers_delay_threshold</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Instead of cancelling trips due to `cancel_drivers_delay_threshold` or congestion capping,</span>
+    <span class="doccomment">/// delay the start of the trip by this amount, and try again. If conditions are still</span>
+    <span class="doccomment">/// problematic, repeat a fixed 3 times before cancelling.</span>
+    <span class="kw">pub</span> <span class="ident">delay_trips_instead_of_cancelling</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Don&#39;t collect any analytics. Only useful for benchmarking and debugging gridlock more</span>
+    <span class="doccomment">/// quickly.</span>
+    <span class="kw">pub</span> <span class="ident">skip_analytics</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">default</span>::<span class="ident">Default</span> <span class="kw">for</span> <span class="ident">SimOptions</span> {
@@ -1111,7 +1150,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">SimOptions</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_args</span>(<span class="ident">args</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CmdArgs</span>, <span class="ident">rng_seed</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SimOptions</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_args</span>(<span class="ident">args</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CmdArgs</span>, <span class="ident">rng_seed</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SimOptions</span> {
         <span class="ident">SimOptions</span> {
             <span class="ident">run_name</span>: <span class="ident">args</span>
                 .<span class="ident">optional</span>(<span class="string">&quot;--run_name&quot;</span>)
@@ -1122,7 +1161,7 @@
             <span class="ident">break_turn_conflict_cycles</span>: <span class="op">!</span><span class="ident">args</span>.<span class="ident">enabled</span>(<span class="string">&quot;--disable_break_turn_conflict_cycles&quot;</span>),
             <span class="ident">handle_uber_turns</span>: <span class="op">!</span><span class="ident">args</span>.<span class="ident">enabled</span>(<span class="string">&quot;--disable_handle_uber_turns&quot;</span>),
             <span class="ident">enable_pandemic_model</span>: <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">enabled</span>(<span class="string">&quot;--pandemic&quot;</span>) {
-                <span class="prelude-val">Some</span>(<span class="ident">XorShiftRng</span>::<span class="ident">from_seed</span>([<span class="ident">rng_seed</span>; <span class="number">16</span>]))
+                <span class="prelude-val">Some</span>(<span class="ident">XorShiftRng</span>::<span class="ident">seed_from_u64</span>(<span class="ident">rng_seed</span>))
             } <span class="kw">else</span> {
                 <span class="prelude-val">None</span>
             },
@@ -1135,19 +1174,24 @@
                     <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Bad --alerts={}. Must be print|block|silence&quot;</span>, <span class="ident">x</span>),
                 })
                 .<span class="ident">unwrap_or</span>(<span class="ident">AlertHandler</span>::<span class="ident">Print</span>),
-            <span class="ident">pathfinding_upfront</span>: <span class="ident">args</span>.<span class="ident">enabled</span>(<span class="string">&quot;--pathfinding_upfront&quot;</span>),
             <span class="ident">infinite_parking</span>: <span class="ident">args</span>.<span class="ident">enabled</span>(<span class="string">&quot;--infinite_parking&quot;</span>),
+            <span class="ident">disable_turn_conflicts</span>: <span class="ident">args</span>.<span class="ident">enabled</span>(<span class="string">&quot;--disable_turn_conflicts&quot;</span>),
+            <span class="ident">cancel_drivers_delay_threshold</span>: <span class="ident">args</span>
+                .<span class="ident">optional_parse</span>(<span class="string">&quot;--cancel_drivers_delay_threshold&quot;</span>, <span class="ident">Duration</span>::<span class="ident">parse</span>),
+            <span class="ident">delay_trips_instead_of_cancelling</span>: <span class="ident">args</span>
+                .<span class="ident">optional_parse</span>(<span class="string">&quot;--delay_trips_instead_of_cancelling&quot;</span>, <span class="ident">Duration</span>::<span class="ident">parse</span>),
+            <span class="ident">skip_analytics</span>: <span class="ident">args</span>.<span class="ident">enabled</span>(<span class="string">&quot;--skip_analytics&quot;</span>),
         }
     }
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">AlertHandler</span> {
-    <span class="comment">// Just print the alert to STDOUT</span>
+    <span class="doccomment">/// Just print the alert to STDOUT</span>
     <span class="ident">Print</span>,
-    <span class="comment">// Print the alert to STDOUT and don&#39;t proceed until the UI calls clear_alerts()</span>
+    <span class="doccomment">/// Print the alert to STDOUT and don&#39;t proceed until the UI calls clear_alerts()</span>
     <span class="ident">Block</span>,
-    <span class="comment">// Don&#39;t do anything</span>
+    <span class="doccomment">/// Don&#39;t do anything</span>
     <span class="ident">Silence</span>,
 }
 
@@ -1168,8 +1212,11 @@
             <span class="ident">handle_uber_turns</span>: <span class="bool-val">true</span>,
             <span class="ident">enable_pandemic_model</span>: <span class="prelude-val">None</span>,
             <span class="ident">alerts</span>: <span class="ident">AlertHandler</span>::<span class="ident">Print</span>,
-            <span class="ident">pathfinding_upfront</span>: <span class="bool-val">false</span>,
             <span class="ident">infinite_parking</span>: <span class="bool-val">false</span>,
+            <span class="ident">disable_turn_conflicts</span>: <span class="bool-val">false</span>,
+            <span class="ident">cancel_drivers_delay_threshold</span>: <span class="prelude-val">None</span>,
+            <span class="ident">delay_trips_instead_of_cancelling</span>: <span class="prelude-val">None</span>,
+            <span class="ident">skip_analytics</span>: <span class="bool-val">false</span>,
         }
     }
 }
@@ -1179,20 +1226,13 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">opts</span>: <span class="ident">SimOptions</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Sim</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scheduler</span> <span class="op">=</span> <span class="ident">Scheduler</span>::<span class="ident">new</span>();
         <span class="ident">Sim</span> {
-            <span class="ident">driving</span>: <span class="ident">DrivingSimState</span>::<span class="ident">new</span>(<span class="ident">map</span>, <span class="ident">opts</span>.<span class="ident">recalc_lanechanging</span>, <span class="ident">opts</span>.<span class="ident">handle_uber_turns</span>),
+            <span class="ident">driving</span>: <span class="ident">DrivingSimState</span>::<span class="ident">new</span>(<span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="ident">opts</span>),
             <span class="ident">parking</span>: <span class="ident">ParkingSimState</span>::<span class="ident">new</span>(<span class="ident">map</span>, <span class="ident">opts</span>.<span class="ident">infinite_parking</span>, <span class="ident">timer</span>),
             <span class="ident">walking</span>: <span class="ident">WalkingSimState</span>::<span class="ident">new</span>(),
-            <span class="ident">intersections</span>: <span class="ident">IntersectionSimState</span>::<span class="ident">new</span>(
-                <span class="ident">map</span>,
-                <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">scheduler</span>,
-                <span class="ident">opts</span>.<span class="ident">use_freeform_policy_everywhere</span>,
-                <span class="ident">opts</span>.<span class="ident">dont_block_the_box</span>,
-                <span class="ident">opts</span>.<span class="ident">break_turn_conflict_cycles</span>,
-                <span class="ident">opts</span>.<span class="ident">handle_uber_turns</span>,
-            ),
+            <span class="ident">intersections</span>: <span class="ident">IntersectionSimState</span>::<span class="ident">new</span>(<span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">scheduler</span>, <span class="kw-2">&amp;</span><span class="ident">opts</span>),
             <span class="ident">transit</span>: <span class="ident">TransitSimState</span>::<span class="ident">new</span>(<span class="ident">map</span>),
-            <span class="ident">cap</span>: <span class="ident">CapSimState</span>::<span class="ident">new</span>(<span class="ident">map</span>),
-            <span class="ident">trips</span>: <span class="ident">TripManager</span>::<span class="ident">new</span>(<span class="ident">opts</span>.<span class="ident">pathfinding_upfront</span>),
+            <span class="ident">cap</span>: <span class="ident">CapSimState</span>::<span class="ident">new</span>(<span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="ident">opts</span>),
+            <span class="ident">trips</span>: <span class="ident">TripManager</span>::<span class="ident">new</span>(),
             <span class="ident">pandemic</span>: <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">rng</span>) <span class="op">=</span> <span class="ident">opts</span>.<span class="ident">enable_pandemic_model</span> {
                 <span class="prelude-val">Some</span>(<span class="ident">PandemicModel</span>::<span class="ident">new</span>(<span class="ident">rng</span>))
             } <span class="kw">else</span> {
@@ -1201,21 +1241,36 @@
             <span class="ident">scheduler</span>,
             <span class="ident">time</span>: <span class="ident">Time</span>::<span class="ident">START_OF_DAY</span>,
 
-            <span class="ident">map_name</span>: <span class="ident">map</span>.<span class="ident">get_name</span>().<span class="ident">to_string</span>(),
+            <span class="ident">map_name</span>: <span class="ident">map</span>.<span class="ident">get_name</span>().<span class="ident">clone</span>(),
             <span class="ident">edits_name</span>: <span class="ident">map</span>.<span class="ident">get_edits</span>().<span class="ident">edits_name</span>.<span class="ident">clone</span>(),
             <span class="ident">run_name</span>: <span class="ident">opts</span>.<span class="ident">run_name</span>,
             <span class="ident">step_count</span>: <span class="number">0</span>,
             <span class="ident">alerts</span>: <span class="ident">opts</span>.<span class="ident">alerts</span>,
 
-            <span class="ident">analytics</span>: <span class="ident">Analytics</span>::<span class="ident">new</span>(),
+            <span class="ident">analytics</span>: <span class="ident">Analytics</span>::<span class="ident">new</span>(<span class="op">!</span><span class="ident">opts</span>.<span class="ident">skip_analytics</span>),
+            <span class="ident">recorder</span>: <span class="prelude-val">None</span>,
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_spawner</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TripSpawner</span> {
-        <span class="ident">TripSpawner</span>::<span class="ident">new</span>()
-    }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush_spawner</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">spawner</span>: <span class="ident">TripSpawner</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>) {
-        <span class="ident">spawner</span>.<span class="ident">finalize</span>(<span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">trips</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>, <span class="ident">timer</span>);
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">spawn_trips</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">input</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">PersonID</span>, <span class="ident">TripInfo</span>, <span class="ident">StartTripArgs</span>)<span class="op">&gt;</span>,
+        <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
+        <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>,
+    ) {
+        <span class="ident">timer</span>.<span class="ident">start_iter</span>(<span class="string">&quot;spawn trips&quot;</span>, <span class="ident">input</span>.<span class="ident">len</span>());
+        <span class="kw">for</span> (<span class="ident">p</span>, <span class="ident">info</span>, <span class="ident">args</span>) <span class="kw">in</span> <span class="ident">input</span> {
+            <span class="ident">timer</span>.<span class="ident">next</span>();
+
+            <span class="kw">let</span> <span class="ident">trip</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">new_trip</span>(<span class="ident">p</span>, <span class="ident">info</span>.<span class="ident">clone</span>());
+            <span class="comment">// This might be immediately true due to ScenarioModifiers</span>
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">msg</span>) <span class="op">=</span> <span class="ident">info</span>.<span class="ident">cancellation_reason</span> {
+                <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">cancel_unstarted_trip</span>(<span class="ident">trip</span>, <span class="ident">msg</span>);
+            } <span class="kw">else</span> {
+                <span class="self">self</span>.<span class="ident">scheduler</span>
+                    .<span class="ident">push</span>(<span class="ident">info</span>.<span class="ident">departure</span>, <span class="ident">Command</span>::<span class="ident">StartTrip</span>(<span class="ident">trip</span>, <span class="ident">args</span>));
+            }
+        }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">m</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">pandemic</span> {
             <span class="ident">m</span>.<span class="ident">initialize</span>(<span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">get_all_people</span>(), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>);
@@ -1236,7 +1291,7 @@
         <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">get_free_lot_spots</span>(<span class="ident">pl</span>)
     }
 
-    <span class="comment">// (Filled, available)</span>
+    <span class="doccomment">/// (Filled, available)</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_all_parking_spots</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ParkingSpot</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ParkingSpot</span><span class="op">&gt;</span>) {
         <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">get_all_parking_spots</span>()
     }
@@ -1245,12 +1300,7 @@
         <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">bldg_to_parked_cars</span>(<span class="ident">b</span>)
     }
 
-    <span class="comment">// Also returns the start distance of the building. TODO Do that in the Path properly.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">walking_path_to_nearest_parking_spot</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
-        <span class="ident">b</span>: <span class="ident">BuildingID</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">Path</span>, <span class="ident">Distance</span>)<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">walking_path_to_nearest_parking_spot</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">b</span>: <span class="ident">BuildingID</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">vehicle</span> <span class="op">=</span> <span class="ident">Vehicle</span> {
             <span class="ident">id</span>: <span class="ident">CarID</span>(<span class="number">0</span>, <span class="ident">VehicleType</span>::<span class="ident">Car</span>),
             <span class="ident">owner</span>: <span class="prelude-val">None</span>,
@@ -1278,29 +1328,24 @@
 
         <span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">SidewalkSpot</span>::<span class="ident">building</span>(<span class="ident">b</span>, <span class="ident">map</span>).<span class="ident">sidewalk_pos</span>;
         <span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="ident">SidewalkSpot</span>::<span class="ident">parking_spot</span>(<span class="ident">spot</span>, <span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">parking</span>).<span class="ident">sidewalk_pos</span>;
-        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">pathfind</span>(<span class="ident">PathRequest</span> {
+        <span class="ident">map</span>.<span class="ident">pathfind</span>(<span class="ident">PathRequest</span> {
             <span class="ident">start</span>,
             <span class="ident">end</span>,
             <span class="ident">constraints</span>: <span class="ident">PathConstraints</span>::<span class="ident">Pedestrian</span>,
-        })<span class="question-mark">?</span>;
-        <span class="prelude-val">Some</span>((<span class="ident">path</span>, <span class="ident">start</span>.<span class="ident">dist_along</span>()))
+        })
+        .<span class="ident">ok</span>()
     }
 
-    <span class="comment">// TODO Should these two be in TripSpawner?</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new_person</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">p</span>: <span class="ident">PersonID</span>,
         <span class="ident">orig_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OrigPersonID</span><span class="op">&gt;</span>,
         <span class="ident">ped_speed</span>: <span class="ident">Speed</span>,
         <span class="ident">vehicle_specs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">VehicleSpec</span><span class="op">&gt;</span>,
-    ) {
-        <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">new_person</span>(<span class="ident">p</span>, <span class="ident">orig_id</span>, <span class="ident">ped_speed</span>, <span class="ident">vehicle_specs</span>);
-    }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">random_person</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ped_speed</span>: <span class="ident">Speed</span>, <span class="ident">vehicle_specs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">VehicleSpec</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Person</span> {
-        <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">random_person</span>(<span class="ident">ped_speed</span>, <span class="ident">vehicle_specs</span>)
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Person</span> {
+        <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">new_person</span>(<span class="ident">orig_id</span>, <span class="ident">ped_speed</span>, <span class="ident">vehicle_specs</span>)
     }
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">seed_parked_car</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">vehicle</span>: <span class="ident">Vehicle</span>, <span class="ident">spot</span>: <span class="ident">ParkingSpot</span>) {
-        <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">reserve_spot</span>(<span class="ident">spot</span>);
+        <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">reserve_spot</span>(<span class="ident">spot</span>, <span class="ident">vehicle</span>.<span class="ident">id</span>);
         <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">add_parked_car</span>(<span class="ident">ParkedCar</span> {
             <span class="ident">vehicle</span>,
             <span class="ident">spot</span>,
@@ -1316,7 +1361,7 @@
 
     <span class="kw">fn</span> <span class="ident">start_bus</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">route</span>: <span class="kw-2">&amp;</span><span class="ident">BusRoute</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) {
         <span class="comment">// Spawn one bus for the first leg.</span>
-        <span class="kw">let</span> (<span class="ident">req</span>, <span class="ident">path</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">transit</span>.<span class="ident">create_empty_route</span>(<span class="ident">route</span>, <span class="ident">map</span>);
+        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">transit</span>.<span class="ident">create_empty_route</span>(<span class="ident">route</span>, <span class="ident">map</span>);
 
         <span class="comment">// For now, no desire for randomness. Caller can pass in list of specs if that ever</span>
         <span class="comment">// changes.</span>
@@ -1331,26 +1376,13 @@
             <span class="ident">max_speed</span>: <span class="prelude-val">None</span>,
         }
         .<span class="ident">make</span>(<span class="ident">CarID</span>(<span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">new_car_id</span>(), <span class="ident">vehicle_type</span>), <span class="prelude-val">None</span>);
-        <span class="kw">let</span> <span class="ident">start_lane</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">path</span>.<span class="ident">current_step</span>().<span class="ident">as_lane</span>());
-        <span class="kw">let</span> <span class="ident">start_dist</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">map</span>.<span class="ident">get_i</span>(<span class="ident">start_lane</span>.<span class="ident">src_i</span>).<span class="ident">is_incoming_border</span>() {
-            <span class="ident">SPAWN_DIST</span>
-        } <span class="kw">else</span> {
-            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">start_lane</span>.<span class="ident">length</span>() <span class="op">&gt;</span> <span class="ident">vehicle</span>.<span class="ident">length</span>);
-            <span class="ident">vehicle</span>.<span class="ident">length</span>
-        };
 
         <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">push</span>(
             <span class="self">self</span>.<span class="ident">time</span>,
             <span class="ident">Command</span>::<span class="ident">SpawnCar</span>(
                 <span class="ident">CreateCar</span> {
-                    <span class="ident">start_dist</span>,
-                    <span class="ident">router</span>: <span class="ident">Router</span>::<span class="ident">follow_bus_route</span>(
-                        <span class="ident">vehicle</span>.<span class="ident">id</span>,
-                        <span class="ident">path</span>.<span class="ident">clone</span>(),
-                        <span class="ident">req</span>.<span class="ident">end</span>.<span class="ident">dist_along</span>(),
-                    ),
+                    <span class="ident">router</span>: <span class="ident">Router</span>::<span class="ident">follow_bus_route</span>(<span class="ident">vehicle</span>.<span class="ident">id</span>, <span class="ident">path</span>),
                     <span class="ident">vehicle</span>,
-                    <span class="ident">req</span>,
                     <span class="ident">maybe_parked_car</span>: <span class="prelude-val">None</span>,
                     <span class="ident">trip_and_person</span>: <span class="prelude-val">None</span>,
                     <span class="ident">maybe_route</span>: <span class="prelude-val">Some</span>(<span class="ident">route</span>.<span class="ident">id</span>),
@@ -1365,69 +1397,6 @@
     }
 }
 
-<span class="comment">// Drawing</span>
-<span class="kw">impl</span> <span class="ident">GetDrawAgents</span> <span class="kw">for</span> <span class="ident">Sim</span> {
-    <span class="kw">fn</span> <span class="ident">time</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Time</span> {
-        <span class="self">self</span>.<span class="ident">time</span>
-    }
-
-    <span class="kw">fn</span> <span class="ident">step_count</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
-        <span class="self">self</span>.<span class="ident">step_count</span>
-    }
-
-    <span class="kw">fn</span> <span class="ident">get_draw_car</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">CarID</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DrawCarInput</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">get_draw_car</span>(<span class="ident">id</span>, <span class="ident">map</span>).<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> {
-            <span class="self">self</span>.<span class="ident">driving</span>
-                .<span class="ident">get_single_draw_car</span>(<span class="ident">id</span>, <span class="self">self</span>.<span class="ident">time</span>, <span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">transit</span>)
-        })
-    }
-
-    <span class="kw">fn</span> <span class="ident">get_draw_ped</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">PedestrianID</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DrawPedestrianInput</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">walking</span>.<span class="ident">get_draw_ped</span>(<span class="ident">id</span>, <span class="self">self</span>.<span class="ident">time</span>, <span class="ident">map</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">get_draw_cars</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">on</span>: <span class="ident">Traversable</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">DrawCarInput</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Traversable</span>::<span class="ident">Lane</span>(<span class="ident">l</span>) <span class="op">=</span> <span class="ident">on</span> {
-            <span class="kw">if</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">l</span>).<span class="ident">is_parking</span>() {
-                <span class="kw">return</span> <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">get_draw_cars</span>(<span class="ident">l</span>, <span class="ident">map</span>);
-            }
-            <span class="ident">results</span>.<span class="ident">extend</span>(<span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">get_draw_cars_in_lots</span>(<span class="ident">l</span>, <span class="ident">map</span>));
-        }
-        <span class="ident">results</span>.<span class="ident">extend</span>(
-            <span class="self">self</span>.<span class="ident">driving</span>
-                .<span class="ident">get_draw_cars_on</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">on</span>, <span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">transit</span>),
-        );
-        <span class="ident">results</span>
-    }
-
-    <span class="kw">fn</span> <span class="ident">get_draw_peds</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">on</span>: <span class="ident">Traversable</span>,
-        <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">DrawPedestrianInput</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">DrawPedCrowdInput</span><span class="op">&gt;</span>) {
-        <span class="self">self</span>.<span class="ident">walking</span>.<span class="ident">get_draw_peds_on</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">on</span>, <span class="ident">map</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">get_all_draw_cars</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">DrawCarInput</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>
-            .<span class="ident">driving</span>
-            .<span class="ident">get_all_draw_cars</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">transit</span>);
-        <span class="ident">result</span>.<span class="ident">extend</span>(<span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">get_all_draw_cars</span>(<span class="ident">map</span>));
-        <span class="ident">result</span>
-    }
-
-    <span class="kw">fn</span> <span class="ident">get_all_draw_peds</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">DrawPedestrianInput</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">walking</span>.<span class="ident">get_all_draw_peds</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">map</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">get_unzoomed_agents</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">UnzoomedAgent</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">driving</span>.<span class="ident">get_unzoomed_agents</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">map</span>);
-        <span class="ident">result</span>.<span class="ident">extend</span>(<span class="self">self</span>.<span class="ident">walking</span>.<span class="ident">get_unzoomed_agents</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">map</span>));
-        <span class="ident">result</span>
-    }
-}
-
 <span class="comment">// Running</span>
 <span class="kw">impl</span> <span class="ident">Sim</span> {
     <span class="comment">// Advances time as minimally as possible, also limited by max_dt. Returns true if the callback</span>
@@ -1436,7 +1405,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
         <span class="ident">max_dt</span>: <span class="ident">Duration</span>,
-        <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">step_count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
 
@@ -1475,7 +1444,7 @@
         <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
         <span class="ident">time</span>: <span class="ident">Time</span>,
         <span class="ident">cmd</span>: <span class="ident">Command</span>,
-        <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">time</span> <span class="op">=</span> <span class="ident">time</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">events</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
@@ -1487,74 +1456,116 @@
             <span class="ident">cap</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">cap</span>,
             <span class="ident">scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>,
             <span class="ident">map</span>,
+            <span class="ident">handling_live_edits</span>: <span class="bool-val">false</span>,
         };
 
         <span class="kw">match</span> <span class="ident">cmd</span> {
-            <span class="ident">Command</span>::<span class="ident">StartTrip</span>(<span class="ident">id</span>, <span class="ident">trip_spec</span>, <span class="ident">maybe_req</span>, <span class="ident">maybe_path</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">trips</span>
-                    .<span class="ident">start_trip</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">id</span>, <span class="ident">trip_spec</span>, <span class="ident">maybe_req</span>, <span class="ident">maybe_path</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
+            <span class="ident">Command</span>::<span class="ident">StartTrip</span>(<span class="ident">id</span>, <span class="ident">args</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">start_trip</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">id</span>, <span class="ident">args</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
             }
             <span class="ident">Command</span>::<span class="ident">SpawnCar</span>(<span class="ident">create_car</span>, <span class="ident">retry_if_no_room</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">driving</span>.<span class="ident">start_car_on_lane</span>(
-                    <span class="self">self</span>.<span class="ident">time</span>,
-                    <span class="ident">create_car</span>.<span class="ident">clone</span>(),
-                    <span class="ident">map</span>,
-                    <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">intersections</span>,
-                    <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">parking</span>,
-                    <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>,
-                ) {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">trip</span>, <span class="ident">person</span>)) <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">trip_and_person</span> {
-                        <span class="self">self</span>.<span class="ident">trips</span>
-                            .<span class="ident">agent_starting_trip_leg</span>(<span class="ident">AgentID</span>::<span class="ident">Car</span>(<span class="ident">create_car</span>.<span class="ident">vehicle</span>.<span class="ident">id</span>), <span class="ident">trip</span>);
-                        <span class="ident">events</span>.<span class="ident">push</span>(<span class="ident">Event</span>::<span class="ident">TripPhaseStarting</span>(
-                            <span class="ident">trip</span>,
-                            <span class="ident">person</span>,
-                            <span class="prelude-val">Some</span>(<span class="ident">create_car</span>.<span class="ident">req</span>.<span class="ident">clone</span>()),
-                            <span class="kw">if</span> <span class="ident">create_car</span>.<span class="ident">vehicle</span>.<span class="ident">id</span>.<span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="ident">VehicleType</span>::<span class="ident">Car</span> {
-                                <span class="ident">TripPhaseType</span>::<span class="ident">Driving</span>
-                            } <span class="kw">else</span> {
-                                <span class="ident">TripPhaseType</span>::<span class="ident">Biking</span>
-                            },
-                        ));
-                    }
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parked_car</span>) <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">maybe_parked_car</span> {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ParkingSpot</span>::<span class="ident">Offstreet</span>(<span class="ident">b</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">parked_car</span>.<span class="ident">spot</span> {
-                            <span class="comment">// Buses don&#39;t start in parking garages, so trip must exist</span>
-                            <span class="ident">events</span>.<span class="ident">push</span>(<span class="ident">Event</span>::<span class="ident">PersonLeavesBuilding</span>(
-                                <span class="ident">create_car</span>.<span class="ident">trip_and_person</span>.<span class="ident">unwrap</span>().<span class="number">1</span>,
-                                <span class="ident">b</span>,
-                            ));
+                <span class="comment">// If this SpawnCar is being retried and the map was live-edited since the first</span>
+                <span class="comment">// attempt, the path might&#39;ve become invalid. TODO Skip this check</span>
+                <span class="comment">// most of the time.</span>
+                <span class="kw">let</span> <span class="ident">constraints</span> <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">vehicle</span>.<span class="ident">vehicle_type</span>.<span class="ident">to_constraints</span>();
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ok</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                <span class="kw">for</span> <span class="ident">step</span> <span class="kw">in</span> <span class="ident">create_car</span>.<span class="ident">router</span>.<span class="ident">get_path</span>().<span class="ident">get_steps</span>() {
+                    <span class="kw">match</span> <span class="ident">step</span>.<span class="ident">as_traversable</span>() {
+                        <span class="ident">Traversable</span>::<span class="ident">Lane</span>(<span class="ident">l</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="kw">if</span> <span class="op">!</span><span class="ident">constraints</span>.<span class="ident">can_use</span>(<span class="ident">ctx</span>.<span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">l</span>), <span class="ident">ctx</span>.<span class="ident">map</span>) {
+                                <span class="ident">ok</span> <span class="op">=</span> <span class="bool-val">false</span>;
+                                <span class="kw">break</span>;
+                            }
                         }
-                        <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">remove_parked_car</span>(<span class="ident">parked_car</span>);
+                        <span class="ident">Traversable</span>::<span class="ident">Turn</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="kw">if</span> <span class="ident">ctx</span>.<span class="ident">map</span>.<span class="ident">maybe_get_t</span>(<span class="ident">t</span>).<span class="ident">is_none</span>() {
+                                <span class="ident">ok</span> <span class="op">=</span> <span class="bool-val">false</span>;
+                                <span class="kw">break</span>;
+                            }
+                        }
                     }
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">route</span>) <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">maybe_route</span> {
-                        <span class="self">self</span>.<span class="ident">transit</span>.<span class="ident">bus_created</span>(<span class="ident">create_car</span>.<span class="ident">vehicle</span>.<span class="ident">id</span>, <span class="ident">route</span>);
-                    }
-                    <span class="self">self</span>.<span class="ident">analytics</span>
-                        .<span class="ident">record_demand</span>(<span class="ident">create_car</span>.<span class="ident">router</span>.<span class="ident">get_path</span>(), <span class="ident">map</span>);
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">retry_if_no_room</span> {
-                    <span class="comment">// TODO Record this in the trip log</span>
-                    <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">push</span>(
-                        <span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="ident">BLIND_RETRY_TO_SPAWN</span>,
-                        <span class="ident">Command</span>::<span class="ident">SpawnCar</span>(<span class="ident">create_car</span>, <span class="ident">retry_if_no_room</span>),
+                }
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">ok</span> {
+                    <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">cancel_trip</span>(
+                        <span class="self">self</span>.<span class="ident">time</span>,
+                        <span class="ident">create_car</span>.<span class="ident">trip_and_person</span>.<span class="ident">unwrap</span>().<span class="number">0</span>,
+                        <span class="string">&quot;path is no longer valid after map edits&quot;</span>.<span class="ident">to_string</span>(),
+                        <span class="prelude-val">Some</span>(<span class="ident">create_car</span>.<span class="ident">vehicle</span>),
+                        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>,
                     );
                 } <span class="kw">else</span> {
-                    <span class="comment">// Buses don&#39;t use Command::SpawnCar, so this must exist.</span>
-                    <span class="kw">let</span> (<span class="ident">trip</span>, <span class="ident">person</span>) <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">trip_and_person</span>.<span class="ident">unwrap</span>();
-                    <span class="macro">println</span><span class="macro">!</span>(
-                        <span class="string">&quot;No room to spawn car for {} by {}. Not retrying!&quot;</span>,
-                        <span class="ident">trip</span>, <span class="ident">person</span>
-                    );
-                    <span class="comment">// Have to redeclare for the borrow checker</span>
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ctx</span> <span class="op">=</span> <span class="ident">Ctx</span> {
-                        <span class="ident">parking</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">parking</span>,
-                        <span class="ident">intersections</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">intersections</span>,
-                        <span class="ident">cap</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">cap</span>,
-                        <span class="ident">scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>,
-                        <span class="ident">map</span>,
-                    };
-                    <span class="self">self</span>.<span class="ident">trips</span>
-                        .<span class="ident">abort_trip</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">trip</span>, <span class="prelude-val">Some</span>(<span class="ident">create_car</span>.<span class="ident">vehicle</span>), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
+                    <span class="comment">// create_car contains a Path, which is expensive to clone. We need different</span>
+                    <span class="comment">// parts of create_car after attempting start_car_on_lane.</span>
+                    <span class="comment">// Make copies just of those here. In no case do we ever</span>
+                    <span class="comment">// clone the path.</span>
+                    <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">vehicle</span>.<span class="ident">id</span>;
+                    <span class="kw">let</span> <span class="ident">maybe_route</span> <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">maybe_route</span>;
+                    <span class="kw">let</span> <span class="ident">trip_and_person</span> <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">trip_and_person</span>;
+                    <span class="kw">let</span> <span class="ident">maybe_parked_car</span> <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">maybe_parked_car</span>.<span class="ident">clone</span>();
+                    <span class="kw">let</span> <span class="ident">req</span> <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">router</span>.<span class="ident">get_path</span>().<span class="ident">get_req</span>().<span class="ident">clone</span>();
+
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">create_car</span>) <span class="op">=</span> <span class="self">self</span>
+                        .<span class="ident">driving</span>
+                        .<span class="ident">start_car_on_lane</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">create_car</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>)
+                    {
+                        <span class="comment">// Starting the car failed for some reason.</span>
+                        <span class="kw">if</span> <span class="ident">retry_if_no_room</span> {
+                            <span class="self">self</span>.<span class="ident">driving</span>.<span class="ident">vehicle_waiting_to_spawn</span>(
+                                <span class="ident">id</span>,
+                                <span class="ident">req</span>.<span class="ident">start</span>,
+                                <span class="ident">trip_and_person</span>.<span class="ident">map</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">p</span>)<span class="op">|</span> <span class="ident">p</span>),
+                            );
+
+                            <span class="comment">// TODO Record this in the trip log</span>
+                            <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">push</span>(
+                                <span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="ident">BLIND_RETRY_TO_SPAWN</span>,
+                                <span class="ident">Command</span>::<span class="ident">SpawnCar</span>(<span class="ident">create_car</span>, <span class="ident">retry_if_no_room</span>),
+                            );
+                        } <span class="kw">else</span> {
+                            <span class="comment">// Buses don&#39;t use Command::SpawnCar, so this must exist.</span>
+                            <span class="kw">let</span> (<span class="ident">trip</span>, <span class="ident">person</span>) <span class="op">=</span> <span class="ident">create_car</span>.<span class="ident">trip_and_person</span>.<span class="ident">unwrap</span>();
+                            <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">cancel_trip</span>(
+                                <span class="self">self</span>.<span class="ident">time</span>,
+                                <span class="ident">trip</span>,
+                                <span class="macro">format</span><span class="macro">!</span>(
+                                    <span class="string">&quot;no room to spawn car for {} by {}, not retrying&quot;</span>,
+                                    <span class="ident">trip</span>, <span class="ident">person</span>
+                                ),
+                                <span class="prelude-val">Some</span>(<span class="ident">create_car</span>.<span class="ident">vehicle</span>),
+                                <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>,
+                            );
+                        }
+                    } <span class="kw">else</span> {
+                        <span class="comment">// Creating the car succeeded.</span>
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">trip</span>, <span class="ident">person</span>)) <span class="op">=</span> <span class="ident">trip_and_person</span> {
+                            <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">agent_starting_trip_leg</span>(<span class="ident">AgentID</span>::<span class="ident">Car</span>(<span class="ident">id</span>), <span class="ident">trip</span>);
+                            <span class="ident">events</span>.<span class="ident">push</span>(<span class="ident">Event</span>::<span class="ident">TripPhaseStarting</span>(
+                                <span class="ident">trip</span>,
+                                <span class="ident">person</span>,
+                                <span class="prelude-val">Some</span>(<span class="ident">req</span>),
+                                <span class="kw">if</span> <span class="ident">id</span>.<span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="ident">VehicleType</span>::<span class="ident">Car</span> {
+                                    <span class="ident">TripPhaseType</span>::<span class="ident">Driving</span>
+                                } <span class="kw">else</span> {
+                                    <span class="ident">TripPhaseType</span>::<span class="ident">Biking</span>
+                                },
+                            ));
+                        }
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parked_car</span>) <span class="op">=</span> <span class="ident">maybe_parked_car</span> {
+                            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ParkingSpot</span>::<span class="ident">Offstreet</span>(<span class="ident">b</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">parked_car</span>.<span class="ident">spot</span> {
+                                <span class="comment">// Buses don&#39;t start in parking garages, so trip must exist</span>
+                                <span class="ident">events</span>.<span class="ident">push</span>(<span class="ident">Event</span>::<span class="ident">PersonLeavesBuilding</span>(
+                                    <span class="ident">trip_and_person</span>.<span class="ident">unwrap</span>().<span class="number">1</span>,
+                                    <span class="ident">b</span>,
+                                ));
+                            }
+                            <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">remove_parked_car</span>(<span class="ident">parked_car</span>);
+                        }
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">route</span>) <span class="op">=</span> <span class="ident">maybe_route</span> {
+                            <span class="self">self</span>.<span class="ident">transit</span>.<span class="ident">bus_created</span>(<span class="ident">id</span>, <span class="ident">route</span>);
+                        }
+                        <span class="self">self</span>.<span class="ident">analytics</span>
+                            .<span class="ident">record_demand</span>(<span class="self">self</span>.<span class="ident">driving</span>.<span class="ident">get_path</span>(<span class="ident">id</span>).<span class="ident">unwrap</span>(), <span class="ident">map</span>);
+                    }
                 }
             }
             <span class="ident">Command</span>::<span class="ident">SpawnPed</span>(<span class="ident">create_ped</span>) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1565,7 +1576,7 @@
                 <span class="ident">events</span>.<span class="ident">push</span>(<span class="ident">Event</span>::<span class="ident">TripPhaseStarting</span>(
                     <span class="ident">create_ped</span>.<span class="ident">trip</span>,
                     <span class="ident">create_ped</span>.<span class="ident">person</span>,
-                    <span class="prelude-val">Some</span>(<span class="ident">create_ped</span>.<span class="ident">req</span>.<span class="ident">clone</span>()),
+                    <span class="prelude-val">Some</span>(<span class="ident">create_ped</span>.<span class="ident">path</span>.<span class="ident">get_req</span>().<span class="ident">clone</span>()),
                     <span class="ident">TripPhaseType</span>::<span class="ident">Walking</span>,
                 ));
                 <span class="self">self</span>.<span class="ident">analytics</span>.<span class="ident">record_demand</span>(<span class="kw-2">&amp;</span><span class="ident">create_ped</span>.<span class="ident">path</span>, <span class="ident">map</span>);
@@ -1581,6 +1592,7 @@
                             <span class="ident">create_ped</span>.<span class="ident">id</span>,
                             <span class="ident">ParkingSpot</span>::<span class="ident">Offstreet</span>(<span class="kw-2">*</span><span class="ident">b2</span>, <span class="kw-2">*</span><span class="ident">idx</span>),
                             <span class="ident">Duration</span>::<span class="ident">ZERO</span>,
+                            <span class="ident">Distance</span>::<span class="ident">ZERO</span>,
                             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>,
                         );
                     }
@@ -1633,9 +1645,6 @@
                     .<span class="ident">unwrap</span>()
                     .<span class="ident">handle_cmd</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">cmd</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>);
             }
-            <span class="ident">Command</span>::<span class="ident">FinishRemoteTrip</span>(<span class="ident">trip</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">remote_trip_finished</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">trip</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
-            }
             <span class="ident">Command</span>::<span class="ident">StartBus</span>(<span class="ident">r</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">start_bus</span>(<span class="ident">map</span>.<span class="ident">get_br</span>(<span class="ident">r</span>), <span class="ident">map</span>);
             }
@@ -1658,6 +1667,9 @@
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">m</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">pandemic</span> {
                 <span class="ident">m</span>.<span class="ident">handle_event</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="kw-2">&amp;</span><span class="ident">ev</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>);
             }
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">r</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">recorder</span> {
+                <span class="ident">r</span>.<span class="ident">handle_event</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="kw-2">&amp;</span><span class="ident">ev</span>, <span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">driving</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">trips</span>);
+            }
 
             <span class="self">self</span>.<span class="ident">analytics</span>.<span class="ident">event</span>(<span class="ident">ev</span>, <span class="self">self</span>.<span class="ident">time</span>, <span class="ident">map</span>);
         }
@@ -1667,7 +1679,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
         <span class="ident">dt</span>: <span class="ident">Duration</span>,
-        <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>,
     ) {
         <span class="kw">let</span> <span class="ident">end_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="ident">dt</span>;
@@ -1703,14 +1715,14 @@
                     <span class="string">&quot;- After {}, the sim is at {}. {} live agents&quot;</span>,
                     <span class="ident">Duration</span>::<span class="ident">realtime_elapsed</span>(<span class="ident">start</span>),
                     <span class="self">self</span>.<span class="ident">time</span>,
-                    <span class="ident">prettyprint_usize</span>(<span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">num_active_agents</span>()),
+                    <span class="ident">prettyprint_usize</span>(<span class="self">self</span>.<span class="ident">num_active_agents</span>()),
                 );
                 <span class="ident">last_update</span> <span class="op">=</span> <span class="ident">Instant</span>::<span class="ident">now</span>();
             }
         }
         <span class="ident">timer</span>.<span class="ident">stop</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Advance sim to {}&quot;</span>, <span class="ident">end_time</span>));
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tiny_step</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tiny_step</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
         <span class="self">self</span>.<span class="ident">timed_step</span>(
             <span class="ident">map</span>,
             <span class="ident">Duration</span>::<span class="ident">seconds</span>(<span class="number">0.1</span>),
@@ -1724,12 +1736,12 @@
         <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
         <span class="ident">dt</span>: <span class="ident">Duration</span>,
         <span class="ident">real_time_limit</span>: <span class="ident">Duration</span>,
-        <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+        <span class="ident">maybe_cb</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">SimCallback</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) {
         <span class="kw">let</span> <span class="ident">started_at</span> <span class="op">=</span> <span class="ident">Instant</span>::<span class="ident">now</span>();
         <span class="kw">let</span> <span class="ident">end_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="ident">dt</span>;
 
-        <span class="kw">while</span> <span class="self">self</span>.<span class="ident">time</span> <span class="op">&lt;</span> <span class="ident">end_time</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">Duration</span>::<span class="ident">realtime_elapsed</span>(<span class="ident">started_at</span>) <span class="op">&lt;</span> <span class="ident">real_time_limit</span> {
+        <span class="kw">while</span> <span class="self">self</span>.<span class="ident">time</span> <span class="op">&lt;</span> <span class="ident">end_time</span> <span class="op">&amp;&amp;</span> <span class="ident">Duration</span>::<span class="ident">realtime_elapsed</span>(<span class="ident">started_at</span>) <span class="op">&lt;</span> <span class="ident">real_time_limit</span> {
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">minimal_step</span>(<span class="ident">map</span>, <span class="ident">end_time</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">time</span>, <span class="ident">maybe_cb</span>) {
                 <span class="kw">break</span>;
             }
@@ -1762,80 +1774,16 @@
     }
 }
 
-<span class="comment">// Helpers to run the sim</span>
-<span class="comment">// TODO Old and gunky</span>
-<span class="kw">impl</span> <span class="ident">Sim</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run_until_done</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Sim</span>, <span class="kw-2">&amp;</span><span class="ident">Map</span>)<span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
-        <span class="ident">callback</span>: <span class="ident">F</span>,
-        <span class="comment">// Interpreted as a relative time</span>
-        <span class="ident">time_limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
-    ) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_print</span> <span class="op">=</span> <span class="ident">Instant</span>::<span class="ident">now</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_sim_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">time</span>();
-
-        <span class="kw">loop</span> {
-            <span class="comment">// TODO Regular printing doesn&#39;t happen if we use a time_limit :\</span>
-            <span class="kw">let</span> <span class="ident">dt</span> <span class="op">=</span> <span class="ident">time_limit</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Duration</span>::<span class="ident">seconds</span>(<span class="number">30.0</span>));
-
-            <span class="kw">match</span> <span class="ident">panic</span>::<span class="ident">catch_unwind</span>(<span class="ident">panic</span>::<span class="ident">AssertUnwindSafe</span>(<span class="op">|</span><span class="op">|</span> {
-                <span class="self">self</span>.<span class="ident">timed_step</span>(<span class="ident">map</span>, <span class="ident">dt</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>::<span class="ident">throwaway</span>());
-            })) {
-                <span class="prelude-val">Ok</span>(()) <span class="op">=</span><span class="op">&gt;</span> {}
-                <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="macro">println</span><span class="macro">!</span>(
-                        <span class="string">&quot;*************************************************************************\
-                         *******&quot;</span>
-                    );
-                    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Sim broke:&quot;</span>);
-                    <span class="self">self</span>.<span class="ident">dump_before_abort</span>();
-                    <span class="ident">panic</span>::<span class="ident">resume_unwind</span>(<span class="ident">err</span>);
-                }
-            }
-
-            <span class="kw">let</span> <span class="ident">dt_real</span> <span class="op">=</span> <span class="ident">Duration</span>::<span class="ident">realtime_elapsed</span>(<span class="ident">last_print</span>);
-            <span class="kw">if</span> <span class="ident">dt_real</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Duration</span>::<span class="ident">seconds</span>(<span class="number">1.0</span>) {
-                <span class="kw">let</span> (<span class="ident">finished</span>, <span class="ident">unfinished</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">num_trips</span>();
-                <span class="macro">println</span><span class="macro">!</span>(
-                    <span class="string">&quot;{}: {} trips finished, {} unfinished, speed = {:.2}x, {}&quot;</span>,
-                    <span class="self">self</span>.<span class="ident">time</span>(),
-                    <span class="ident">prettyprint_usize</span>(<span class="ident">finished</span>),
-                    <span class="ident">prettyprint_usize</span>(<span class="ident">unfinished</span>),
-                    (<span class="self">self</span>.<span class="ident">time</span>() <span class="op">-</span> <span class="ident">last_sim_time</span>) <span class="op">/</span> <span class="ident">dt_real</span>,
-                    <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">describe_stats</span>()
-                );
-                <span class="ident">last_print</span> <span class="op">=</span> <span class="ident">Instant</span>::<span class="ident">now</span>();
-                <span class="ident">last_sim_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">time</span>();
-            }
-            <span class="ident">callback</span>(<span class="self">self</span>, <span class="ident">map</span>);
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_done</span>() {
-                <span class="macro">println</span><span class="macro">!</span>(
-                    <span class="string">&quot;{}: speed = {:.2}x, {}&quot;</span>,
-                    <span class="self">self</span>.<span class="ident">time</span>(),
-                    (<span class="self">self</span>.<span class="ident">time</span>() <span class="op">-</span> <span class="ident">last_sim_time</span>) <span class="op">/</span> <span class="ident">dt_real</span>,
-                    <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">describe_stats</span>()
-                );
-                <span class="kw">break</span>;
-            }
-
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">lim</span>) <span class="op">=</span> <span class="ident">time_limit</span> {
-                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Time limit {} hit&quot;</span>, <span class="ident">lim</span>);
-            }
-        }
-    }
-}
-
 <span class="comment">// Savestating</span>
 <span class="kw">impl</span> <span class="ident">Sim</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">save_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
-        <span class="ident">abstutil</span>::<span class="ident">path_all_saves</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map_name</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">edits_name</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">run_name</span>)
+        <span class="ident">abstio</span>::<span class="ident">path_all_saves</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map_name</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">edits_name</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">run_name</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">save_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">base_time</span>: <span class="ident">Time</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="comment">// If we wanted to be even more reproducible, we&#39;d encode RNG seed, version of code, etc,</span>
         <span class="comment">// but that&#39;s overkill right now.</span>
-        <span class="ident">abstutil</span>::<span class="ident">path_save</span>(
+        <span class="ident">abstio</span>::<span class="ident">path_save</span>(
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">map_name</span>,
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">edits_name</span>,
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">run_name</span>,
@@ -1844,9 +1792,7 @@
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">save</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
-        <span class="kw">let</span> <span class="ident">restore</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">before_savestate</span>();
-
-        <span class="kw">if</span> <span class="bool-val">true</span> {
+        <span class="kw">if</span> <span class="bool-val">false</span> {
             <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;sim savestate breakdown:&quot;</span>);
             <span class="macro">println</span><span class="macro">!</span>(
                 <span class="string">&quot;- driving: {} bytes&quot;</span>,
@@ -1883,39 +1829,21 @@
         }
 
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">save_path</span>(<span class="self">self</span>.<span class="ident">time</span>);
-        <span class="ident">abstutil</span>::<span class="ident">write_binary</span>(<span class="ident">path</span>.<span class="ident">clone</span>(), <span class="self">self</span>);
-
-        <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">after_savestate</span>(<span class="ident">restore</span>);
+        <span class="ident">abstio</span>::<span class="ident">write_binary</span>(<span class="ident">path</span>.<span class="ident">clone</span>(), <span class="self">self</span>);
 
         <span class="ident">path</span>
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_previous_savestate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">base_time</span>: <span class="ident">Time</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="ident">abstutil</span>::<span class="ident">find_prev_file</span>(<span class="self">self</span>.<span class="ident">save_path</span>(<span class="ident">base_time</span>))
+        <span class="ident">abstio</span>::<span class="ident">find_prev_file</span>(<span class="self">self</span>.<span class="ident">save_path</span>(<span class="ident">base_time</span>))
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_next_savestate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">base_time</span>: <span class="ident">Time</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="ident">abstutil</span>::<span class="ident">find_next_file</span>(<span class="self">self</span>.<span class="ident">save_path</span>(<span class="ident">base_time</span>))
+        <span class="ident">abstio</span>::<span class="ident">find_next_file</span>(<span class="self">self</span>.<span class="ident">save_path</span>(<span class="ident">base_time</span>))
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">load_savestate</span>(
-        <span class="ident">path</span>: <span class="ident">String</span>,
-        <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
-        <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sim</span>, <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sim</span>: <span class="ident">Sim</span> <span class="op">=</span> <span class="ident">abstutil</span>::<span class="ident">maybe_read_binary</span>(<span class="ident">path</span>, <span class="ident">timer</span>)<span class="question-mark">?</span>;
-        <span class="ident">sim</span>.<span class="ident">restore_paths</span>(<span class="ident">map</span>, <span class="ident">timer</span>);
-        <span class="prelude-val">Ok</span>(<span class="ident">sim</span>)
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">restore_paths</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>) {
-        <span class="kw">let</span> <span class="ident">paths</span> <span class="op">=</span> <span class="ident">timer</span>.<span class="ident">parallelize</span>(
-            <span class="string">&quot;calculate paths&quot;</span>,
-            <span class="ident">Parallelism</span>::<span class="ident">Fastest</span>,
-            <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">get_requests_for_savestate</span>(),
-            <span class="op">|</span><span class="ident">req</span><span class="op">|</span> <span class="ident">map</span>.<span class="ident">pathfind</span>(<span class="ident">req</span>).<span class="ident">unwrap</span>(),
-        );
-        <span class="self">self</span>.<span class="ident">scheduler</span>.<span class="ident">after_savestate</span>(<span class="ident">paths</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">load_savestate</span>(<span class="ident">path</span>: <span class="ident">String</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Sim</span><span class="op">&gt;</span> {
+        <span class="ident">abstio</span>::<span class="ident">maybe_read_binary</span>(<span class="ident">path</span>, <span class="ident">timer</span>)
     }
 }
 
@@ -1926,11 +1854,16 @@
             .<span class="ident">handle_live_edited_traffic_signals</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_live_edits</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) {
-        <span class="kw">let</span> <span class="ident">affected</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_trips_affected_by_live_edits</span>(<span class="ident">map</span>);
+    <span class="doccomment">/// Respond to arbitrary map edits without resetting the simulation. Returns the number of</span>
+    <span class="doccomment">/// (trips cancelled, parked cars displaced).</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_live_edits</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">usize</span>, <span class="ident">usize</span>) {
+        <span class="self">self</span>.<span class="ident">edits_name</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_edits</span>().<span class="ident">edits_name</span>.<span class="ident">clone</span>();
 
-        <span class="comment">// V1: Just abort every trip crossing an affected area.</span>
-        <span class="comment">// (V2 is probably rerouting everyone, only aborting when that fails)</span>
+        <span class="kw">let</span> (<span class="ident">affected</span>, <span class="ident">num_parked_cars</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_trips_affected_by_live_edits</span>(<span class="ident">map</span>);
+        <span class="kw">let</span> <span class="ident">num_trips_cancelled</span> <span class="op">=</span> <span class="ident">affected</span>.<span class="ident">len</span>();
+
+        <span class="comment">// V1: Just cancel every trip crossing an affected area.</span>
+        <span class="comment">// (V2 is probably rerouting everyone, only cancelling when that fails)</span>
         <span class="comment">// TODO If we delete a bus, deal with all its passengers</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ctx</span> <span class="op">=</span> <span class="ident">Ctx</span> {
             <span class="ident">parking</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">parking</span>,
@@ -1938,30 +1871,55 @@
             <span class="ident">cap</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">cap</span>,
             <span class="ident">scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>,
             <span class="ident">map</span>,
+            <span class="ident">handling_live_edits</span>: <span class="bool-val">true</span>,
         };
         <span class="kw">for</span> (<span class="ident">agent</span>, <span class="ident">trip</span>) <span class="kw">in</span> <span class="ident">affected</span> {
             <span class="kw">match</span> <span class="ident">agent</span> {
                 <span class="ident">AgentID</span>::<span class="ident">Car</span>(<span class="ident">car</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="ident">vehicle</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">driving</span>.<span class="ident">delete_car</span>(<span class="ident">car</span>, <span class="self">self</span>.<span class="ident">time</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
-                    <span class="self">self</span>.<span class="ident">trips</span>
-                        .<span class="ident">abort_trip</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">trip</span>, <span class="prelude-val">Some</span>(<span class="ident">vehicle</span>), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
+                    <span class="comment">// TODO Plumb more info about the reason</span>
+                    <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">cancel_trip</span>(
+                        <span class="self">self</span>.<span class="ident">time</span>,
+                        <span class="ident">trip</span>,
+                        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;map edited without reset&quot;</span>),
+                        <span class="prelude-val">Some</span>(<span class="ident">vehicle</span>),
+                        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>,
+                    );
+                    <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">trip_abruptly_cancelled</span>(<span class="ident">trip</span>, <span class="ident">AgentID</span>::<span class="ident">Car</span>(<span class="ident">car</span>));
                 }
                 <span class="ident">AgentID</span>::<span class="ident">Pedestrian</span>(<span class="ident">ped</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="self">self</span>.<span class="ident">walking</span>.<span class="ident">delete_ped</span>(<span class="ident">ped</span>, <span class="ident">ctx</span>.<span class="ident">scheduler</span>);
-                    <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">abort_trip</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">trip</span>, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
+                    <span class="self">self</span>.<span class="ident">walking</span>.<span class="ident">delete_ped</span>(<span class="ident">ped</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
+                    <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">cancel_trip</span>(
+                        <span class="self">self</span>.<span class="ident">time</span>,
+                        <span class="ident">trip</span>,
+                        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;map edited without reset&quot;</span>),
+                        <span class="prelude-val">None</span>,
+                        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>,
+                    );
+                    <span class="self">self</span>.<span class="ident">trips</span>
+                        .<span class="ident">trip_abruptly_cancelled</span>(<span class="ident">trip</span>, <span class="ident">AgentID</span>::<span class="ident">Pedestrian</span>(<span class="ident">ped</span>));
                 }
                 <span class="ident">AgentID</span>::<span class="ident">BusPassenger</span>(<span class="kw">_</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
             }
         }
+
+        <span class="self">self</span>.<span class="ident">driving</span>.<span class="ident">handle_live_edits</span>(<span class="ident">map</span>);
+        <span class="self">self</span>.<span class="ident">intersections</span>.<span class="ident">handle_live_edits</span>(<span class="ident">map</span>);
+
+        (<span class="ident">num_trips_cancelled</span>, <span class="ident">num_parked_cars</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">find_trips_affected_by_live_edits</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">AgentID</span>, <span class="ident">TripID</span>)<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">affected</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">AgentID</span>, <span class="ident">TripID</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+    <span class="doccomment">/// Returns (trips affected, number of parked cars displaced)</span>
+    <span class="kw">fn</span> <span class="ident">find_trips_affected_by_live_edits</span>(
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">BTreeSet</span><span class="op">&lt;</span>(<span class="ident">AgentID</span>, <span class="ident">TripID</span>)<span class="op">&gt;</span>, <span class="ident">usize</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">affected</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span>(<span class="ident">AgentID</span>, <span class="ident">TripID</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">BTreeSet</span>::<span class="ident">new</span>();
 
         <span class="comment">// TODO Handle changes to access restrictions</span>
 
         {
-            <span class="comment">// Find every active trip whose path crosses a modified lane or closed intersection</span>
+            <span class="comment">// Find every active trip whose path crosses a modified lane or intersection</span>
             <span class="kw">let</span> (<span class="ident">edited_lanes</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_edits</span>().<span class="ident">changed_lanes</span>(<span class="ident">map</span>);
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">closed_intersections</span> <span class="op">=</span> <span class="ident">HashSet</span>::<span class="ident">new</span>();
             <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="ident">map</span>.<span class="ident">get_edits</span>().<span class="ident">original_intersections</span>.<span class="ident">keys</span>() {
@@ -1976,18 +1934,33 @@
                         .<span class="ident">iter</span>()
                         .<span class="ident">any</span>(<span class="op">|</span><span class="ident">step</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">step</span>.<span class="ident">as_traversable</span>() {
                             <span class="ident">Traversable</span>::<span class="ident">Lane</span>(<span class="ident">l</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">edited_lanes</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">l</span>),
-                            <span class="ident">Traversable</span>::<span class="ident">Turn</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">closed_intersections</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">t</span>.<span class="ident">parent</span>),
+                            <span class="ident">Traversable</span>::<span class="ident">Turn</span>(<span class="ident">t</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="ident">closed_intersections</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">t</span>.<span class="ident">parent</span>)
+                                    <span class="op">|</span><span class="op">|</span> <span class="ident">edited_lanes</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">t</span>.<span class="ident">src</span>)
+                                    <span class="op">|</span><span class="op">|</span> <span class="ident">edited_lanes</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">t</span>.<span class="ident">dst</span>)
+                            }
                         })
                     {
-                        <span class="ident">affected</span>.<span class="ident">push</span>((<span class="kw-2">*</span><span class="ident">a</span>, <span class="kw-2">*</span><span class="ident">trip</span>));
+                        <span class="ident">affected</span>.<span class="ident">insert</span>((<span class="kw-2">*</span><span class="ident">a</span>, <span class="kw-2">*</span><span class="ident">trip</span>));
                     }
                 }
             }
+
+            <span class="ident">affected</span>.<span class="ident">extend</span>(
+                <span class="self">self</span>.<span class="ident">driving</span>
+                    .<span class="ident">find_vehicles_affected_by_live_edits</span>(<span class="kw-2">&amp;</span><span class="ident">closed_intersections</span>, <span class="kw-2">&amp;</span><span class="ident">edited_lanes</span>),
+            );
         }
 
-        {
-            <span class="kw">let</span> <span class="ident">evicted_cars</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">handle_live_edits</span>(<span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>::<span class="ident">throwaway</span>());
+        <span class="kw">let</span> <span class="ident">num_evicted</span> <span class="op">=</span> {
+            <span class="kw">let</span> (<span class="ident">evicted_cars</span>, <span class="ident">cars_parking_in_the_void</span>) <span class="op">=</span>
+                <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">handle_live_edits</span>(<span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>::<span class="ident">throwaway</span>());
+            <span class="kw">let</span> <span class="ident">num_evicted</span> <span class="op">=</span> <span class="ident">evicted_cars</span>.<span class="ident">len</span>();
             <span class="ident">affected</span>.<span class="ident">extend</span>(<span class="self">self</span>.<span class="ident">walking</span>.<span class="ident">find_trips_to_parking</span>(<span class="ident">evicted_cars</span>));
+            <span class="kw">for</span> <span class="ident">car</span> <span class="kw">in</span> <span class="ident">cars_parking_in_the_void</span> {
+                <span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="ident">AgentID</span>::<span class="ident">Car</span>(<span class="ident">car</span>);
+                <span class="ident">affected</span>.<span class="ident">insert</span>((<span class="ident">a</span>, <span class="self">self</span>.<span class="ident">agent_to_trip</span>(<span class="ident">a</span>).<span class="ident">unwrap</span>()));
+            }
 
             <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">is_infinite</span>() {
                 <span class="kw">let</span> (<span class="ident">filled</span>, <span class="ident">avail</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">parking</span>.<span class="ident">get_all_parking_spots</span>();
@@ -1996,9 +1969,10 @@
                 <span class="ident">all_spots</span>.<span class="ident">extend</span>(<span class="ident">avail</span>);
                 <span class="ident">affected</span>.<span class="ident">extend</span>(<span class="self">self</span>.<span class="ident">driving</span>.<span class="ident">find_trips_to_edited_parking</span>(<span class="ident">all_spots</span>));
             }
-        }
+            <span class="ident">num_evicted</span>
+        };
 
-        <span class="ident">affected</span>
+        (<span class="ident">affected</span>, <span class="ident">num_evicted</span>)
     }
 }
 
@@ -2012,11 +1986,16 @@
                 <span class="ident">cap</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">cap</span>,
                 <span class="ident">scheduler</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">scheduler</span>,
                 <span class="ident">map</span>,
+                <span class="ident">handling_live_edits</span>: <span class="bool-val">false</span>,
             };
             <span class="kw">let</span> <span class="ident">vehicle</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">driving</span>.<span class="ident">delete_car</span>(<span class="ident">id</span>, <span class="self">self</span>.<span class="ident">time</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
-            <span class="self">self</span>.<span class="ident">trips</span>
-                .<span class="ident">abort_trip</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="ident">trip</span>, <span class="prelude-val">Some</span>(<span class="ident">vehicle</span>), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>);
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Forcibly killed {}&quot;</span>, <span class="ident">id</span>);
+            <span class="self">self</span>.<span class="ident">trips</span>.<span class="ident">cancel_trip</span>(
+                <span class="self">self</span>.<span class="ident">time</span>,
+                <span class="ident">trip</span>,
+                <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{} deleted manually through the UI&quot;</span>, <span class="ident">id</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">vehicle</span>),
+                <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ctx</span>,
+            );
         } <span class="kw">else</span> {
             <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;{} has no trip?!&quot;</span>, <span class="ident">id</span>);
         }
@@ -2035,7 +2014,7 @@
 <span class="ident">downcast_rs</span>::<span class="macro">impl_downcast</span><span class="macro">!</span>(<span class="ident">SimCallback</span>);
 
 <span class="kw">impl</span> <span class="ident">Sim</span> {
-    <span class="comment">// Only one at a time supported.</span>
+    <span class="doccomment">/// Only one at a time supported.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_periodic_callback</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">frequency</span>: <span class="ident">Duration</span>) {
         <span class="comment">// TODO Round up time nicely?</span>
         <span class="self">self</span>.<span class="ident">scheduler</span>
@@ -2045,6 +2024,22 @@
         <span class="comment">// Frequency doesn&#39;t matter</span>
         <span class="self">self</span>.<span class="ident">scheduler</span>
             .<span class="ident">cancel</span>(<span class="ident">Command</span>::<span class="ident">Callback</span>(<span class="ident">Duration</span>::<span class="ident">seconds</span>(<span class="number">1.0</span>)));
+    }
+}
+
+<span class="comment">// Recording traffic</span>
+<span class="kw">impl</span> <span class="ident">Sim</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">record_traffic_for</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">intersections</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">IntersectionID</span><span class="op">&gt;</span>) {
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">recorder</span>.<span class="ident">is_none</span>());
+        <span class="self">self</span>.<span class="ident">recorder</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">TrafficRecorder</span>::<span class="ident">new</span>(<span class="ident">intersections</span>));
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">num_recorded_trips</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">recorder</span>.<span class="ident">as_ref</span>()<span class="question-mark">?</span>.<span class="ident">num_recorded_trips</span>())
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">save_recorded_traffic</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) {
+        <span class="self">self</span>.<span class="ident">recorder</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>().<span class="ident">save</span>(<span class="ident">map</span>);
     }
 }
 </pre></div>
