@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["ColorDiscrete",""],["ColorLegend",""],["ColorNetwork",""],["ColorScale",""],["DivergingScale",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["ColorDiscrete",""],["ColorNetwork",""]]};

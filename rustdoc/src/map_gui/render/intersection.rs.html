@@ -1,105 +1,102 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `map_gui/src/render/intersection.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>intersection.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../map_gui/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
-                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `map_gui/src/render/intersection.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>intersection.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../map_gui/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../map_gui/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../map_gui/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -478,20 +475,219 @@
 <span id="475">475</span>
 <span id="476">476</span>
 <span id="477">477</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
 
-<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Angle</span>, <span class="ident">ArrowCap</span>, <span class="ident">Distance</span>, <span class="ident">Line</span>, <span class="ident">PolyLine</span>, <span class="ident">Polygon</span>, <span class="ident">Pt2D</span>, <span class="ident">Ring</span>, <span class="ident">Time</span>, <span class="ident">EPSILON_DIST</span>};
+<span class="kw">use</span> <span class="ident">geom</span>::{
+    <span class="ident">Angle</span>, <span class="ident">ArrowCap</span>, <span class="ident">Distance</span>, <span class="ident">Line</span>, <span class="ident">PolyLine</span>, <span class="ident">Polygon</span>, <span class="ident">Pt2D</span>, <span class="ident">Ring</span>, <span class="ident">Tessellation</span>, <span class="ident">Time</span>,
+    <span class="ident">EPSILON_DIST</span>,
+};
 <span class="kw">use</span> <span class="ident">map_model</span>::{
-    <span class="ident">Direction</span>, <span class="ident">DrivingSide</span>, <span class="ident">Intersection</span>, <span class="ident">IntersectionID</span>, <span class="ident">IntersectionType</span>, <span class="ident">LaneType</span>, <span class="ident">Map</span>, <span class="ident">Road</span>,
-    <span class="ident">RoadWithStopSign</span>, <span class="ident">Turn</span>, <span class="ident">TurnType</span>, <span class="ident">SIDEWALK_THICKNESS</span>,
+    <span class="ident">ControlTrafficSignal</span>, <span class="ident">Direction</span>, <span class="ident">DrivingSide</span>, <span class="ident">Intersection</span>, <span class="ident">IntersectionID</span>, <span class="ident">IntersectionType</span>,
+    <span class="ident">LaneType</span>, <span class="ident">Map</span>, <span class="ident">Road</span>, <span class="ident">RoadWithStopSign</span>, <span class="ident">Turn</span>, <span class="ident">TurnType</span>, <span class="ident">SIDEWALK_THICKNESS</span>,
 };
-<span class="kw">use</span> <span class="ident">widgetry</span>::{<span class="ident">Color</span>, <span class="ident">Drawable</span>, <span class="ident">GeomBatch</span>, <span class="ident">GfxCtx</span>, <span class="ident">Prerender</span>, <span class="ident">RewriteColor</span>};
+<span class="kw">use</span> <span class="ident">widgetry</span>::{<span class="ident">Color</span>, <span class="ident">Drawable</span>, <span class="ident">GeomBatch</span>, <span class="ident">GfxCtx</span>, <span class="ident">Prerender</span>, <span class="ident">RewriteColor</span>, <span class="ident">Text</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">colors</span>::<span class="ident">ColorScheme</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">render</span>::{
-    <span class="ident">traffic_signal</span>, <span class="ident">DrawOptions</span>, <span class="ident">Renderable</span>, <span class="ident">CROSSWALK_LINE_THICKNESS</span>, <span class="ident">OUTLINE_THICKNESS</span>,
-};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::colors::ColorScheme</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::render</span>::{<span class="ident">traffic_signal</span>, <span class="ident">DrawOptions</span>, <span class="ident">Renderable</span>, <span class="ident">OUTLINE_THICKNESS</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">AppLike</span>, <span class="ident">ID</span>};
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DrawIntersection</span> {
@@ -503,97 +699,125 @@
 }
 
 <span class="kw">impl</span> <span class="ident">DrawIntersection</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">Intersection</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DrawIntersection</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">Intersection</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="ident">DrawIntersection</span> {
         <span class="ident">DrawIntersection</span> {
             <span class="ident">id</span>: <span class="ident">i</span>.<span class="ident">id</span>,
             <span class="ident">zorder</span>: <span class="ident">i</span>.<span class="ident">get_zorder</span>(<span class="ident">map</span>),
-            <span class="ident">draw_default</span>: <span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="prelude-val">None</span>),
-            <span class="ident">draw_traffic_signal</span>: <span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="prelude-val">None</span>),
+            <span class="ident">draw_default</span>: <span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>),
+            <span class="ident">draw_traffic_signal</span>: <span class="ident">RefCell::new</span>(<span class="prelude-val">None</span>),
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_rendering</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">draw_default</span>.<span class="ident">borrow_mut</span>() <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">draw_traffic_signal</span>.<span class="ident">borrow_mut</span>() <span class="op">=</span> <span class="prelude-val">None</span>;
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Prerender</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">prerender</span>: <span class="kw-2">&amp;</span><span class="ident">P</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">dyn</span> <span class="ident">AppLike</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GeomBatch</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Prerender</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">prerender</span>: <span class="kw-2">&amp;</span><span class="ident">P</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">AppLike</span>) -&gt; <span class="ident">GeomBatch</span> {
         <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">map</span>();
         <span class="kw">let</span> <span class="ident">i</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_i</span>(<span class="self">self</span>.<span class="ident">id</span>);
 
         <span class="comment">// Order matters... main polygon first, then sidewalk corners.</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">default_geom</span> <span class="op">=</span> <span class="ident">GeomBatch</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">default_geom</span> <span class="op">=</span> <span class="ident">GeomBatch::new</span>();
         <span class="kw">let</span> <span class="ident">rank</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">get_rank</span>(<span class="ident">map</span>);
         <span class="ident">default_geom</span>.<span class="ident">push</span>(
             <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">is_footway</span>(<span class="ident">map</span>) {
-                <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">zoomed_road_surface</span>(<span class="ident">LaneType</span>::<span class="ident">Sidewalk</span>, <span class="ident">rank</span>)
+                <span class="comment">// TODO Or maybe shared-use, once there&#39;s some visual distinction there</span>
+                <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">zoomed_road_surface</span>(<span class="ident">LaneType::Footway</span>, <span class="ident">rank</span>)
+            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">is_cycleway</span>(<span class="ident">map</span>) {
+                <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">zoomed_road_surface</span>(<span class="ident">LaneType::Biking</span>, <span class="ident">rank</span>)
             } <span class="kw">else</span> {
                 <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">zoomed_intersection_surface</span>(<span class="ident">rank</span>)
             },
             <span class="ident">i</span>.<span class="ident">polygon</span>.<span class="ident">clone</span>(),
         );
-        <span class="kw">if</span> <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">sidewalk_lines</span>.<span class="ident">is_some</span>() {
-            <span class="ident">default_geom</span>.<span class="ident">extend</span>(
-                <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">zoomed_road_surface</span>(<span class="ident">LaneType</span>::<span class="ident">Sidewalk</span>, <span class="ident">rank</span>),
-                <span class="ident">calculate_corners</span>(<span class="ident">i</span>, <span class="ident">map</span>),
-            );
-        } <span class="kw">else</span> {
-            <span class="ident">calculate_corners_with_borders</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">default_geom</span>, <span class="ident">app</span>, <span class="ident">i</span>);
+        <span class="ident">default_geom</span>.<span class="ident">extend</span>(
+            <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">zoomed_road_surface</span>(<span class="ident">LaneType::Sidewalk</span>, <span class="ident">rank</span>),
+            <span class="ident">calculate_corners</span>(<span class="ident">i</span>, <span class="ident">map</span>),
+        );
+        <span class="kw">if</span> <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">road_outlines</span> {
+            <span class="ident">default_geom</span>.<span class="ident">extend</span>(<span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">curb</span>(<span class="ident">rank</span>), <span class="ident">calculate_corner_curbs</span>(<span class="ident">i</span>, <span class="ident">map</span>));
+        }
+        <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">is_footway</span>(<span class="ident">map</span>) {
+            <span class="kw">for</span> <span class="ident">pl</span> <span class="kw">in</span> <span class="ident"><span class="self">Self</span>::get_unzoomed_outline</span>(<span class="ident">i</span>, <span class="ident">map</span>) {
+                <span class="ident">default_geom</span>.<span class="ident">extend</span>(
+                    <span class="ident">Color::BLACK</span>,
+                    <span class="ident">pl</span>.<span class="ident">exact_dashed_polygons</span>(
+                        <span class="ident">Distance::meters</span>(<span class="number">0.25</span>),
+                        <span class="ident">Distance::meters</span>(<span class="number">1.0</span>),
+                        <span class="ident">Distance::meters</span>(<span class="number">1.5</span>),
+                    ),
+                );
+            }
         }
 
-        <span class="kw">for</span> <span class="ident">turn</span> <span class="kw">in</span> <span class="ident">map</span>.<span class="ident">get_turns_in_intersection</span>(<span class="ident">i</span>.<span class="ident">id</span>) {
-            <span class="comment">// Avoid double-rendering</span>
-            <span class="kw">if</span> <span class="ident">turn</span>.<span class="ident">turn_type</span> <span class="op">=</span><span class="op">=</span> <span class="ident">TurnType</span>::<span class="ident">Crosswalk</span>
-                <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">turn</span>.<span class="ident">other_crosswalk_ids</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">id</span> <span class="op">&lt;</span> <span class="ident">turn</span>.<span class="ident">id</span>)
-            {
-                <span class="ident">make_crosswalk</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">default_geom</span>, <span class="ident">turn</span>, <span class="ident">map</span>, <span class="ident">app</span>.<span class="ident">cs</span>());
+        <span class="kw">for</span> <span class="ident">turn</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">i</span>.<span class="ident">turns</span> {
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">app</span>.<span class="ident">opts</span>().<span class="ident">show_crosswalks</span> {
+                <span class="kw">break</span>;
+            }
+            <span class="kw">if</span> <span class="ident">turn</span>.<span class="ident">turn_type</span>.<span class="ident">pedestrian_crossing</span>() {
+                <span class="ident">make_crosswalk</span>(<span class="kw-2">&amp;mut</span> <span class="ident">default_geom</span>, <span class="ident">turn</span>, <span class="ident">map</span>, <span class="ident">app</span>.<span class="ident">cs</span>());
             }
         }
 
         <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">is_private</span>(<span class="ident">map</span>) {
-            <span class="ident">default_geom</span>.<span class="ident">push</span>(<span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">private_road</span>.<span class="ident">alpha</span>(<span class="number">0.5</span>), <span class="ident">i</span>.<span class="ident">polygon</span>.<span class="ident">clone</span>());
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">private_road</span> {
+                <span class="ident">default_geom</span>.<span class="ident">push</span>(<span class="ident">color</span>.<span class="ident">alpha</span>(<span class="number">0.5</span>), <span class="ident">i</span>.<span class="ident">polygon</span>.<span class="ident">clone</span>());
+            }
         }
 
         <span class="kw">match</span> <span class="ident">i</span>.<span class="ident">intersection_type</span> {
-            <span class="ident">IntersectionType</span>::<span class="ident">Border</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">IntersectionType::Border</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_r</span>(<span class="kw-2">*</span><span class="ident">i</span>.<span class="ident">roads</span>.<span class="ident">iter</span>().<span class="ident">next</span>().<span class="ident">unwrap</span>());
                 <span class="ident">default_geom</span>.<span class="ident">extend</span>(
-                    <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">road_center_line</span>(<span class="ident">r</span>.<span class="ident">get_rank</span>()),
+                    <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">road_center_line</span>(<span class="ident">map</span>),
                     <span class="ident">calculate_border_arrows</span>(<span class="ident">i</span>, <span class="ident">r</span>, <span class="ident">map</span>),
                 );
             }
-            <span class="ident">IntersectionType</span>::<span class="ident">StopSign</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">IntersectionType::StopSign</span> <span class="op">|</span> <span class="ident">IntersectionType::Uncontrolled</span> =&gt; {
                 <span class="kw">for</span> <span class="ident">ss</span> <span class="kw">in</span> <span class="ident">map</span>.<span class="ident">get_stop_sign</span>(<span class="ident">i</span>.<span class="ident">id</span>).<span class="ident">roads</span>.<span class="ident">values</span>() {
+                    <span class="kw">if</span> <span class="op">!</span><span class="ident">app</span>.<span class="ident">opts</span>().<span class="ident">show_stop_signs</span> {
+                        <span class="kw">break</span>;
+                    }
                     <span class="kw">if</span> <span class="ident">ss</span>.<span class="ident">must_stop</span> {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">octagon</span>, <span class="ident">pole</span>)) <span class="op">=</span> <span class="ident">DrawIntersection</span>::<span class="ident">stop_sign_geom</span>(<span class="ident">ss</span>, <span class="ident">map</span>) {
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">octagon</span>, <span class="ident">pole</span>, <span class="ident">angle</span>)) <span class="op">=</span>
+                            <span class="ident">DrawIntersection::stop_sign_geom</span>(<span class="ident">ss</span>, <span class="ident">map</span>)
+                        {
+                            <span class="kw">let</span> <span class="ident">center</span> <span class="op">=</span> <span class="ident">octagon</span>.<span class="ident">center</span>();
                             <span class="ident">default_geom</span>.<span class="ident">push</span>(<span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">stop_sign</span>, <span class="ident">octagon</span>);
                             <span class="ident">default_geom</span>.<span class="ident">push</span>(<span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">stop_sign_pole</span>, <span class="ident">pole</span>);
+
+                            <span class="comment">// Trial and error to make the scale and angle work. We could also make</span>
+                            <span class="comment">// a fixed SVG asset and just rotate it, but we&#39;d still need to</span>
+                            <span class="comment">// calculate the octagon hitbox for the stop sign editor.</span>
+                            <span class="ident">default_geom</span>.<span class="ident">append</span>(
+                                <span class="ident">Text::from</span>(<span class="ident">widgetry::Line</span>(<span class="string">&quot;STOP&quot;</span>).<span class="ident">small_heading</span>().<span class="ident">fg</span>(<span class="ident">Color::WHITE</span>))
+                                    .<span class="ident">render_autocropped</span>(<span class="ident">prerender</span>.<span class="ident">as_ref</span>())
+                                    .<span class="ident">scale</span>(<span class="number">0.02</span>)
+                                    .<span class="ident">centered_on</span>(<span class="ident">center</span>)
+                                    .<span class="ident">rotate</span>(<span class="ident">angle</span>.<span class="ident">opposite</span>().<span class="ident">rotate_degs</span>(<span class="op">-</span><span class="number">90.0</span>)),
+                            );
                         }
                     }
                 }
             }
-            <span class="ident">IntersectionType</span>::<span class="ident">Construction</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">IntersectionType::Construction</span> =&gt; {
                 <span class="comment">// TODO Centering seems weird</span>
                 <span class="ident">default_geom</span>.<span class="ident">append</span>(
-                    <span class="ident">GeomBatch</span>::<span class="ident">load_svg</span>(<span class="ident">prerender</span>, <span class="string">&quot;system/assets/map/under_construction.svg&quot;</span>)
+                    <span class="ident">GeomBatch::load_svg</span>(<span class="ident">prerender</span>, <span class="string">&quot;system/assets/map/under_construction.svg&quot;</span>)
                         .<span class="ident">scale</span>(<span class="number">0.08</span>)
                         .<span class="ident">centered_on</span>(<span class="ident">i</span>.<span class="ident">polygon</span>.<span class="ident">center</span>()),
                 );
             }
-            <span class="ident">IntersectionType</span>::<span class="ident">TrafficSignal</span> <span class="op">=</span><span class="op">&gt;</span> {}
+            <span class="ident">IntersectionType::TrafficSignal</span> =&gt; {}
         }
 
         <span class="kw">let</span> <span class="ident">zorder</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">get_zorder</span>(<span class="ident">map</span>);
         <span class="kw">if</span> <span class="ident">zorder</span> <span class="op">&lt;</span> <span class="number">0</span> {
-            <span class="ident">default_geom</span> <span class="op">=</span> <span class="ident">default_geom</span>.<span class="ident">color</span>(<span class="ident">RewriteColor</span>::<span class="ident">ChangeAlpha</span>(<span class="number">0.5</span>));
+            <span class="ident">default_geom</span> <span class="op">=</span> <span class="ident">default_geom</span>.<span class="ident">color</span>(<span class="ident">RewriteColor::ChangeAlpha</span>(<span class="number">0.5</span>));
         }
 
         <span class="ident">default_geom</span>
     }
 
-    <span class="comment">// Returns the (octagon, pole) if there&#39;s room to draw it.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">stop_sign_geom</span>(<span class="ident">ss</span>: <span class="kw-2">&amp;</span><span class="ident">RoadWithStopSign</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">Polygon</span>, <span class="ident">Polygon</span>)<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">trim_back</span> <span class="op">=</span> <span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="number">0.1</span>);
+    <span class="comment">// Returns the (octagon, pole, angle of the angle) if there&#39;s room to draw it.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">stop_sign_geom</span>(<span class="ident">ss</span>: <span class="kw-2">&amp;</span><span class="ident">RoadWithStopSign</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">Polygon</span>, <span class="ident">Polygon</span>, <span class="ident">Angle</span>)<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">trim_back</span> <span class="op">=</span> <span class="ident">Distance::meters</span>(<span class="number">0.1</span>);
         <span class="kw">let</span> <span class="ident">edge_lane</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">ss</span>.<span class="ident">lane_closest_to_edge</span>);
         <span class="comment">// TODO The dream of trimming f64&#39;s was to isolate epsilon checks like this...</span>
         <span class="kw">if</span> <span class="ident">edge_lane</span>.<span class="ident">length</span>() <span class="op">-</span> <span class="ident">trim_back</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">EPSILON_DIST</span> {
@@ -602,35 +826,71 @@
         }
         <span class="kw">let</span> <span class="ident">last_line</span> <span class="op">=</span> <span class="ident">edge_lane</span>
             .<span class="ident">lane_center_pts</span>
-            .<span class="ident">exact_slice</span>(<span class="ident">Distance</span>::<span class="ident">ZERO</span>, <span class="ident">edge_lane</span>.<span class="ident">length</span>() <span class="op">-</span> <span class="ident">trim_back</span>)
+            .<span class="ident">exact_slice</span>(<span class="ident">Distance::ZERO</span>, <span class="ident">edge_lane</span>.<span class="ident">length</span>() <span class="op">-</span> <span class="ident">trim_back</span>)
             .<span class="ident">last_line</span>();
-        <span class="kw">let</span> <span class="ident">last_line</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">map</span>.<span class="ident">get_config</span>().<span class="ident">driving_side</span> <span class="op">=</span><span class="op">=</span> <span class="ident">DrivingSide</span>::<span class="ident">Right</span> {
+        <span class="kw">let</span> <span class="ident">last_line</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">map</span>.<span class="ident">get_config</span>().<span class="ident">driving_side</span> <span class="op">==</span> <span class="ident">DrivingSide::Right</span> {
             <span class="ident">last_line</span>.<span class="ident">shift_right</span>(<span class="ident">edge_lane</span>.<span class="ident">width</span>)
         } <span class="kw">else</span> {
             <span class="ident">last_line</span>.<span class="ident">shift_left</span>(<span class="ident">edge_lane</span>.<span class="ident">width</span>)
         };
 
-        <span class="kw">let</span> <span class="ident">octagon</span> <span class="op">=</span> <span class="ident">make_octagon</span>(<span class="ident">last_line</span>.<span class="ident">pt2</span>(), <span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="number">1.0</span>), <span class="ident">last_line</span>.<span class="ident">angle</span>());
-        <span class="kw">let</span> <span class="ident">pole</span> <span class="op">=</span> <span class="ident">Line</span>::<span class="ident">must_new</span>(
+        <span class="kw">let</span> <span class="ident">octagon</span> <span class="op">=</span> <span class="ident">make_octagon</span>(<span class="ident">last_line</span>.<span class="ident">pt2</span>(), <span class="ident">Distance::meters</span>(<span class="number">1.0</span>), <span class="ident">last_line</span>.<span class="ident">angle</span>());
+        <span class="kw">let</span> <span class="ident">pole</span> <span class="op">=</span> <span class="ident">Line::must_new</span>(
             <span class="ident">last_line</span>
                 .<span class="ident">pt2</span>()
-                .<span class="ident">project_away</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="number">1.5</span>), <span class="ident">last_line</span>.<span class="ident">angle</span>().<span class="ident">opposite</span>()),
+                .<span class="ident">project_away</span>(<span class="ident">Distance::meters</span>(<span class="number">1.5</span>), <span class="ident">last_line</span>.<span class="ident">angle</span>().<span class="ident">opposite</span>()),
             <span class="comment">// TODO Slightly &lt; 0.9</span>
             <span class="ident">last_line</span>
                 .<span class="ident">pt2</span>()
-                .<span class="ident">project_away</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="number">0.9</span>), <span class="ident">last_line</span>.<span class="ident">angle</span>().<span class="ident">opposite</span>()),
+                .<span class="ident">project_away</span>(<span class="ident">Distance::meters</span>(<span class="number">0.9</span>), <span class="ident">last_line</span>.<span class="ident">angle</span>().<span class="ident">opposite</span>()),
         )
-        .<span class="ident">make_polygons</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="number">0.3</span>));
-        <span class="prelude-val">Some</span>((<span class="ident">octagon</span>, <span class="ident">pole</span>))
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">Renderable</span> <span class="kw">for</span> <span class="ident">DrawIntersection</span> {
-    <span class="kw">fn</span> <span class="ident">get_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ID</span> {
-        <span class="ident">ID</span>::<span class="ident">Intersection</span>(<span class="self">self</span>.<span class="ident">id</span>)
+        .<span class="ident">make_polygons</span>(<span class="ident">Distance::meters</span>(<span class="number">0.3</span>));
+        <span class="prelude-val">Some</span>((<span class="ident">octagon</span>, <span class="ident">pole</span>, <span class="ident">last_line</span>.<span class="ident">angle</span>()))
     }
 
-    <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GfxCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">dyn</span> <span class="ident">AppLike</span>, <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">DrawOptions</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clear_rendering</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
+        <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">draw_default</span>.<span class="ident">borrow_mut</span>() <span class="op">=</span> <span class="prelude-val">None</span>;
+    }
+
+    <span class="doccomment">/// Find sections along the intersection polygon that aren&#39;t connected to a road. These should</span>
+    <span class="doccomment">/// contribute an outline.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_unzoomed_outline</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">Intersection</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PolyLine</span><span class="op">&gt;</span> {
+        <span class="comment">// Turn each road into the left and right point that should be on the ring, so we can</span>
+        <span class="comment">// &quot;subtract&quot; them out.</span>
+        <span class="kw">let</span> <span class="ident">road_pairs</span> <span class="op">=</span> <span class="ident">i</span>
+            .<span class="ident">roads</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">road</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_r</span>(<span class="kw-2">*</span><span class="ident">r</span>);
+                <span class="kw">let</span> <span class="ident">half_width</span> <span class="op">=</span> <span class="ident">road</span>.<span class="ident">get_half_width</span>();
+                <span class="kw">let</span> <span class="ident">left</span> <span class="op">=</span> <span class="ident">road</span>.<span class="ident">center_pts</span>.<span class="ident">must_shift_left</span>(<span class="ident">half_width</span>);
+                <span class="kw">let</span> <span class="ident">right</span> <span class="op">=</span> <span class="ident">road</span>.<span class="ident">center_pts</span>.<span class="ident">must_shift_right</span>(<span class="ident">half_width</span>);
+                <span class="kw">if</span> <span class="ident">road</span>.<span class="ident">src_i</span> <span class="op">==</span> <span class="ident">i</span>.<span class="ident">id</span> {
+                    (<span class="ident">left</span>.<span class="ident">first_pt</span>(), <span class="ident">right</span>.<span class="ident">first_pt</span>())
+                } <span class="kw">else</span> {
+                    (<span class="ident">left</span>.<span class="ident">last_pt</span>(), <span class="ident">right</span>.<span class="ident">last_pt</span>())
+                }
+            })
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
+
+        <span class="comment">// Walk along each line segment on the ring. If it&#39;s not one of our road pairs, add it as a</span>
+        <span class="comment">// potential segment.</span>
+        <span class="ident">i</span>.<span class="ident">polygon</span>
+            .<span class="ident">get_outer_ring</span>()
+            .<span class="ident">points</span>()
+            .<span class="ident">windows</span>(<span class="number">2</span>)
+            .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">window</span><span class="op">|</span> {
+                <span class="op">!</span><span class="ident">road_pairs</span>
+                    .<span class="ident">iter</span>()
+                    .<span class="ident">any</span>(<span class="op">|</span><span class="ident">road_pair</span><span class="op">|</span> <span class="ident">approx_eq</span>(<span class="ident">window</span>, <span class="kw-2">&amp;</span><span class="ident">road_pair</span>))
+            })
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">pair</span><span class="op">|</span> <span class="ident">PolyLine::must_new</span>(<span class="macro">vec!</span>[<span class="ident">pair</span>[<span class="number">0</span>], <span class="ident">pair</span>[<span class="number">1</span>]]))
+            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()
+
+        <span class="comment">// TODO We could merge adjacent segments, to get nicer corners</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">redraw_default</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GfxCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">AppLike</span>) {
         <span class="comment">// Lazily calculate, because these are expensive to all do up-front, and most players won&#39;t</span>
         <span class="comment">// exhaustively see every intersection during a single session</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">draw</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">draw_default</span>.<span class="ident">borrow_mut</span>();
@@ -638,95 +898,162 @@
             <span class="kw-2">*</span><span class="ident">draw</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">g</span>.<span class="ident">upload</span>(<span class="self">self</span>.<span class="ident">render</span>(<span class="ident">g</span>, <span class="ident">app</span>)));
         }
         <span class="ident">g</span>.<span class="ident">redraw</span>(<span class="ident">draw</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>());
+    }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">signal</span>) <span class="op">=</span> <span class="ident">app</span>.<span class="ident">map</span>().<span class="ident">maybe_get_traffic_signal</span>(<span class="self">self</span>.<span class="ident">id</span>) {
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">opts</span>.<span class="ident">suppress_traffic_signal_details</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">id</span>) {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">maybe_redraw</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">draw_traffic_signal</span>.<span class="ident">borrow_mut</span>();
-                <span class="kw">let</span> <span class="ident">recalc</span> <span class="op">=</span> <span class="ident">maybe_redraw</span>
-                    .<span class="ident">as_ref</span>()
-                    .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">t</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="kw-2">*</span><span class="ident">t</span> <span class="op">!</span><span class="op">=</span> <span class="ident">app</span>.<span class="ident">sim_time</span>())
-                    .<span class="ident">unwrap_or</span>(<span class="bool-val">true</span>);
-                <span class="kw">if</span> <span class="ident">recalc</span> {
-                    <span class="kw">let</span> (<span class="ident">idx</span>, <span class="ident">remaining</span>) <span class="op">=</span> <span class="ident">app</span>.<span class="ident">current_stage_and_remaining_time</span>(<span class="self">self</span>.<span class="ident">id</span>);
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">batch</span> <span class="op">=</span> <span class="ident">GeomBatch</span>::<span class="ident">new</span>();
-                    <span class="ident">traffic_signal</span>::<span class="ident">draw_signal_stage</span>(
-                        <span class="ident">g</span>.<span class="ident">prerender</span>,
-                        <span class="kw-2">&amp;</span><span class="ident">signal</span>.<span class="ident">stages</span>[<span class="ident">idx</span>],
-                        <span class="ident">idx</span>,
-                        <span class="self">self</span>.<span class="ident">id</span>,
-                        <span class="prelude-val">Some</span>(<span class="ident">remaining</span>),
-                        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">batch</span>,
-                        <span class="ident">app</span>,
-                        <span class="ident">app</span>.<span class="ident">opts</span>().<span class="ident">traffic_signal_style</span>.<span class="ident">clone</span>(),
-                    );
-                    <span class="kw-2">*</span><span class="ident">maybe_redraw</span> <span class="op">=</span> <span class="prelude-val">Some</span>((<span class="ident">app</span>.<span class="ident">sim_time</span>(), <span class="ident">g</span>.<span class="ident">prerender</span>.<span class="ident">upload</span>(<span class="ident">batch</span>)));
-                }
-                <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">batch</span>) <span class="op">=</span> <span class="ident">maybe_redraw</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>();
-                <span class="ident">g</span>.<span class="ident">redraw</span>(<span class="ident">batch</span>);
+    <span class="kw">fn</span> <span class="ident">draw_traffic_signal</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">g</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GfxCtx</span>,
+        <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">AppLike</span>,
+        <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">DrawOptions</span>,
+        <span class="ident">signal</span>: <span class="kw-2">&amp;</span><span class="ident">ControlTrafficSignal</span>,
+    ) {
+        <span class="kw">if</span> <span class="ident">opts</span>.<span class="ident">suppress_traffic_signal_details</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">id</span>) {
+            <span class="kw">return</span>;
+        }
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">maybe_redraw</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">draw_traffic_signal</span>.<span class="ident">borrow_mut</span>();
+        <span class="kw">if</span> <span class="ident">app</span>.<span class="ident">opts</span>().<span class="ident">show_traffic_signal_icon</span> {
+            <span class="comment">// The icon doesn&#39;t change over time</span>
+            <span class="kw">let</span> <span class="ident">recalc</span> <span class="op">=</span> <span class="ident">maybe_redraw</span>.<span class="ident">is_none</span>();
+            <span class="kw">if</span> <span class="ident">recalc</span> {
+                <span class="kw">let</span> <span class="ident">batch</span> <span class="op">=</span> <span class="ident">GeomBatch::load_svg</span>(<span class="ident">g</span>, <span class="string">&quot;system/assets/map/traffic_signal.svg&quot;</span>)
+                    .<span class="ident">scale</span>(<span class="number">0.3</span>)
+                    .<span class="ident">centered_on</span>(<span class="ident">app</span>.<span class="ident">map</span>().<span class="ident">get_i</span>(<span class="self">self</span>.<span class="ident">id</span>).<span class="ident">polygon</span>.<span class="ident">polylabel</span>());
+                <span class="kw-2">*</span><span class="ident">maybe_redraw</span> <span class="op">=</span> <span class="prelude-val">Some</span>((<span class="ident">Time::START_OF_DAY</span>, <span class="ident">g</span>.<span class="ident">prerender</span>.<span class="ident">upload</span>(<span class="ident">batch</span>)));
             }
+        } <span class="kw">else</span> {
+            <span class="kw">let</span> <span class="ident">recalc</span> <span class="op">=</span> <span class="ident">maybe_redraw</span>
+                .<span class="ident">as_ref</span>()
+                .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">t</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="kw-2">*</span><span class="ident">t</span> <span class="op">!</span><span class="op">=</span> <span class="ident">app</span>.<span class="ident">sim_time</span>())
+                .<span class="ident">unwrap_or</span>(<span class="bool-val">true</span>);
+            <span class="kw">if</span> <span class="ident">recalc</span> {
+                <span class="kw">let</span> (<span class="ident">idx</span>, <span class="ident">remaining</span>) <span class="op">=</span> <span class="ident">app</span>.<span class="ident">current_stage_and_remaining_time</span>(<span class="self">self</span>.<span class="ident">id</span>);
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">batch</span> <span class="op">=</span> <span class="ident">GeomBatch::new</span>();
+                <span class="ident">traffic_signal::draw_signal_stage</span>(
+                    <span class="ident">g</span>.<span class="ident">prerender</span>,
+                    <span class="kw-2">&amp;</span><span class="ident">signal</span>.<span class="ident">stages</span>[<span class="ident">idx</span>],
+                    <span class="ident">idx</span>,
+                    <span class="self">self</span>.<span class="ident">id</span>,
+                    <span class="prelude-val">Some</span>(<span class="ident">remaining</span>),
+                    <span class="kw-2">&amp;mut</span> <span class="ident">batch</span>,
+                    <span class="ident">app</span>,
+                    <span class="ident">app</span>.<span class="ident">opts</span>().<span class="ident">traffic_signal_style</span>.<span class="ident">clone</span>(),
+                );
+                <span class="kw-2">*</span><span class="ident">maybe_redraw</span> <span class="op">=</span> <span class="prelude-val">Some</span>((<span class="ident">app</span>.<span class="ident">sim_time</span>(), <span class="ident">g</span>.<span class="ident">prerender</span>.<span class="ident">upload</span>(<span class="ident">batch</span>)));
+            }
+        }
+
+        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">batch</span>) <span class="op">=</span> <span class="ident">maybe_redraw</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>();
+        <span class="ident">g</span>.<span class="ident">redraw</span>(<span class="ident">batch</span>);
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">approx_eq</span>(<span class="ident">pair1</span>: <span class="kw-2">&amp;</span>[<span class="ident">Pt2D</span>], <span class="ident">pair2</span>: <span class="kw-2">&amp;</span>(<span class="ident">Pt2D</span>, <span class="ident">Pt2D</span>)) -&gt; <span class="ident">bool</span> {
+    <span class="kw">let</span> <span class="ident">epsilon</span> <span class="op">=</span> <span class="ident">Distance::meters</span>(<span class="number">0.1</span>);
+    (<span class="ident">pair1</span>[<span class="number">0</span>].<span class="ident">approx_eq</span>(<span class="ident">pair2</span>.<span class="number">0</span>, <span class="ident">epsilon</span>) <span class="op">&amp;&amp;</span> <span class="ident">pair1</span>[<span class="number">1</span>].<span class="ident">approx_eq</span>(<span class="ident">pair2</span>.<span class="number">1</span>, <span class="ident">epsilon</span>))
+        <span class="op">|</span><span class="op">|</span> (<span class="ident">pair1</span>[<span class="number">0</span>].<span class="ident">approx_eq</span>(<span class="ident">pair2</span>.<span class="number">1</span>, <span class="ident">epsilon</span>) <span class="op">&amp;&amp;</span> <span class="ident">pair1</span>[<span class="number">1</span>].<span class="ident">approx_eq</span>(<span class="ident">pair2</span>.<span class="number">0</span>, <span class="ident">epsilon</span>))
+}
+
+<span class="kw">impl</span> <span class="ident">Renderable</span> <span class="kw">for</span> <span class="ident">DrawIntersection</span> {
+    <span class="kw">fn</span> <span class="ident">get_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ID</span> {
+        <span class="ident">ID::Intersection</span>(<span class="self">self</span>.<span class="ident">id</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GfxCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">AppLike</span>, <span class="ident">opts</span>: <span class="kw-2">&amp;</span><span class="ident">DrawOptions</span>) {
+        <span class="self">self</span>.<span class="ident">redraw_default</span>(<span class="ident">g</span>, <span class="ident">app</span>);
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">signal</span>) <span class="op">=</span> <span class="ident">app</span>.<span class="ident">map</span>().<span class="ident">maybe_get_traffic_signal</span>(<span class="self">self</span>.<span class="ident">id</span>) {
+            <span class="self">self</span>.<span class="ident">draw_traffic_signal</span>(<span class="ident">g</span>, <span class="ident">app</span>, <span class="ident">opts</span>, <span class="ident">signal</span>);
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_outline</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Polygon</span> {
-        <span class="kw">let</span> <span class="ident">poly</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">map</span>.<span class="ident">get_i</span>(<span class="self">self</span>.<span class="ident">id</span>).<span class="ident">polygon</span>;
-        <span class="ident">poly</span>.<span class="ident">to_outline</span>(<span class="ident">OUTLINE_THICKNESS</span>)
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">poly</span>.<span class="ident">clone</span>())
+    <span class="kw">fn</span> <span class="ident">get_outline</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="ident">Tessellation</span> {
+        <span class="ident">map</span>.<span class="ident">get_i</span>(<span class="self">self</span>.<span class="ident">id</span>).<span class="ident">polygon</span>.<span class="ident">to_outline</span>(<span class="ident">OUTLINE_THICKNESS</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">contains_pt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pt</span>: <span class="ident">Pt2D</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">contains_pt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pt</span>: <span class="ident">Pt2D</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="ident">bool</span> {
         <span class="ident">map</span>.<span class="ident">get_i</span>(<span class="self">self</span>.<span class="ident">id</span>).<span class="ident">polygon</span>.<span class="ident">contains_pt</span>(<span class="ident">pt</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">get_zorder</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">isize</span> {
+    <span class="kw">fn</span> <span class="ident">get_zorder</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">isize</span> {
         <span class="self">self</span>.<span class="ident">zorder</span>
     }
 }
 
-<span class="comment">// TODO Temporarily public for debugging.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calculate_corners</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">Intersection</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Polygon</span><span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">is_footway</span>(<span class="ident">map</span>) {
-        <span class="kw">return</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+<span class="comment">// Public for debugging</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calculate_corners</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">Intersection</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Polygon</span><span class="op">&gt;</span> {
+    <span class="comment">// Don&#39;t attempt corners for footways or where normal roads and footways meet</span>
+    <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">roads</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> <span class="ident">map</span>.<span class="ident">get_r</span>(<span class="kw-2">*</span><span class="ident">r</span>).<span class="ident">is_footway</span>()) {
+        <span class="kw">return</span> <span class="ident">Vec::new</span>();
     }
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">corners</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">corners</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
 
-    <span class="kw">for</span> <span class="ident">turn</span> <span class="kw">in</span> <span class="ident">map</span>.<span class="ident">get_turns_in_intersection</span>(<span class="ident">i</span>.<span class="ident">id</span>) {
-        <span class="kw">if</span> <span class="ident">turn</span>.<span class="ident">turn_type</span> <span class="op">=</span><span class="op">=</span> <span class="ident">TurnType</span>::<span class="ident">SharedSidewalkCorner</span> {
-            <span class="comment">// Avoid double-rendering</span>
-            <span class="kw">if</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>).<span class="ident">dst_i</span> <span class="op">!</span><span class="op">=</span> <span class="ident">i</span>.<span class="ident">id</span> {
-                <span class="kw">continue</span>;
-            }
-            <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="ident">map</span>
-                .<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>)
-                .<span class="ident">width</span>
-                .<span class="ident">min</span>(<span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">dst</span>).<span class="ident">width</span>);
-
-            <span class="comment">// Special case for dead-ends: just thicken the geometry.</span>
-            <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">roads</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
-                <span class="ident">corners</span>.<span class="ident">push</span>(<span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">make_polygons</span>(<span class="ident">width</span>));
-                <span class="kw">continue</span>;
-            }
-
+    <span class="kw">for</span> <span class="ident">turn</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">i</span>.<span class="ident">turns</span> {
+        <span class="kw">if</span> <span class="ident">turn</span>.<span class="ident">turn_type</span> <span class="op">==</span> <span class="ident">TurnType::SharedSidewalkCorner</span> {
             <span class="kw">let</span> <span class="ident">l1</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>);
             <span class="kw">let</span> <span class="ident">l2</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">dst</span>);
 
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">poly</span>) <span class="op">=</span> (<span class="op">|</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pts</span> <span class="op">=</span> <span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">shift_left</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">ok</span>()<span class="question-mark">?</span>.<span class="ident">into_points</span>();
-                <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">l2</span>.<span class="ident">first_line</span>().<span class="ident">shift_left</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">pt1</span>());
-                <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">l2</span>.<span class="ident">first_line</span>().<span class="ident">shift_right</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">pt1</span>());
-                <span class="ident">pts</span>.<span class="ident">extend</span>(
-                    <span class="ident">turn</span>.<span class="ident">geom</span>
-                        .<span class="ident">shift_right</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>)
-                        .<span class="ident">ok</span>()<span class="question-mark">?</span>
-                        .<span class="ident">reversed</span>()
-                        .<span class="ident">into_points</span>(),
-                );
-                <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">l1</span>.<span class="ident">last_line</span>().<span class="ident">shift_right</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">pt2</span>());
-                <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">l1</span>.<span class="ident">last_line</span>().<span class="ident">shift_left</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">pt2</span>());
+            <span class="comment">// Special case for dead-ends: just thicken the geometry.</span>
+            <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">roads</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> {
+                <span class="ident">corners</span>.<span class="ident">push</span>(<span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">make_polygons</span>(<span class="ident">l1</span>.<span class="ident">width</span>.<span class="ident">min</span>(<span class="ident">l2</span>.<span class="ident">width</span>)));
+                <span class="kw">continue</span>;
+            }
+
+            <span class="comment">// Is point2 counter-clockwise of point1?</span>
+            <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">i</span>
+                .<span class="ident">polygon</span>
+                .<span class="ident">center</span>()
+                .<span class="ident">angle_to</span>(<span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">first_pt</span>())
+                .<span class="ident">simple_shortest_rotation_towards</span>(<span class="ident">i</span>.<span class="ident">polygon</span>.<span class="ident">center</span>().<span class="ident">angle_to</span>(<span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">last_pt</span>()))
+                <span class="op">&gt;</span> <span class="number">0.0</span>
+            {
+                <span class="number">1.0</span>
+            } <span class="kw">else</span> {
+                <span class="op">-</span><span class="number">1.0</span>
+            };
+
+            <span class="kw">if</span> <span class="ident">l1</span>.<span class="ident">width</span> <span class="op">==</span> <span class="ident">l2</span>.<span class="ident">width</span> {
+                <span class="comment">// When two sidewalks or two shoulders meet, use the turn geometry to create some</span>
+                <span class="comment">// nice rounding.</span>
+                <span class="kw">let</span> <span class="ident">shift</span> <span class="op">=</span> <span class="ident">dir</span> <span class="op">*</span> <span class="ident">l1</span>.<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>;
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">poly</span>) <span class="op">=</span> (<span class="op">|</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pts</span> <span class="op">=</span> <span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">shift_either_direction</span>(<span class="op">-</span><span class="ident">shift</span>).<span class="ident">ok</span>()<span class="question-mark">?</span>.<span class="ident">into_points</span>();
+                    <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">l2</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>).<span class="ident">shift_either_direction</span>(<span class="ident">shift</span>).<span class="ident">pt2</span>());
+                    <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">l2</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>).<span class="ident">shift_either_direction</span>(<span class="op">-</span><span class="ident">shift</span>).<span class="ident">pt2</span>());
+                    <span class="ident">pts</span>.<span class="ident">extend</span>(
+                        <span class="ident">turn</span>.<span class="ident">geom</span>
+                            .<span class="ident">shift_either_direction</span>(<span class="ident">shift</span>)
+                            .<span class="ident">ok</span>()<span class="question-mark">?</span>
+                            .<span class="ident">reversed</span>()
+                            .<span class="ident">into_points</span>(),
+                    );
+                    <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">l1</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>).<span class="ident">shift_either_direction</span>(<span class="ident">shift</span>).<span class="ident">pt2</span>());
+                    <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">l1</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>).<span class="ident">shift_either_direction</span>(<span class="op">-</span><span class="ident">shift</span>).<span class="ident">pt2</span>());
+                    <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">pts</span>[<span class="number">0</span>]);
+                    <span class="prelude-val">Some</span>(<span class="ident">Ring::deduping_new</span>(<span class="ident">pts</span>).<span class="ident">ok</span>()<span class="question-mark">?</span>.<span class="ident">into_polygon</span>())
+                })() {
+                    <span class="ident">corners</span>.<span class="ident">push</span>(<span class="ident">poly</span>);
+                }
+            } <span class="kw">else</span> {
+                <span class="comment">// When a sidewalk and a shoulder meet, use a simpler shape to connect them.</span>
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pts</span> <span class="op">=</span> <span class="macro">vec!</span>[
+                    <span class="ident">l2</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>)
+                        .<span class="ident">shift_either_direction</span>(<span class="ident">dir</span> <span class="op">*</span> <span class="ident">l2</span>.<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>)
+                        .<span class="ident">pt2</span>(),
+                    <span class="ident">l2</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>)
+                        .<span class="ident">shift_either_direction</span>(<span class="op">-</span><span class="ident">dir</span> <span class="op">*</span> <span class="ident">l2</span>.<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>)
+                        .<span class="ident">pt2</span>(),
+                    <span class="ident">l1</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>)
+                        .<span class="ident">shift_either_direction</span>(<span class="op">-</span><span class="ident">dir</span> <span class="op">*</span> <span class="ident">l1</span>.<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>)
+                        .<span class="ident">pt2</span>(),
+                    <span class="ident">l1</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>)
+                        .<span class="ident">shift_either_direction</span>(<span class="ident">dir</span> <span class="op">*</span> <span class="ident">l1</span>.<span class="ident">width</span> <span class="op">/</span> <span class="number">2.0</span>)
+                        .<span class="ident">pt2</span>(),
+                ];
                 <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">pts</span>[<span class="number">0</span>]);
-                <span class="prelude-val">Some</span>(<span class="ident">Polygon</span>::<span class="ident">buggy_new</span>(<span class="ident">pts</span>))
-            })() {
-                <span class="ident">corners</span>.<span class="ident">push</span>(<span class="ident">poly</span>);
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">ring</span>) <span class="op">=</span> <span class="ident">Ring::new</span>(<span class="ident">pts</span>) {
+                    <span class="ident">corners</span>.<span class="ident">push</span>(<span class="ident">ring</span>.<span class="ident">into_polygon</span>());
+                }
             }
         }
     }
@@ -734,63 +1061,113 @@
     <span class="ident">corners</span>
 }
 
-<span class="comment">// calculate_corners smooths edges, but we don&#39;t want to do that when drawing explicit borders.</span>
-<span class="kw">fn</span> <span class="ident">calculate_corners_with_borders</span>(<span class="ident">batch</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GeomBatch</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">dyn</span> <span class="ident">AppLike</span>, <span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">Intersection</span>) {
-    <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">map</span>();
-    <span class="kw">let</span> <span class="ident">rank</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">get_rank</span>(<span class="ident">map</span>);
-    <span class="kw">let</span> <span class="ident">surface_color</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">zoomed_road_surface</span>(<span class="ident">LaneType</span>::<span class="ident">Sidewalk</span>, <span class="ident">rank</span>);
-    <span class="kw">let</span> <span class="ident">border_color</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">general_road_marking</span>(<span class="ident">rank</span>);
-
-    <span class="kw">for</span> <span class="ident">turn</span> <span class="kw">in</span> <span class="ident">map</span>.<span class="ident">get_turns_in_intersection</span>(<span class="ident">i</span>.<span class="ident">id</span>) {
-        <span class="kw">if</span> <span class="ident">turn</span>.<span class="ident">turn_type</span> <span class="op">!</span><span class="op">=</span> <span class="ident">TurnType</span>::<span class="ident">SharedSidewalkCorner</span> {
-            <span class="kw">continue</span>;
-        }
-        <span class="comment">// Avoid double-rendering</span>
-        <span class="kw">if</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>).<span class="ident">dst_i</span> <span class="op">!</span><span class="op">=</span> <span class="ident">i</span>.<span class="ident">id</span> {
-            <span class="kw">continue</span>;
-        }
-        <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="ident">map</span>
-            .<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>)
-            .<span class="ident">width</span>
-            .<span class="ident">min</span>(<span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">dst</span>).<span class="ident">width</span>);
-
-        <span class="comment">// TODO This leaves gaps.</span>
-        <span class="ident">batch</span>.<span class="ident">push</span>(<span class="ident">surface_color</span>, <span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">make_polygons</span>(<span class="ident">width</span>));
-
-        <span class="kw">let</span> <span class="ident">thickness</span> <span class="op">=</span> <span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="number">0.2</span>);
-        <span class="kw">let</span> <span class="ident">shift</span> <span class="op">=</span> (<span class="ident">width</span> <span class="op">-</span> <span class="ident">thickness</span>) <span class="op">/</span> <span class="number">2.0</span>;
-        <span class="ident">batch</span>.<span class="ident">push</span>(
-            <span class="ident">border_color</span>,
-            <span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">must_shift_right</span>(<span class="ident">shift</span>).<span class="ident">make_polygons</span>(<span class="ident">thickness</span>),
-        );
-        <span class="ident">batch</span>.<span class="ident">push</span>(
-            <span class="ident">border_color</span>,
-            <span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">must_shift_left</span>(<span class="ident">shift</span>).<span class="ident">make_polygons</span>(<span class="ident">thickness</span>),
-        );
+<span class="kw">fn</span> <span class="ident">calculate_corner_curbs</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">Intersection</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Polygon</span><span class="op">&gt;</span> {
+    <span class="comment">// Don&#39;t attempt corners for footways or where normal roads and footways meet</span>
+    <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">roads</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> <span class="ident">map</span>.<span class="ident">get_r</span>(<span class="kw-2">*</span><span class="ident">r</span>).<span class="ident">is_footway</span>()) {
+        <span class="kw">return</span> <span class="ident">Vec::new</span>();
     }
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">curbs</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+
+    <span class="kw">let</span> <span class="ident">thickness</span> <span class="op">=</span> <span class="ident">Distance::meters</span>(<span class="number">0.2</span>);
+    <span class="kw">let</span> <span class="ident">shift</span> <span class="op">=</span> <span class="op">|</span><span class="ident">width</span><span class="op">|</span> (<span class="ident">width</span> <span class="op">-</span> <span class="ident">thickness</span>) <span class="op">/</span> <span class="number">2.0</span>;
+
+    <span class="kw">for</span> <span class="ident">turn</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">i</span>.<span class="ident">turns</span> {
+        <span class="kw">if</span> <span class="ident">turn</span>.<span class="ident">turn_type</span> <span class="op">==</span> <span class="ident">TurnType::SharedSidewalkCorner</span> {
+            <span class="kw">let</span> <span class="ident">dir</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">turn</span>
+                .<span class="ident">geom</span>
+                .<span class="ident">first_pt</span>()
+                .<span class="ident">angle_to</span>(<span class="ident">i</span>.<span class="ident">polygon</span>.<span class="ident">center</span>())
+                .<span class="ident">simple_shortest_rotation_towards</span>(
+                    <span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">first_pt</span>().<span class="ident">angle_to</span>(<span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">last_pt</span>()),
+                )
+                <span class="op">&gt;</span> <span class="number">0.0</span>
+            {
+                <span class="number">1.0</span>
+            } <span class="kw">else</span> {
+                <span class="op">-</span><span class="number">1.0</span>
+                <span class="comment">// At a dead end we&#39;re going the long way around</span>
+            } <span class="op">*</span> <span class="kw">if</span> <span class="ident">i</span>.<span class="ident">is_deadend_for_everyone</span>() {
+                <span class="op">-</span><span class="number">1.0</span>
+            } <span class="kw">else</span> {
+                <span class="number">1.0</span>
+            };
+            <span class="kw">let</span> <span class="ident">l1</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>);
+            <span class="kw">let</span> <span class="ident">l2</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">dst</span>);
+
+            <span class="kw">if</span> <span class="ident">l1</span>.<span class="ident">width</span> <span class="op">==</span> <span class="ident">l2</span>.<span class="ident">width</span> {
+                <span class="comment">// When two sidewalks or two shoulders meet, use the turn geometry to create some</span>
+                <span class="comment">// nice rounding.</span>
+                <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="ident">dir</span> <span class="op">*</span> <span class="ident">shift</span>(<span class="ident">l1</span>.<span class="ident">width</span>);
+
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pl</span>) <span class="op">=</span> (<span class="op">|</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pts</span> <span class="op">=</span> <span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">shift_either_direction</span>(<span class="ident">width</span>).<span class="ident">ok</span>()<span class="question-mark">?</span>.<span class="ident">into_points</span>();
+                    <span class="comment">// TODO Connecting the SharedSidewalkCorner geometry to the curb usually</span>
+                    <span class="comment">// requires adding a few points from the sidewalk on each end. But sometimes</span>
+                    <span class="comment">// this causes &quot;zig-zaggy&quot; artifacts. The approx_eq check helps some (but not</span>
+                    <span class="comment">// all) of those cases, but sometimes introduces visual &quot;gaps&quot;. This still</span>
+                    <span class="comment">// needs more work.</span>
+                    <span class="kw">let</span> <span class="ident">first_line</span> <span class="op">=</span> <span class="ident">l2</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>).<span class="ident">shift_either_direction</span>(<span class="op">-</span><span class="ident">width</span>);
+                    <span class="kw">if</span> <span class="op">!</span><span class="ident">pts</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>().<span class="ident">approx_eq</span>(<span class="ident">first_line</span>.<span class="ident">pt2</span>(), <span class="ident">thickness</span>) {
+                        <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">first_line</span>.<span class="ident">pt2</span>());
+                        <span class="ident">pts</span>.<span class="ident">push</span>(<span class="ident">first_line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">first_line</span>.<span class="ident">length</span>() <span class="op">-</span> <span class="ident">thickness</span>));
+                    }
+                    <span class="kw">let</span> <span class="ident">last_line</span> <span class="op">=</span> <span class="ident">l1</span>.<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>).<span class="ident">shift_either_direction</span>(<span class="ident">width</span>);
+                    <span class="kw">if</span> <span class="op">!</span><span class="ident">pts</span>[<span class="number">0</span>].<span class="ident">approx_eq</span>(<span class="ident">last_line</span>.<span class="ident">pt2</span>(), <span class="ident">thickness</span>) {
+                        <span class="ident">pts</span>.<span class="ident">insert</span>(<span class="number">0</span>, <span class="ident">last_line</span>.<span class="ident">pt2</span>());
+                        <span class="ident">pts</span>.<span class="ident">insert</span>(
+                            <span class="number">0</span>,
+                            <span class="ident">last_line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">last_line</span>.<span class="ident">length</span>() <span class="op">-</span> <span class="ident">thickness</span>),
+                        );
+                    }
+                    <span class="ident">PolyLine::deduping_new</span>(<span class="ident">pts</span>).<span class="ident">ok</span>()
+                })() {
+                    <span class="ident">curbs</span>.<span class="ident">push</span>(<span class="ident">pl</span>.<span class="ident">make_polygons</span>(<span class="ident">thickness</span>));
+                }
+            } <span class="kw">else</span> {
+                <span class="comment">// When a sidewalk and a shoulder meet, use a simpler shape to connect them.</span>
+                <span class="kw">let</span> <span class="ident">l1_line</span> <span class="op">=</span> <span class="ident">l1</span>
+                    .<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>)
+                    .<span class="ident">shift_either_direction</span>(<span class="ident">dir</span> <span class="op">*</span> <span class="ident">shift</span>(<span class="ident">l1</span>.<span class="ident">width</span>));
+                <span class="kw">let</span> <span class="ident">l2_line</span> <span class="op">=</span> <span class="ident">l2</span>
+                    .<span class="ident">end_line</span>(<span class="ident">i</span>.<span class="ident">id</span>)
+                    .<span class="ident">shift_either_direction</span>(<span class="op">-</span><span class="ident">dir</span> <span class="op">*</span> <span class="ident">shift</span>(<span class="ident">l2</span>.<span class="ident">width</span>));
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">pl</span>) <span class="op">=</span> <span class="ident">PolyLine::deduping_new</span>(<span class="macro">vec!</span>[
+                    <span class="ident">l1_line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">l1_line</span>.<span class="ident">length</span>() <span class="op">-</span> <span class="ident">thickness</span>),
+                    <span class="ident">l1_line</span>.<span class="ident">pt2</span>(),
+                    <span class="ident">l2_line</span>.<span class="ident">pt2</span>(),
+                    <span class="ident">l2_line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">l2_line</span>.<span class="ident">length</span>() <span class="op">-</span> <span class="ident">thickness</span>),
+                ]) {
+                    <span class="ident">curbs</span>.<span class="ident">push</span>(<span class="ident">pl</span>.<span class="ident">make_polygons</span>(<span class="ident">thickness</span>));
+                }
+            }
+        }
+    }
+
+    <span class="ident">curbs</span>
 }
 
 <span class="comment">// TODO This assumes the lanes change direction only at one point. A two-way cycletrack right at</span>
 <span class="comment">// the border will look a bit off.</span>
-<span class="kw">fn</span> <span class="ident">calculate_border_arrows</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">Intersection</span>, <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="ident">Road</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Polygon</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+<span class="kw">fn</span> <span class="ident">calculate_border_arrows</span>(<span class="ident">i</span>: <span class="kw-2">&amp;</span><span class="ident">Intersection</span>, <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="ident">Road</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Polygon</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">width_fwd</span> <span class="op">=</span> <span class="ident">Distance</span>::<span class="ident">ZERO</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">width_back</span> <span class="op">=</span> <span class="ident">Distance</span>::<span class="ident">ZERO</span>;
-    <span class="kw">for</span> (<span class="ident">l</span>, <span class="ident">dir</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="ident">r</span>.<span class="ident">lanes_ltr</span>() {
-        <span class="kw">if</span> <span class="ident">dir</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Direction</span>::<span class="ident">Fwd</span> {
-            <span class="ident">width_fwd</span> <span class="op">+</span><span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">l</span>).<span class="ident">width</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">width_fwd</span> <span class="op">=</span> <span class="ident">Distance::ZERO</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">width_back</span> <span class="op">=</span> <span class="ident">Distance::ZERO</span>;
+    <span class="kw">for</span> <span class="ident">l</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">r</span>.<span class="ident">lanes</span> {
+        <span class="kw">if</span> <span class="ident">l</span>.<span class="ident">dir</span> <span class="op">==</span> <span class="ident">Direction::Fwd</span> {
+            <span class="ident">width_fwd</span> <span class="op">+</span><span class="op">=</span> <span class="ident">l</span>.<span class="ident">width</span>;
         } <span class="kw">else</span> {
-            <span class="ident">width_back</span> <span class="op">+</span><span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">l</span>).<span class="ident">width</span>;
+            <span class="ident">width_back</span> <span class="op">+</span><span class="op">=</span> <span class="ident">l</span>.<span class="ident">width</span>;
         }
     }
     <span class="kw">let</span> <span class="ident">center</span> <span class="op">=</span> <span class="ident">r</span>.<span class="ident">get_dir_change_pl</span>(<span class="ident">map</span>);
 
     <span class="comment">// These arrows should point from the void to the road</span>
     <span class="kw">if</span> <span class="op">!</span><span class="ident">i</span>.<span class="ident">outgoing_lanes</span>.<span class="ident">is_empty</span>() {
-        <span class="kw">let</span> (<span class="ident">line</span>, <span class="ident">width</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">r</span>.<span class="ident">dst_i</span> <span class="op">=</span><span class="op">=</span> <span class="ident">i</span>.<span class="ident">id</span> {
+        <span class="kw">let</span> (<span class="ident">line</span>, <span class="ident">width</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">r</span>.<span class="ident">dst_i</span> <span class="op">==</span> <span class="ident">i</span>.<span class="ident">id</span> {
             (
-                <span class="ident">center</span>.<span class="ident">last_line</span>().<span class="ident">shift_left</span>(<span class="ident">width_back</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">reverse</span>(),
+                <span class="ident">center</span>.<span class="ident">last_line</span>().<span class="ident">shift_left</span>(<span class="ident">width_back</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">reversed</span>(),
                 <span class="ident">width_back</span>,
             )
         } <span class="kw">else</span> {
@@ -798,30 +1175,30 @@
         };
         <span class="ident">result</span>.<span class="ident">push</span>(
             <span class="comment">// DEGENERATE_INTERSECTION_HALF_LENGTH is 2.5m...</span>
-            <span class="ident">PolyLine</span>::<span class="ident">must_new</span>(<span class="macro">vec</span><span class="macro">!</span>[
-                <span class="ident">line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="op">-</span><span class="number">9.5</span>)),
-                <span class="ident">line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="op">-</span><span class="number">0.5</span>)),
+            <span class="ident">PolyLine::must_new</span>(<span class="macro">vec!</span>[
+                <span class="ident">line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">Distance::meters</span>(<span class="op">-</span><span class="number">9.5</span>)),
+                <span class="ident">line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">Distance::meters</span>(<span class="op">-</span><span class="number">0.5</span>)),
             ])
-            .<span class="ident">make_arrow</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">3.0</span>, <span class="ident">ArrowCap</span>::<span class="ident">Triangle</span>),
+            .<span class="ident">make_arrow</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">3.0</span>, <span class="ident">ArrowCap::Triangle</span>),
         );
     }
 
     <span class="comment">// These arrows should point from the road to the void</span>
     <span class="kw">if</span> <span class="op">!</span><span class="ident">i</span>.<span class="ident">incoming_lanes</span>.<span class="ident">is_empty</span>() {
-        <span class="kw">let</span> (<span class="ident">line</span>, <span class="ident">width</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">r</span>.<span class="ident">dst_i</span> <span class="op">=</span><span class="op">=</span> <span class="ident">i</span>.<span class="ident">id</span> {
+        <span class="kw">let</span> (<span class="ident">line</span>, <span class="ident">width</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">r</span>.<span class="ident">dst_i</span> <span class="op">==</span> <span class="ident">i</span>.<span class="ident">id</span> {
             (
-                <span class="ident">center</span>.<span class="ident">last_line</span>().<span class="ident">shift_right</span>(<span class="ident">width_fwd</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">reverse</span>(),
+                <span class="ident">center</span>.<span class="ident">last_line</span>().<span class="ident">shift_right</span>(<span class="ident">width_fwd</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">reversed</span>(),
                 <span class="ident">width_fwd</span>,
             )
         } <span class="kw">else</span> {
             (<span class="ident">center</span>.<span class="ident">first_line</span>().<span class="ident">shift_left</span>(<span class="ident">width_back</span> <span class="op">/</span> <span class="number">2.0</span>), <span class="ident">width_back</span>)
         };
         <span class="ident">result</span>.<span class="ident">push</span>(
-            <span class="ident">PolyLine</span>::<span class="ident">must_new</span>(<span class="macro">vec</span><span class="macro">!</span>[
-                <span class="ident">line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="op">-</span><span class="number">0.5</span>)),
-                <span class="ident">line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="op">-</span><span class="number">9.5</span>)),
+            <span class="ident">PolyLine::must_new</span>(<span class="macro">vec!</span>[
+                <span class="ident">line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">Distance::meters</span>(<span class="op">-</span><span class="number">0.5</span>)),
+                <span class="ident">line</span>.<span class="ident">unbounded_dist_along</span>(<span class="ident">Distance::meters</span>(<span class="op">-</span><span class="number">9.5</span>)),
             ])
-            .<span class="ident">make_arrow</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">3.0</span>, <span class="ident">ArrowCap</span>::<span class="ident">Triangle</span>),
+            .<span class="ident">make_arrow</span>(<span class="ident">width</span> <span class="op">/</span> <span class="number">3.0</span>, <span class="ident">ArrowCap::Triangle</span>),
         );
     }
 
@@ -829,16 +1206,22 @@
 }
 
 <span class="comment">// TODO A squished octagon would look better</span>
-<span class="kw">fn</span> <span class="ident">make_octagon</span>(<span class="ident">center</span>: <span class="ident">Pt2D</span>, <span class="ident">radius</span>: <span class="ident">Distance</span>, <span class="ident">facing</span>: <span class="ident">Angle</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Polygon</span> {
-    <span class="ident">Ring</span>::<span class="ident">must_new</span>(
+<span class="kw">fn</span> <span class="ident">make_octagon</span>(<span class="ident">center</span>: <span class="ident">Pt2D</span>, <span class="ident">radius</span>: <span class="ident">Distance</span>, <span class="ident">facing</span>: <span class="ident">Angle</span>) -&gt; <span class="ident">Polygon</span> {
+    <span class="ident">Ring::must_new</span>(
         (<span class="number">0</span>..<span class="op">=</span><span class="number">8</span>)
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">center</span>.<span class="ident">project_away</span>(<span class="ident">radius</span>, <span class="ident">facing</span>.<span class="ident">rotate_degs</span>(<span class="number">22.5</span> <span class="op">+</span> <span class="ident">f64</span>::<span class="ident">from</span>(<span class="ident">i</span> <span class="op">*</span> <span class="number">360</span> <span class="op">/</span> <span class="number">8</span>))))
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">center</span>.<span class="ident">project_away</span>(<span class="ident">radius</span>, <span class="ident">facing</span>.<span class="ident">rotate_degs</span>(<span class="number">22.5</span> <span class="op">+</span> <span class="ident">f64::from</span>(<span class="ident">i</span> <span class="op">*</span> <span class="number">360</span> <span class="op">/</span> <span class="number">8</span>))))
             .<span class="ident">collect</span>(),
     )
-    .<span class="ident">to_polygon</span>()
+    .<span class="ident">into_polygon</span>()
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_crosswalk</span>(<span class="ident">batch</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GeomBatch</span>, <span class="ident">turn</span>: <span class="kw-2">&amp;</span><span class="ident">Turn</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">cs</span>: <span class="kw-2">&amp;</span><span class="ident">ColorScheme</span>) {
+<span class="doccomment">/// Draws both zebra crosswalks and unmarked crossings</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">make_crosswalk</span>(<span class="ident">batch</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GeomBatch</span>, <span class="ident">turn</span>: <span class="kw-2">&amp;</span><span class="ident">Turn</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">cs</span>: <span class="kw-2">&amp;</span><span class="ident">ColorScheme</span>) {
+    <span class="kw">if</span> <span class="ident">turn</span>.<span class="ident">turn_type</span> <span class="op">==</span> <span class="ident">TurnType::UnmarkedCrossing</span> {
+        <span class="ident">make_unmarked_crossing</span>(<span class="ident">batch</span>, <span class="ident">turn</span>, <span class="ident">map</span>, <span class="ident">cs</span>);
+        <span class="kw">return</span>;
+    }
+
     <span class="kw">if</span> <span class="ident">make_rainbow_crosswalk</span>(<span class="ident">batch</span>, <span class="ident">turn</span>, <span class="ident">map</span>) {
         <span class="kw">return</span>;
     }
@@ -849,50 +1232,38 @@
     <span class="comment">// crosswalk line itself. Center the lines inside these two boundaries.</span>
     <span class="kw">let</span> <span class="ident">boundary</span> <span class="op">=</span> <span class="ident">width</span>;
     <span class="kw">let</span> <span class="ident">tile_every</span> <span class="op">=</span> <span class="ident">width</span> <span class="op">*</span> <span class="number">0.6</span>;
-    <span class="kw">let</span> <span class="ident">line</span> <span class="op">=</span> {
-        <span class="comment">// The middle line in the crosswalk geometry is the main crossing line.</span>
-        <span class="kw">let</span> <span class="ident">pts</span> <span class="op">=</span> <span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">points</span>();
-        <span class="kw">if</span> <span class="ident">pts</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">3</span> {
-            <span class="macro">println</span><span class="macro">!</span>(
-                <span class="string">&quot;Not rendering crosswalk for {}; its geometry was squished earlier&quot;</span>,
-                <span class="ident">turn</span>.<span class="ident">id</span>
-            );
-            <span class="kw">return</span>;
-        }
-        <span class="kw">match</span> <span class="ident">Line</span>::<span class="ident">new</span>(<span class="ident">pts</span>[<span class="number">1</span>], <span class="ident">pts</span>[<span class="number">2</span>]) {
-            <span class="prelude-val">Some</span>(<span class="ident">l</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">l</span>,
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">return</span>;
-            }
-        }
+    <span class="kw">let</span> <span class="ident">line</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">l</span>) <span class="op">=</span> <span class="ident">turn</span>.<span class="ident">crosswalk_line</span>() {
+        <span class="ident">l</span>
+    } <span class="kw">else</span> {
+        <span class="kw">return</span>;
     };
 
+    <span class="kw">const</span> <span class="ident">CROSSWALK_LINE_THICKNESS</span>: <span class="ident">Distance</span> <span class="op">=</span> <span class="ident">Distance::const_meters</span>(<span class="number">0.15</span>);
+
     <span class="kw">let</span> <span class="ident">available_length</span> <span class="op">=</span> <span class="ident">line</span>.<span class="ident">length</span>() <span class="op">-</span> (<span class="ident">boundary</span> <span class="op">*</span> <span class="number">2.0</span>);
-    <span class="kw">if</span> <span class="ident">available_length</span> <span class="op">&gt;</span> <span class="ident">Distance</span>::<span class="ident">ZERO</span> {
+    <span class="kw">if</span> <span class="ident">available_length</span> <span class="op">&gt;</span> <span class="ident">Distance::ZERO</span> {
         <span class="kw">let</span> <span class="ident">num_markings</span> <span class="op">=</span> (<span class="ident">available_length</span> <span class="op">/</span> <span class="ident">tile_every</span>).<span class="ident">floor</span>() <span class="kw">as</span> <span class="ident">usize</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dist_along</span> <span class="op">=</span>
             <span class="ident">boundary</span> <span class="op">+</span> (<span class="ident">available_length</span> <span class="op">-</span> <span class="ident">tile_every</span> <span class="op">*</span> (<span class="ident">num_markings</span> <span class="kw">as</span> <span class="ident">f64</span>)) <span class="op">/</span> <span class="number">2.0</span>;
         <span class="comment">// TODO Seems to be an off-by-one sometimes. Not enough of these.</span>
-        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;make_crosswalk for {} broke&quot;</span>, <span class="ident">turn</span>.<span class="ident">id</span>);
+        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;make_crosswalk for {} broke&quot;</span>, <span class="ident">turn</span>.<span class="ident">id</span>);
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="ident">num_markings</span> {
             <span class="kw">let</span> <span class="ident">pt1</span> <span class="op">=</span> <span class="ident">line</span>.<span class="ident">dist_along</span>(<span class="ident">dist_along</span>).<span class="ident">expect</span>(<span class="kw-2">&amp;</span><span class="ident">err</span>);
             <span class="comment">// Reuse perp_line. Project away an arbitrary amount</span>
-            <span class="kw">let</span> <span class="ident">pt2</span> <span class="op">=</span> <span class="ident">pt1</span>.<span class="ident">project_away</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="number">1.0</span>), <span class="ident">turn</span>.<span class="ident">angle</span>());
-            <span class="kw">let</span> <span class="ident">general_road_marking</span> <span class="op">=</span>
-                <span class="ident">cs</span>.<span class="ident">general_road_marking</span>(<span class="ident">map</span>.<span class="ident">get_i</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">parent</span>).<span class="ident">get_rank</span>(<span class="ident">map</span>));
+            <span class="kw">let</span> <span class="ident">pt2</span> <span class="op">=</span> <span class="ident">pt1</span>.<span class="ident">project_away</span>(<span class="ident">Distance::meters</span>(<span class="number">1.0</span>), <span class="ident">line</span>.<span class="ident">angle</span>());
             <span class="ident">batch</span>.<span class="ident">push</span>(
-                <span class="ident">general_road_marking</span>,
-                <span class="ident">perp_line</span>(<span class="ident">Line</span>::<span class="ident">must_new</span>(<span class="ident">pt1</span>, <span class="ident">pt2</span>), <span class="ident">width</span>).<span class="ident">make_polygons</span>(<span class="ident">CROSSWALK_LINE_THICKNESS</span>),
+                <span class="ident">cs</span>.<span class="ident">general_road_marking</span>,
+                <span class="ident">perp_line</span>(<span class="ident">Line::must_new</span>(<span class="ident">pt1</span>, <span class="ident">pt2</span>), <span class="ident">width</span>).<span class="ident">make_polygons</span>(<span class="ident">CROSSWALK_LINE_THICKNESS</span>),
             );
 
             <span class="comment">// Actually every line is a double</span>
             <span class="kw">let</span> <span class="ident">pt3</span> <span class="op">=</span> <span class="ident">line</span>
                 .<span class="ident">dist_along</span>(<span class="ident">dist_along</span> <span class="op">+</span> <span class="number">2.0</span> <span class="op">*</span> <span class="ident">CROSSWALK_LINE_THICKNESS</span>)
                 .<span class="ident">expect</span>(<span class="kw-2">&amp;</span><span class="ident">err</span>);
-            <span class="kw">let</span> <span class="ident">pt4</span> <span class="op">=</span> <span class="ident">pt3</span>.<span class="ident">project_away</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="number">1.0</span>), <span class="ident">turn</span>.<span class="ident">angle</span>());
+            <span class="kw">let</span> <span class="ident">pt4</span> <span class="op">=</span> <span class="ident">pt3</span>.<span class="ident">project_away</span>(<span class="ident">Distance::meters</span>(<span class="number">1.0</span>), <span class="ident">line</span>.<span class="ident">angle</span>());
             <span class="ident">batch</span>.<span class="ident">push</span>(
-                <span class="ident">general_road_marking</span>,
-                <span class="ident">perp_line</span>(<span class="ident">Line</span>::<span class="ident">must_new</span>(<span class="ident">pt3</span>, <span class="ident">pt4</span>), <span class="ident">width</span>).<span class="ident">make_polygons</span>(<span class="ident">CROSSWALK_LINE_THICKNESS</span>),
+                <span class="ident">cs</span>.<span class="ident">general_road_marking</span>,
+                <span class="ident">perp_line</span>(<span class="ident">Line::must_new</span>(<span class="ident">pt3</span>, <span class="ident">pt4</span>), <span class="ident">width</span>).<span class="ident">make_polygons</span>(<span class="ident">CROSSWALK_LINE_THICKNESS</span>),
             );
 
             <span class="ident">dist_along</span> <span class="op">+</span><span class="op">=</span> <span class="ident">tile_every</span>;
@@ -900,7 +1271,7 @@
     }
 }
 
-<span class="kw">fn</span> <span class="ident">make_rainbow_crosswalk</span>(<span class="ident">batch</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GeomBatch</span>, <span class="ident">turn</span>: <span class="kw-2">&amp;</span><span class="ident">Turn</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+<span class="kw">fn</span> <span class="ident">make_rainbow_crosswalk</span>(<span class="ident">batch</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GeomBatch</span>, <span class="ident">turn</span>: <span class="kw-2">&amp;</span><span class="ident">Turn</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="ident">bool</span> {
     <span class="comment">// TODO The crosswalks aren&#39;t tagged in OSM yet. Manually hardcoding some now.</span>
     <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_i</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">parent</span>).<span class="ident">orig_id</span>.<span class="number">0</span>;
     <span class="kw">let</span> <span class="ident">way</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_parent</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>).<span class="ident">orig_id</span>.<span class="ident">osm_way_id</span>.<span class="number">0</span>;
@@ -919,22 +1290,23 @@
         (<span class="number">53068795</span>, <span class="number">607691081</span>) <span class="op">|</span>
         (<span class="number">53068795</span>, <span class="number">65588105</span>) <span class="op">|</span>
         <span class="comment">// 11th and Pike</span>
-        (<span class="number">53068794</span>, <span class="number">65588105</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> { <span class="kw">return</span> <span class="bool-val">false</span>; }
+        (<span class="number">53068794</span>, <span class="number">65588105</span>) =&gt; {}
+        <span class="kw">_</span> =&gt; { <span class="kw">return</span> <span class="bool-val">false</span>; }
     }
 
     <span class="kw">let</span> <span class="ident">total_width</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>).<span class="ident">width</span>;
-    <span class="kw">let</span> <span class="ident">colors</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
-        <span class="ident">Color</span>::<span class="ident">WHITE</span>,
-        <span class="ident">Color</span>::<span class="ident">RED</span>,
-        <span class="ident">Color</span>::<span class="ident">ORANGE</span>,
-        <span class="ident">Color</span>::<span class="ident">YELLOW</span>,
-        <span class="ident">Color</span>::<span class="ident">GREEN</span>,
-        <span class="ident">Color</span>::<span class="ident">BLUE</span>,
-        <span class="ident">Color</span>::<span class="ident">hex</span>(<span class="string">&quot;#8B00FF&quot;</span>),
-        <span class="ident">Color</span>::<span class="ident">WHITE</span>,
+    <span class="kw">let</span> <span class="ident">colors</span> <span class="op">=</span> <span class="macro">vec!</span>[
+        <span class="ident">Color::WHITE</span>,
+        <span class="ident">Color::RED</span>,
+        <span class="ident">Color::ORANGE</span>,
+        <span class="ident">Color::YELLOW</span>,
+        <span class="ident">Color::GREEN</span>,
+        <span class="ident">Color::BLUE</span>,
+        <span class="ident">Color::hex</span>(<span class="string">&quot;#8B00FF&quot;</span>),
+        <span class="ident">Color::WHITE</span>,
     ];
     <span class="kw">let</span> <span class="ident">band_width</span> <span class="op">=</span> <span class="ident">total_width</span> <span class="op">/</span> (<span class="ident">colors</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">f64</span>);
+    <span class="kw">let</span> <span class="ident">total_width</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>).<span class="ident">width</span>;
     <span class="kw">let</span> <span class="ident">slice</span> <span class="op">=</span> <span class="ident">turn</span>
         .<span class="ident">geom</span>
         .<span class="ident">exact_slice</span>(<span class="ident">total_width</span>, <span class="ident">turn</span>.<span class="ident">geom</span>.<span class="ident">length</span>() <span class="op">-</span> <span class="ident">total_width</span>)
@@ -950,11 +1322,33 @@
     <span class="bool-val">true</span>
 }
 
+<span class="kw">fn</span> <span class="ident">make_unmarked_crossing</span>(<span class="ident">batch</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GeomBatch</span>, <span class="ident">turn</span>: <span class="kw-2">&amp;</span><span class="ident">Turn</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>, <span class="ident">cs</span>: <span class="kw-2">&amp;</span><span class="ident">ColorScheme</span>) {
+    <span class="kw">let</span> <span class="ident">color</span> <span class="op">=</span> <span class="ident">cs</span>.<span class="ident">general_road_marking</span>.<span class="ident">alpha</span>(<span class="number">0.5</span>);
+    <span class="kw">let</span> <span class="ident">band_width</span> <span class="op">=</span> <span class="ident">Distance::meters</span>(<span class="number">0.1</span>);
+    <span class="kw">let</span> <span class="ident">total_width</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_l</span>(<span class="ident">turn</span>.<span class="ident">id</span>.<span class="ident">src</span>).<span class="ident">width</span>;
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">line</span>) <span class="op">=</span> <span class="ident">turn</span>.<span class="ident">crosswalk_line</span>() {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">slice</span>) <span class="op">=</span> <span class="ident">line</span>.<span class="ident">slice</span>(<span class="ident">total_width</span>, <span class="ident">line</span>.<span class="ident">length</span>() <span class="op">-</span> <span class="ident">total_width</span>) {
+            <span class="ident">batch</span>.<span class="ident">push</span>(
+                <span class="ident">color</span>,
+                <span class="ident">slice</span>
+                    .<span class="ident">shift_left</span>(<span class="ident">total_width</span> <span class="op">/</span> <span class="number">2.0</span> <span class="op">-</span> <span class="ident">band_width</span> <span class="op">/</span> <span class="number">2.0</span>)
+                    .<span class="ident">make_polygons</span>(<span class="ident">band_width</span>),
+            );
+            <span class="ident">batch</span>.<span class="ident">push</span>(
+                <span class="ident">color</span>,
+                <span class="ident">slice</span>
+                    .<span class="ident">shift_right</span>(<span class="ident">total_width</span> <span class="op">/</span> <span class="number">2.0</span> <span class="op">-</span> <span class="ident">band_width</span> <span class="op">/</span> <span class="number">2.0</span>)
+                    .<span class="ident">make_polygons</span>(<span class="ident">band_width</span>),
+            );
+        }
+    }
+}
+
 <span class="comment">// TODO copied from DrawLane</span>
-<span class="kw">fn</span> <span class="ident">perp_line</span>(<span class="ident">l</span>: <span class="ident">Line</span>, <span class="ident">length</span>: <span class="ident">Distance</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Line</span> {
+<span class="kw">fn</span> <span class="ident">perp_line</span>(<span class="ident">l</span>: <span class="ident">Line</span>, <span class="ident">length</span>: <span class="ident">Distance</span>) -&gt; <span class="ident">Line</span> {
     <span class="kw">let</span> <span class="ident">pt1</span> <span class="op">=</span> <span class="ident">l</span>.<span class="ident">shift_right</span>(<span class="ident">length</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">pt1</span>();
     <span class="kw">let</span> <span class="ident">pt2</span> <span class="op">=</span> <span class="ident">l</span>.<span class="ident">shift_left</span>(<span class="ident">length</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">pt1</span>();
-    <span class="ident">Line</span>::<span class="ident">must_new</span>(<span class="ident">pt1</span>, <span class="ident">pt2</span>)
+    <span class="ident">Line::must_new</span>(<span class="ident">pt1</span>, <span class="ident">pt2</span>)
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "map_gui";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="map_gui" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>

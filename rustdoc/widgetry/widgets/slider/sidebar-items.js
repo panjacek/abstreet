@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["BG_CROSS_AXIS_LEN",""]],"enum":[["Style",""]],"struct":[["Slider",""]]});
+window.SIDEBAR_ITEMS = {"constant":[["AREA_SLIDER_BG_WIDTH",""],["SCROLLBAR_BG_WIDTH",""]],"enum":[["Style",""]],"struct":[["Slider",""]]};

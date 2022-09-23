@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["preview_route",""],["preview_trip",""]],"struct":[["GenericTripTable",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["open_trip_transition",""],["preview_route",""],["preview_trip",""]]};

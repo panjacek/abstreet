@@ -1,0 +1,880 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `cli/src/main.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>main.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../cli/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../cli/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../cli/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+</pre><pre class="rust"><code><span class="doccomment">//! A collection of tools, mostly related to importing maps and scenarios. These are bundled as a</span>
+<span class="doccomment">//! single executable to reduce the cost of static linking in the release&#39;s file size.</span>
+
+<span class="attribute">#[<span class="ident">macro_use</span>]</span>
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">log</span>;
+
+<span class="kw">mod</span> <span class="ident">augment_scenario</span>;
+<span class="kw">mod</span> <span class="ident">clip_osm</span>;
+<span class="kw">mod</span> <span class="ident">generate_houses</span>;
+<span class="kw">mod</span> <span class="ident">geojson_to_osmosis</span>;
+<span class="kw">mod</span> <span class="ident">import_grid2demand</span>;
+<span class="kw">mod</span> <span class="ident">import_scenario</span>;
+<span class="kw">mod</span> <span class="ident">one_step_import</span>;
+
+<span class="kw">use</span> <span class="ident">std::io::Write</span>;
+
+<span class="kw">use</span> <span class="ident">abstio::CityName</span>;
+<span class="kw">use</span> <span class="ident">anyhow::Result</span>;
+<span class="kw">use</span> <span class="ident">fs_err::File</span>;
+<span class="kw">use</span> <span class="ident">importer::Job</span>;
+<span class="kw">use</span> <span class="ident">structopt::StructOpt</span>;
+
+<span class="kw">use</span> <span class="ident">abstutil::Timer</span>;
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">StructOpt</span>)]</span>
+<span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;abcli&quot;</span>, <span class="ident">about</span> <span class="op">=</span> <span class="string">&quot;The A/B Street multi-tool&quot;</span>)]</span>
+<span class="kw">enum</span> <span class="ident">Command</span> {
+    <span class="doccomment">/// Print a binary map or scenario file as JSON</span>
+    <span class="ident">DumpJSON</span> {
+        <span class="attribute">#[<span class="ident">structopt</span>()]</span>
+        <span class="ident">path</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Generates a random scenario using the proletariat robot travel demand model</span>
+    <span class="ident">RandomScenario</span> {
+        <span class="doccomment">/// A seed for generating random numbers</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">rng_seed</span>: <span class="ident">u64</span>,
+        <span class="doccomment">/// The path to a map to generate a scenario for</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">map</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The name of the scenario to generate</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">scenario_name</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Modifies the schedule of every person in an existing scenario.</span>
+    <span class="ident">AugmentScenario</span> {
+        <span class="doccomment">/// The path to a scenario to augment. This will be modified in-place.</span>
+        <span class="doccomment">///</span>
+        <span class="doccomment">/// This tool isn&#39;t very smart about detecting if a scenario already has these extra trips</span>
+        <span class="doccomment">/// added in; be careful about running this on the correct input.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">input_scenario</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// For people with only a single trip, add a return trip back home sometime 4-12 hours</span>
+        <span class="doccomment">/// later</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">add_return_trips</span>: <span class="ident">bool</span>,
+        <span class="doccomment">/// Before a person&#39;s final trip home, insert a round-trip to a nearby cafe or restaurant</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">add_lunch_trips</span>: <span class="ident">bool</span>,
+        <span class="doccomment">/// A JSON list of modifiers to transform the scenario. These can be generated with the GUI.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>, <span class="ident">parse</span>(<span class="ident">try_from_str</span> <span class="op">=</span> <span class="ident">parse_modifiers</span>), <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;[]&quot;</span>)]</span>
+        <span class="ident">scenario_modifiers</span>: <span class="ident">ModifierList</span>,
+        <span class="doccomment">/// Delete cancelled trips, and delete people with no remaining trips.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">delete_cancelled_trips</span>: <span class="ident">bool</span>,
+        <span class="doccomment">/// A seed for generating random numbers</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;42&quot;</span>)]</span>
+        <span class="ident">rng_seed</span>: <span class="ident">u64</span>,
+    },
+    <span class="doccomment">/// Clips an OSM file to a boundary. This is a simple Rust port of `osmconvert large_map.osm</span>
+    <span class="doccomment">/// -B=clipping.poly --complete-ways -o=smaller_map.osm`.</span>
+    <span class="ident">ClipOSM</span> {
+        <span class="doccomment">/// The path to the input .osm.pbf file</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">pbf_path</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The path to an Osmosis boundary polygon</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">clip_path</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The path to write the XML results</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">out_path</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Reads a GeoJSON file, extracts a polygon from every feature, and writes numbered files in</span>
+    <span class="doccomment">/// the https://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format format as</span>
+    <span class="doccomment">/// output.</span>
+    <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;geojson-to-osmosis&quot;</span>)]</span>
+    <span class="ident">GeoJSONToOsmosis</span> {
+        <span class="doccomment">/// The path to a GeoJSON file</span>
+        <span class="attribute">#[<span class="ident">structopt</span>()]</span>
+        <span class="ident">input</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Import a scenario from https://github.com/asu-trans-ai-lab/grid2demand.</span>
+    <span class="ident">ImportGrid2Demand</span> {
+        <span class="doccomment">/// The path to a grid2demand CSV file</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">input</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The path to a map matching the grid2demand data</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">map</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Import a JSON scenario in the</span>
+    <span class="doccomment">/// https://a-b-street.github.io/docs/tech/dev/formats/scenarios.html format</span>
+    <span class="ident">ImportScenario</span> {
+        <span class="doccomment">/// The path to a JSON scenario file</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">input</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The path to a map matching the scenario data</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">map</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// Problems occur when a position is within the map boundary, but not close enough to</span>
+        <span class="doccomment">/// buildings. Skip people with problematic positions if true, abort otherwise.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">skip_problems</span>: <span class="ident">bool</span>,
+    },
+    <span class="doccomment">/// Transform a JSON map that&#39;s been manually edited into the binary format suitable for</span>
+    <span class="doccomment">/// simulation.</span>
+    <span class="ident">ImportJSONMap</span> {
+        <span class="doccomment">/// The path to a JSON map file to import</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">input</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The path to write</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">output</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Removes nonessential parts of a Map, for the bike network tool.</span>
+    <span class="ident">MinifyMap</span> {
+        <span class="doccomment">/// The path to a map to shrink. The map is modified in-place.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>()]</span>
+        <span class="ident">map</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Procedurally generates houses along empty residential roads of a map</span>
+    <span class="ident">GenerateHouses</span> {
+        <span class="doccomment">/// The path to a map to generate houses for</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">map</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// If the tool doesn&#39;t generate at least this many houses, then fail. This can be used to</span>
+        <span class="doccomment">/// autodetect if a map probably already has most houses tagged in OSM.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">num_required</span>: <span class="ident">usize</span>,
+        <span class="doccomment">/// A seed for generating random numbers</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;42&quot;</span>)]</span>
+        <span class="ident">rng_seed</span>: <span class="ident">u64</span>,
+        <span class="doccomment">/// The GeoJSON file to write</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">output</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Prints the osm.pbf file from download.geofabrik.de that covers a given boundary.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is a useful tool when importing a new map, if you don&#39;t already know which geofabrik</span>
+    <span class="doccomment">/// file you should use as your OSM input.</span>
+    <span class="ident">PickGeofabrik</span> {
+        <span class="doccomment">/// The path to an [osmosis polygon boundary</span>
+        <span class="doccomment">/// file](https://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format)</span>
+        <span class="attribute">#[<span class="ident">structopt</span>()]</span>
+        <span class="ident">input</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// Imports a one-shot A/B Street map from a GeoJSON boundary in a single command.</span>
+    <span class="ident">OneStepImport</span> {
+        <span class="doccomment">/// The path to a GeoJSON file with a boundary</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">geojson_path</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// What to name the new imported map. The country will always be &quot;zz&quot; (a fake country</span>
+        <span class="doccomment">/// code), with the city as &quot;oneshot.&quot; This name shouldn&#39;t contain spaces or be empty.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">map_name</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// Do people drive on the left side of the road in this map?</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">drive_on_left</span>: <span class="ident">bool</span>,
+        <span class="doccomment">/// Use Geofabrik to grab OSM input if true, or Overpass if false. Overpass is faster.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">use_geofabrik</span>: <span class="ident">bool</span>,
+        <span class="doccomment">/// Downgrade crosswalks not matching a `highway=crossing` OSM node into unmarked crossings.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">filter_crosswalks</span>: <span class="ident">bool</span>,
+        <span class="doccomment">/// Generate a simple travel demand model based on 2011 UK commuting data. This will only</span>
+        <span class="doccomment">/// work if the boundary is in the UK.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">create_uk_travel_demand_model</span>: <span class="ident">bool</span>,
+    },
+    <span class="doccomment">/// Imports a one-shot A/B Street map from an .osm file in a single command.</span>
+    <span class="ident">OneshotImport</span> {
+        <span class="attribute">#[<span class="ident">structopt</span>()]</span>
+        <span class="ident">osm_input</span>: <span class="ident">String</span>,
+        <span class="doccomment">/// The path to an Osmosis boundary polygon. If omitted, a boundary will be derived from</span>
+        <span class="doccomment">/// the .osm file, but borders will likely be broken or missing.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">clip_path</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="doccomment">/// Do people drive on the left side of the road in this map?</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">drive_on_left</span>: <span class="ident">bool</span>,
+        <span class="doccomment">/// Downgrade crosswalks not matching a `highway=crossing` OSM node into unmarked crossings.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">filter_crosswalks</span>: <span class="ident">bool</span>,
+        <span class="doccomment">/// Generate a simple travel demand model based on 2011 UK commuting data. This will only</span>
+        <span class="doccomment">/// work if the boundary is in the UK.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>)]</span>
+        <span class="ident">create_uk_travel_demand_model</span>: <span class="ident">bool</span>,
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">flatten</span>)]</span>
+        <span class="ident">opts</span>: <span class="ident">map_model::RawToMapOptions</span>,
+    },
+    <span class="doccomment">/// Regenerate all maps and scenarios from scratch.</span>
+    <span class="ident">RegenerateEverything</span> {
+        <span class="doccomment">/// If this command is being run in the cloud, parallelize the jobs by specifying which</span>
+        <span class="doccomment">/// shard this invocation should run.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;0&quot;</span>)]</span>
+        <span class="ident">shard_num</span>: <span class="ident">usize</span>,
+        <span class="doccomment">/// If this command is being run in the cloud, parallelize the jobs by specifying how many</span>
+        <span class="doccomment">/// total shards there are.</span>
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">long</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;1&quot;</span>)]</span>
+        <span class="ident">num_shards</span>: <span class="ident">usize</span>,
+    },
+    <span class="doccomment">/// Generate a shell script to regenerate all cities that uses an external task runner.</span>
+    <span class="ident">RegenerateEverythingExternally</span>,
+    <span class="doccomment">/// Import RawMaps, maps, scenarios, and city overviews for a single city.</span>
+    <span class="ident">Import</span> {
+        <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">flatten</span>)]</span>
+        <span class="ident">job</span>: <span class="ident">Job</span>,
+    },
+    <span class="doccomment">/// Simulate a full day of a scenario, and write the &quot;prebaked results,&quot; so the UI can later be</span>
+    <span class="doccomment">/// used for A/B testing.</span>
+    <span class="attribute">#[<span class="ident">structopt</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;prebake-scenario&quot;</span>)]</span>
+    <span class="ident">PrebakeScenario</span> {
+        <span class="doccomment">/// The path to a scenario file</span>
+        <span class="attribute">#[<span class="ident">structopt</span>()]</span>
+        <span class="ident">scenario_path</span>: <span class="ident">String</span>,
+    },
+}
+
+<span class="comment">// See https://github.com/TeXitoi/structopt/issues/94</span>
+<span class="kw">type</span> <span class="ident">ModifierList</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">synthpop::ScenarioModifier</span><span class="op">&gt;</span>;
+
+<span class="kw">fn</span> <span class="ident">parse_modifiers</span>(<span class="ident">x</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ModifierList</span><span class="op">&gt;</span> {
+    <span class="ident">abstutil::from_json</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>.<span class="ident">to_string</span>().<span class="ident">into_bytes</span>())
+}
+
+<span class="attribute">#[<span class="ident">tokio::main</span>]</span>
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">Command::from_args</span>();
+
+    <span class="comment">// All but a few commands want logging</span>
+    <span class="kw">if</span> <span class="op">!</span><span class="macro">matches!</span>(
+        <span class="ident">cmd</span>,
+        <span class="ident">Command::DumpJSON</span> { .. } <span class="op">|</span> <span class="ident">Command::PickGeofabrik</span> { .. },
+    ) {
+        <span class="ident">abstutil::logger::setup</span>();
+    }
+
+    <span class="comment">// Short implementations can stay in this file, but please split larger subcommands to their</span>
+    <span class="comment">// own module.</span>
+    <span class="kw">match</span> <span class="ident">Command::from_args</span>() {
+        <span class="ident">Command::DumpJSON</span> { <span class="ident">path</span> } =&gt; <span class="ident">dump_json</span>(<span class="ident">path</span>),
+        <span class="ident">Command::RandomScenario</span> {
+            <span class="ident">rng_seed</span>,
+            <span class="ident">map</span>,
+            <span class="ident">scenario_name</span>,
+        } =&gt; <span class="ident">random_scenario</span>(<span class="ident">rng_seed</span>, <span class="ident">map</span>, <span class="ident">scenario_name</span>),
+        <span class="ident">Command::AugmentScenario</span> {
+            <span class="ident">input_scenario</span>,
+            <span class="ident">add_return_trips</span>,
+            <span class="ident">add_lunch_trips</span>,
+            <span class="ident">scenario_modifiers</span>,
+            <span class="ident">delete_cancelled_trips</span>,
+            <span class="ident">rng_seed</span>,
+        } =&gt; <span class="ident">augment_scenario::run</span>(
+            <span class="ident">input_scenario</span>,
+            <span class="ident">add_return_trips</span>,
+            <span class="ident">add_lunch_trips</span>,
+            <span class="ident">scenario_modifiers</span>,
+            <span class="ident">delete_cancelled_trips</span>,
+            <span class="ident">rng_seed</span>,
+        ),
+        <span class="ident">Command::ClipOSM</span> {
+            <span class="ident">pbf_path</span>,
+            <span class="ident">clip_path</span>,
+            <span class="ident">out_path</span>,
+        } =&gt; <span class="ident">clip_osm::run</span>(<span class="ident">pbf_path</span>, <span class="ident">clip_path</span>, <span class="ident">out_path</span>)<span class="question-mark">?</span>,
+        <span class="ident">Command::GeoJSONToOsmosis</span> { <span class="ident">input</span> } =&gt; <span class="ident">geojson_to_osmosis::run</span>(<span class="ident">input</span>)<span class="question-mark">?</span>,
+        <span class="ident">Command::ImportGrid2Demand</span> { <span class="ident">input</span>, <span class="ident">map</span> } =&gt; <span class="ident">import_grid2demand::run</span>(<span class="ident">input</span>, <span class="ident">map</span>)<span class="question-mark">?</span>,
+        <span class="ident">Command::ImportScenario</span> {
+            <span class="ident">input</span>,
+            <span class="ident">map</span>,
+            <span class="ident">skip_problems</span>,
+        } =&gt; <span class="ident">import_scenario::run</span>(<span class="ident">input</span>, <span class="ident">map</span>, <span class="ident">skip_problems</span>),
+        <span class="ident">Command::ImportJSONMap</span> { <span class="ident">input</span>, <span class="ident">output</span> } =&gt; <span class="ident">import_json_map</span>(<span class="ident">input</span>, <span class="ident">output</span>),
+        <span class="ident">Command::MinifyMap</span> { <span class="ident">map</span> } =&gt; <span class="ident">minify_map</span>(<span class="ident">map</span>),
+        <span class="ident">Command::GenerateHouses</span> {
+            <span class="ident">map</span>,
+            <span class="ident">num_required</span>,
+            <span class="ident">rng_seed</span>,
+            <span class="ident">output</span>,
+        } =&gt; <span class="ident">generate_houses::run</span>(<span class="ident">map</span>, <span class="ident">num_required</span>, <span class="ident">rng_seed</span>, <span class="ident">output</span>),
+        <span class="ident">Command::PickGeofabrik</span> { <span class="ident">input</span> } =&gt; {
+            <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">importer::pick_geofabrik</span>(<span class="ident">input</span>).<span class="kw">await</span><span class="question-mark">?</span>)
+        }
+        <span class="ident">Command::OneStepImport</span> {
+            <span class="ident">geojson_path</span>,
+            <span class="ident">map_name</span>,
+            <span class="ident">drive_on_left</span>,
+            <span class="ident">use_geofabrik</span>,
+            <span class="ident">filter_crosswalks</span>,
+            <span class="ident">create_uk_travel_demand_model</span>,
+        } =&gt; {
+            <span class="ident">one_step_import::run</span>(
+                <span class="ident">geojson_path</span>,
+                <span class="ident">map_name</span>,
+                <span class="ident">driving_side</span>(<span class="ident">drive_on_left</span>),
+                <span class="ident">use_geofabrik</span>,
+                <span class="ident">filter_crosswalks</span>,
+                <span class="ident">create_uk_travel_demand_model</span>,
+            )
+            .<span class="kw">await</span><span class="question-mark">?</span>
+        }
+        <span class="ident">Command::OneshotImport</span> {
+            <span class="ident">osm_input</span>,
+            <span class="ident">clip_path</span>,
+            <span class="ident">drive_on_left</span>,
+            <span class="ident">filter_crosswalks</span>,
+            <span class="ident">create_uk_travel_demand_model</span>,
+            <span class="ident">opts</span>,
+        } =&gt; {
+            <span class="ident">importer::oneshot</span>(
+                <span class="ident">osm_input</span>,
+                <span class="ident">clip_path</span>,
+                <span class="ident">driving_side</span>(<span class="ident">drive_on_left</span>),
+                <span class="ident">filter_crosswalks</span>,
+                <span class="ident">create_uk_travel_demand_model</span>,
+                <span class="ident">opts</span>,
+            )
+            .<span class="kw">await</span>
+        }
+        <span class="ident">Command::RegenerateEverything</span> {
+            <span class="ident">shard_num</span>,
+            <span class="ident">num_shards</span>,
+        } =&gt; <span class="ident">importer::regenerate_everything</span>(<span class="ident">shard_num</span>, <span class="ident">num_shards</span>).<span class="kw">await</span>,
+        <span class="ident">Command::RegenerateEverythingExternally</span> =&gt; <span class="ident">regenerate_everything_externally</span>()<span class="question-mark">?</span>,
+        <span class="ident">Command::Import</span> { <span class="ident">job</span> } =&gt; <span class="ident">job</span>.<span class="ident">run</span>(<span class="kw-2">&amp;mut</span> <span class="ident">Timer::new</span>(<span class="string">&quot;import one city&quot;</span>)).<span class="kw">await</span>,
+        <span class="ident">Command::PrebakeScenario</span> { <span class="ident">scenario_path</span> } =&gt; <span class="ident">prebake_scenario</span>(<span class="ident">scenario_path</span>),
+    }
+    <span class="prelude-val">Ok</span>(())
+}
+
+<span class="kw">fn</span> <span class="ident">dump_json</span>(<span class="ident">path</span>: <span class="ident">String</span>) {
+    <span class="comment">// Just try to deserialize as different formats</span>
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">map</span>) <span class="op">=</span>
+        <span class="ident">abstio::maybe_read_binary</span>::<span class="op">&lt;</span><span class="ident">map_model::Map</span><span class="op">&gt;</span>(<span class="ident">path</span>.<span class="ident">clone</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">Timer::throwaway</span>())
+    {
+        <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">abstutil::to_json</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>));
+        <span class="kw">return</span>;
+    }
+    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">scenario</span>) <span class="op">=</span>
+        <span class="ident">abstio::maybe_read_binary</span>::<span class="op">&lt;</span><span class="ident">synthpop::Scenario</span><span class="op">&gt;</span>(<span class="ident">path</span>.<span class="ident">clone</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">Timer::throwaway</span>())
+    {
+        <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">abstutil::to_json</span>(<span class="kw-2">&amp;</span><span class="ident">scenario</span>));
+        <span class="kw">return</span>;
+    }
+    <span class="macro">panic!</span>(
+        <span class="string">&quot;Don&#39;t know how to dump JSON for {}. Only maps and scenarios are supported.&quot;</span>,
+        <span class="ident">path</span>
+    );
+}
+
+<span class="kw">fn</span> <span class="ident">random_scenario</span>(<span class="ident">rng_seed</span>: <span class="ident">u64</span>, <span class="ident">map</span>: <span class="ident">String</span>, <span class="ident">scenario_name</span>: <span class="ident">String</span>) {
+    <span class="kw">use</span> <span class="ident">rand::SeedableRng</span>;
+    <span class="kw">use</span> <span class="ident">rand_xorshift::XorShiftRng</span>;
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">XorShiftRng::seed_from_u64</span>(<span class="ident">rng_seed</span>);
+    <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">map_model::Map::load_synchronously</span>(<span class="ident">map</span>, <span class="kw-2">&amp;mut</span> <span class="ident">Timer::throwaway</span>());
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scenario</span> <span class="op">=</span>
+        <span class="ident">sim::ScenarioGenerator::proletariat_robot</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>, <span class="kw-2">&amp;mut</span> <span class="ident">rng</span>, <span class="kw-2">&amp;mut</span> <span class="ident">Timer::throwaway</span>());
+    <span class="ident">scenario</span>.<span class="ident">scenario_name</span> <span class="op">=</span> <span class="ident">scenario_name</span>;
+    <span class="ident">scenario</span>.<span class="ident">save</span>();
+    <span class="macro">println!</span>(
+        <span class="string">&quot;Wrote {}&quot;</span>,
+        <span class="ident">abstio::path_scenario</span>(<span class="kw-2">&amp;</span><span class="ident">scenario</span>.<span class="ident">map_name</span>, <span class="kw-2">&amp;</span><span class="ident">scenario</span>.<span class="ident">scenario_name</span>)
+    );
+}
+
+<span class="kw">fn</span> <span class="ident">import_json_map</span>(<span class="ident">input</span>: <span class="ident">String</span>, <span class="ident">output</span>: <span class="ident">String</span>) {
+    <span class="comment">// TODO This can&#39;t handle the output of dump_map! What?!</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span>: <span class="ident">map_model::Map</span> <span class="op">=</span> <span class="ident">abstio::read_json</span>(<span class="ident">input</span>, <span class="kw-2">&amp;mut</span> <span class="ident">Timer::throwaway</span>());
+    <span class="ident">map</span>.<span class="ident">map_loaded_directly</span>(<span class="kw-2">&amp;mut</span> <span class="ident">Timer::throwaway</span>());
+    <span class="ident">abstio::write_binary</span>(<span class="ident">output</span>, <span class="kw-2">&amp;</span><span class="ident">map</span>);
+}
+
+<span class="kw">fn</span> <span class="ident">minify_map</span>(<span class="ident">path</span>: <span class="ident">String</span>) {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">timer</span> <span class="op">=</span> <span class="ident">Timer::new</span>(<span class="string">&quot;minify map&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">map_model::Map::load_synchronously</span>(<span class="ident">path</span>, <span class="kw-2">&amp;mut</span> <span class="ident">timer</span>);
+    <span class="ident">map</span>.<span class="ident">minify</span>(<span class="kw-2">&amp;mut</span> <span class="ident">timer</span>);
+    <span class="comment">// This also changes the name, so this won&#39;t overwrite anything</span>
+    <span class="ident">map</span>.<span class="ident">save</span>();
+}
+
+<span class="kw">fn</span> <span class="ident">regenerate_everything_externally</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="string">&quot;regenerate.sh&quot;</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="ident">File::create</span>(<span class="ident">path</span>)<span class="question-mark">?</span>;
+    <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;#!/bin/sh&quot;</span>)<span class="question-mark">?</span>;
+    <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;set -e&quot;</span>)<span class="question-mark">?</span>;
+    <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;pueue parallel 16&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">for</span> <span class="ident">city</span> <span class="kw">in</span> <span class="ident">CityName::list_all_cities_from_importer_config</span>() {
+        <span class="kw">if</span> <span class="ident">city</span> <span class="op">==</span> <span class="ident">CityName::new</span>(<span class="string">&quot;gb&quot;</span>, <span class="string">&quot;london&quot;</span>) {
+            <span class="comment">// Special case because there are so many maps</span>
+            <span class="kw">for</span> <span class="ident">map</span> <span class="kw">in</span> <span class="ident">city</span>.<span class="ident">list_all_maps_in_city_from_importer_config</span>() {
+                <span class="macro">writeln!</span>(
+                    <span class="ident">f</span>,
+                    <span class="string">&quot;pueue add -- ./import.sh --raw --map --scenario {} --city=gb/london&quot;</span>,
+                    <span class="ident">map</span>.<span class="ident">map</span>
+                )<span class="question-mark">?</span>;
+            }
+            <span class="kw">continue</span>;
+        }
+
+        <span class="kw">let</span> <span class="ident">job</span> <span class="op">=</span> <span class="ident">Job::full_for_city</span>(<span class="ident">city</span>);
+        <span class="macro">writeln!</span>(<span class="ident">f</span>, <span class="string">&quot;pueue add -- ./import.sh {}&quot;</span>, <span class="ident">job</span>.<span class="ident">flags</span>().<span class="ident">join</span>(<span class="string">&quot; &quot;</span>))<span class="question-mark">?</span>;
+    }
+    <span class="macro">println!</span>(<span class="string">&quot;&quot;</span>);
+    <span class="macro">println!</span>(
+        <span class="string">&quot;You can run {}. You&#39;ll need https://github.com/Nukesor/pueue set up first&quot;</span>,
+        <span class="ident">path</span>
+    );
+    <span class="macro">println!</span>(<span class="string">&quot;Handy reminders: pueue status / pause / reset&quot;</span>);
+    <span class="macro">println!</span>(<span class="string">&quot;pueue status | grep Success | wc -l&quot;</span>);
+    <span class="macro">println!</span>(<span class="string">&quot;For the long-tail: pueue status | grep Running&quot;</span>);
+    <span class="prelude-val">Ok</span>(())
+}
+
+<span class="kw">fn</span> <span class="ident">prebake_scenario</span>(<span class="ident">path</span>: <span class="ident">String</span>) {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">timer</span> <span class="op">=</span> <span class="ident">Timer::new</span>(<span class="string">&quot;prebake scenario&quot;</span>);
+    <span class="kw">let</span> <span class="ident">scenario</span>: <span class="ident">synthpop::Scenario</span> <span class="op">=</span> <span class="ident">abstio::must_read_object</span>(<span class="ident">path</span>, <span class="kw-2">&amp;mut</span> <span class="ident">timer</span>);
+    <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">map_model::Map::load_synchronously</span>(<span class="ident">scenario</span>.<span class="ident">map_name</span>.<span class="ident">path</span>(), <span class="kw-2">&amp;mut</span> <span class="ident">timer</span>);
+    <span class="ident">sim::prebake::prebake</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>, <span class="ident">scenario</span>, <span class="kw-2">&amp;mut</span> <span class="ident">timer</span>);
+}
+
+<span class="kw">fn</span> <span class="ident">driving_side</span>(<span class="ident">drive_on_left</span>: <span class="ident">bool</span>) -&gt; <span class="ident">map_model::DrivingSide</span> {
+    <span class="kw">if</span> <span class="ident">drive_on_left</span> {
+        <span class="ident">map_model::DrivingSide::Left</span>
+    } <span class="kw">else</span> {
+        <span class="ident">map_model::DrivingSide::Right</span>
+    }
+}
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="cli" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["PersistentSplit",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["button_builder",""]],"struct":[["PersistentSplit",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["built_info",""]],"struct":[["About",""],["MainMenu",""],["Proposals",""],["Screensaver",""],["TitleScreen",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["enter_state",""]],"mod":[["proposals",""]],"struct":[["TitleScreen",""]]};

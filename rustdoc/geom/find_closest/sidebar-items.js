@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["pts_to_line_string",""]],"struct":[["FindClosest","A quad-tree to quickly find the closest points to some polylines."]]});
+window.SIDEBAR_ITEMS = {"struct":[["FindClosest","A quad-tree to quickly find the closest points to some polylines."]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["default_spawn_times",""],["make_route",""],["make_stops_and_routes","Construct the final model of bus/train stops and routes. This is quite broken currently, so not going to describe how it works."],["pick_start_lane",""]],"struct":[["Matcher",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["create_route",""],["create_stop",""],["finalize_transit",""]],"struct":[["BorderSnapper",""]]};

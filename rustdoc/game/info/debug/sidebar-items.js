@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["area",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["area",""],["area_body",""]]};

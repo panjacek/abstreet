@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["alter_turn_destinations",""],["main",""],["nuke_random_parking",""],["run",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["alter_turn_destinations",""],["main",""],["nuke_random_parking",""],["run",""]],"struct":[["Args",""]]};

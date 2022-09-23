@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["ChooseSomething","Choose something from a menu, then feed the answer to a callback."],["PopupMsg","Display a message dialog."],["PromptInput","Prompt for arbitrary text input, then feed the answer to a callback."]]});
+window.SIDEBAR_ITEMS = {"fn":[["checkbox_per_mode",""],["cmp_count","Less is better"],["cmp_dist","Shorter is better"],["cmp_duration","Shorter is better"],["color_for_mode",""],["percentage_bar",""]],"struct":[["FilePicker",""]]};

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Options","The constraints on how we're moving."]],"struct":[["Isochrone","Represents the area reachable from a single building."]]});
+window.SIDEBAR_ITEMS = {"enum":[["MovementOptions","The constraints on how we’re moving."]],"struct":[["BorderIsochrone","Represents the area reachable from all intersections on the map border"],["Isochrone","Represents the area reachable from a single building."],["Options",""]]};

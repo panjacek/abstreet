@@ -1,105 +1,102 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `importer/src/berlin.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>berlin.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../importer/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `importer/src/berlin.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>berlin.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../importer/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../importer/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../importer/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -121,84 +118,63 @@
 <span id="118">118</span>
 <span id="119">119</span>
 <span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
-<span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fs</span>::<span class="ident">File</span>;
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">fs_err::File</span>;
+<span class="kw">use</span> <span class="ident">rand::SeedableRng</span>;
+<span class="kw">use</span> <span class="ident">rand_xorshift::XorShiftRng</span>;
+<span class="kw">use</span> <span class="ident">serde::Deserialize</span>;
 
-<span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">Rng</span>, <span class="ident">SeedableRng</span>};
-<span class="kw">use</span> <span class="ident">rand_xorshift</span>::<span class="ident">XorShiftRng</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::<span class="ident">Deserialize</span>;
+<span class="kw">use</span> <span class="ident">abstutil::Timer</span>;
+<span class="kw">use</span> <span class="ident">geom::Ring</span>;
+<span class="kw">use</span> <span class="ident">kml::ExtraShapes</span>;
+<span class="kw">use</span> <span class="ident">map_model::BuildingType</span>;
+<span class="kw">use</span> <span class="ident">raw_map::RawMap</span>;
 
-<span class="kw">use</span> <span class="ident">abstutil</span>::{<span class="ident">prettyprint_usize</span>, <span class="ident">Timer</span>};
-<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Polygon</span>, <span class="ident">Ring</span>};
-<span class="kw">use</span> <span class="ident">kml</span>::<span class="ident">ExtraShapes</span>;
-<span class="kw">use</span> <span class="ident">map_model</span>::<span class="ident">raw</span>::<span class="ident">RawMap</span>;
-<span class="kw">use</span> <span class="ident">map_model</span>::<span class="ident">BuildingType</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::configuration::ImporterConfiguration</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::utils</span>::{<span class="ident">download</span>, <span class="ident">download_kml</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">configuration</span>::<span class="ident">ImporterConfiguration</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">utils</span>::{<span class="ident">download</span>, <span class="ident">download_kml</span>};
-
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">import_extra_data</span>(<span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">RawMap</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">ImporterConfiguration</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>) {
+<span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">import_extra_data</span>(
+    <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">RawMap</span>,
+    <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">ImporterConfiguration</span>,
+    <span class="ident">timer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Timer</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
+) {
     <span class="comment">// From https://data.technologiestiftung-berlin.de/dataset/lor_planungsgraeume/en</span>
     <span class="ident">download_kml</span>(
-        <span class="string">&quot;input/berlin/planning_areas.bin&quot;</span>,
+        <span class="ident">map</span>.<span class="ident">get_city_name</span>().<span class="ident">input_path</span>(<span class="string">&quot;planning_areas.bin&quot;</span>),
         <span class="string">&quot;https://tsb-opendata.s3.eu-central-1.amazonaws.com/lor_planungsgraeume/lor_planungsraeume.kml&quot;</span>,
-        <span class="kw-2">&amp;</span><span class="ident">map</span>.<span class="ident">gps_bounds</span>,
+        <span class="kw-2">&amp;</span><span class="ident">map</span>.<span class="ident">streets</span>.<span class="ident">gps_bounds</span>,
         <span class="comment">// Keep partly out-of-bounds polygons</span>
         <span class="bool-val">false</span>,
         <span class="ident">timer</span>
-    );
+    ).<span class="kw">await</span>;
 
     <span class="comment">// From</span>
     <span class="comment">// https://daten.berlin.de/datensaetze/einwohnerinnen-und-einwohner-berlin-lor-planungsr%C3%A4umen-am-31122018</span>
     <span class="ident">download</span>(
         <span class="ident">config</span>,
-        <span class="string">&quot;input/berlin/EWR201812E_Matrix.csv&quot;</span>,
+        <span class="ident">map</span>.<span class="ident">get_city_name</span>().<span class="ident">input_path</span>(<span class="string">&quot;EWR201812E_Matrix.csv&quot;</span>),
         <span class="string">&quot;https://www.statistik-berlin-brandenburg.de/opendata/EWR201812E_Matrix.csv&quot;</span>,
-    );
+    )
+    .<span class="kw">await</span>;
 
     <span class="comment">// Always do this, it&#39;s idempotent and fast</span>
     <span class="ident">correlate_population</span>(
-        <span class="string">&quot;data/input/berlin/planning_areas.bin&quot;</span>,
-        <span class="string">&quot;data/input/berlin/EWR201812E_Matrix.csv&quot;</span>,
+        <span class="ident">map</span>.<span class="ident">get_city_name</span>().<span class="ident">input_path</span>(<span class="string">&quot;planning_areas.bin&quot;</span>),
+        <span class="ident">map</span>.<span class="ident">get_city_name</span>().<span class="ident">input_path</span>(<span class="string">&quot;EWR201812E_Matrix.csv&quot;</span>),
         <span class="ident">timer</span>,
     );
 }
 
 <span class="comment">// Modify the filtered KML of planning areas with the number of residents from a different dataset.</span>
-<span class="kw">fn</span> <span class="ident">correlate_population</span>(<span class="ident">kml_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">csv_path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>) {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">shapes</span> <span class="op">=</span> <span class="ident">abstio</span>::<span class="ident">read_binary</span>::<span class="op">&lt;</span><span class="ident">ExtraShapes</span><span class="op">&gt;</span>(<span class="ident">kml_path</span>.<span class="ident">to_string</span>(), <span class="ident">timer</span>);
-    <span class="kw">for</span> <span class="ident">rec</span> <span class="kw">in</span> <span class="ident">csv</span>::<span class="ident">ReaderBuilder</span>::<span class="ident">new</span>()
+<span class="kw">fn</span> <span class="ident">correlate_population</span>(<span class="ident">kml_path</span>: <span class="ident">String</span>, <span class="ident">csv_path</span>: <span class="ident">String</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Timer</span>) {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">shapes</span> <span class="op">=</span> <span class="ident">abstio::read_binary</span>::<span class="op">&lt;</span><span class="ident">ExtraShapes</span><span class="op">&gt;</span>(<span class="ident">kml_path</span>.<span class="ident">clone</span>(), <span class="ident">timer</span>);
+    <span class="kw">for</span> <span class="ident">rec</span> <span class="kw">in</span> <span class="ident">csv::ReaderBuilder::new</span>()
         .<span class="ident">delimiter</span>(<span class="string">b&#39;;&#39;</span>)
-        .<span class="ident">from_reader</span>(<span class="ident">File</span>::<span class="ident">open</span>(<span class="ident">csv_path</span>).<span class="ident">unwrap</span>())
+        .<span class="ident">from_reader</span>(<span class="ident">File::open</span>(<span class="ident">csv_path</span>).<span class="ident">unwrap</span>())
         .<span class="ident">deserialize</span>()
     {
         <span class="kw">let</span> <span class="ident">rec</span>: <span class="ident">Record</span> <span class="op">=</span> <span class="ident">rec</span>.<span class="ident">unwrap</span>();
-        <span class="kw">for</span> <span class="ident">shape</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">shapes</span>.<span class="ident">shapes</span> {
-            <span class="kw">if</span> <span class="ident">shape</span>.<span class="ident">attributes</span>.<span class="ident">get</span>(<span class="string">&quot;spatial_name&quot;</span>) <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">rec</span>.<span class="ident">raumid</span>) {
+        <span class="kw">for</span> <span class="ident">shape</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">shapes</span>.<span class="ident">shapes</span> {
+            <span class="kw">if</span> <span class="ident">shape</span>.<span class="ident">attributes</span>.<span class="ident">get</span>(<span class="string">&quot;spatial_name&quot;</span>) <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">rec</span>.<span class="ident">raumid</span>) {
                 <span class="ident">shape</span>
                     .<span class="ident">attributes</span>
                     .<span class="ident">insert</span>(<span class="string">&quot;num_residents&quot;</span>.<span class="ident">to_string</span>(), <span class="ident">rec</span>.<span class="ident">e_e</span>);
@@ -206,7 +182,7 @@
             }
         }
     }
-    <span class="ident">abstio</span>::<span class="ident">write_binary</span>(<span class="ident">kml_path</span>.<span class="ident">to_string</span>(), <span class="kw-2">&amp;</span><span class="ident">shapes</span>);
+    <span class="ident">abstio::write_binary</span>(<span class="ident">kml_path</span>, <span class="kw-2">&amp;</span><span class="ident">shapes</span>);
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Deserialize</span>)]</span>
@@ -219,9 +195,9 @@
     <span class="ident">e_e</span>: <span class="ident">String</span>,
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">distribute_residents</span>(<span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">map_model</span>::<span class="ident">Map</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Timer</span>) {
-    <span class="kw">for</span> <span class="ident">shape</span> <span class="kw">in</span> <span class="ident">abstio</span>::<span class="ident">read_binary</span>::<span class="op">&lt;</span><span class="ident">ExtraShapes</span><span class="op">&gt;</span>(
-        <span class="string">&quot;data/input/berlin/planning_areas.bin&quot;</span>.<span class="ident">to_string</span>(),
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">distribute_residents</span>(<span class="ident">map</span>: <span class="kw-2">&amp;mut</span> <span class="ident">map_model::Map</span>, <span class="ident">timer</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Timer</span>) {
+    <span class="kw">for</span> <span class="ident">shape</span> <span class="kw">in</span> <span class="ident">abstio::read_binary</span>::<span class="op">&lt;</span><span class="ident">ExtraShapes</span><span class="op">&gt;</span>(
+        <span class="string">&quot;data/input/de/berlin/planning_areas.bin&quot;</span>.<span class="ident">to_string</span>(),
         <span class="ident">timer</span>,
     )
     .<span class="ident">shapes</span>
@@ -233,62 +209,34 @@
         {
             <span class="kw">continue</span>;
         }
-        <span class="kw">let</span> <span class="ident">region</span> <span class="op">=</span> <span class="ident">Ring</span>::<span class="ident">must_new</span>(<span class="ident">pts</span>).<span class="ident">to_polygon</span>();
-        <span class="kw">let</span> <span class="ident">bldgs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">map_model</span>::<span class="ident">BuildingID</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">map</span>
-            .<span class="ident">all_buildings</span>()
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">region</span>.<span class="ident">contains_pt</span>(<span class="ident">b</span>.<span class="ident">label_center</span>) <span class="op">&amp;&amp;</span> <span class="ident">b</span>.<span class="ident">bldg_type</span>.<span class="ident">has_residents</span>())
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span>.<span class="ident">id</span>)
-            .<span class="ident">collect</span>();
-        <span class="kw">let</span> <span class="ident">orig_num_residents</span> <span class="op">=</span> <span class="ident">shape</span>.<span class="ident">attributes</span>[<span class="string">&quot;num_residents&quot;</span>].<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>();
-
-        <span class="comment">// If the region is partly out-of-bounds, then scale down the number of residents linearly</span>
-        <span class="comment">// based on area of the overlapping part of the polygon.</span>
-        <span class="kw">let</span> <span class="ident">pct_overlap</span> <span class="op">=</span> <span class="ident">Polygon</span>::<span class="ident">union_all</span>(<span class="ident">region</span>.<span class="ident">intersection</span>(<span class="ident">map</span>.<span class="ident">get_boundary_polygon</span>()))
-            .<span class="ident">area</span>()
-            <span class="op">/</span> <span class="ident">region</span>.<span class="ident">area</span>();
-        <span class="kw">let</span> <span class="ident">num_residents</span> <span class="op">=</span> (<span class="ident">pct_overlap</span> <span class="op">*</span> <span class="ident">orig_num_residents</span>) <span class="kw">as</span> <span class="ident">usize</span>;
-        <span class="ident">timer</span>.<span class="ident">note</span>(<span class="macro">format</span><span class="macro">!</span>(
-            <span class="string">&quot;Distributing {} residents in {} to {} buildings. {}% of this area overlapped with \
-             the map, scaled residents accordingly.&quot;</span>,
-            <span class="ident">prettyprint_usize</span>(<span class="ident">num_residents</span>),
-            <span class="ident">shape</span>.<span class="ident">attributes</span>[<span class="string">&quot;spatial_alias&quot;</span>],
-            <span class="ident">prettyprint_usize</span>(<span class="ident">bldgs</span>.<span class="ident">len</span>()),
-            (<span class="ident">pct_overlap</span> <span class="op">*</span> <span class="number">100.0</span>) <span class="kw">as</span> <span class="ident">usize</span>
-        ));
-
+        <span class="kw">let</span> <span class="ident">region</span> <span class="op">=</span> <span class="ident">Ring::must_new</span>(<span class="ident">pts</span>).<span class="ident">into_polygon</span>();
         <span class="comment">// Deterministically seed using the planning area&#39;s ID.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span>
-            <span class="ident">XorShiftRng</span>::<span class="ident">seed_from_u64</span>(<span class="ident">shape</span>.<span class="ident">attributes</span>[<span class="string">&quot;spatial_name&quot;</span>].<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>());
+            <span class="ident">XorShiftRng::seed_from_u64</span>(<span class="ident">shape</span>.<span class="ident">attributes</span>[<span class="string">&quot;spatial_name&quot;</span>].<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>());
 
-        <span class="comment">// How do you randomly distribute num_residents into some buildings?</span>
-        <span class="comment">// https://stackoverflow.com/questions/2640053/getting-n-random-numbers-whose-sum-is-m</span>
-        <span class="comment">// TODO Problems:</span>
-        <span class="comment">// - Because of how we round, the sum might not exactly be num_residents</span>
-        <span class="comment">// - This is not a uniform distribution, per stackoverflow</span>
-        <span class="comment">// - Larger buildings should get more people</span>
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rand_nums</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">bldgs</span>.<span class="ident">len</span>()).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0.0</span>..<span class="number">1.0</span>)).<span class="ident">collect</span>();
-        <span class="kw">let</span> <span class="ident">sum</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="ident">rand_nums</span>.<span class="ident">iter</span>().<span class="ident">sum</span>();
-        <span class="kw">for</span> <span class="ident">b</span> <span class="kw">in</span> <span class="ident">bldgs</span> {
-            <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> (<span class="ident">rand_nums</span>.<span class="ident">pop</span>().<span class="ident">unwrap</span>() <span class="op">/</span> <span class="ident">sum</span> <span class="op">*</span> (<span class="ident">num_residents</span> <span class="kw">as</span> <span class="ident">f64</span>)) <span class="kw">as</span> <span class="ident">usize</span>;
-            <span class="kw">let</span> <span class="ident">bldg_type</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">map</span>.<span class="ident">get_b</span>(<span class="ident">b</span>).<span class="ident">bldg_type</span> {
-                <span class="ident">BuildingType</span>::<span class="ident">Residential</span> {
+        <span class="kw">for</span> (<span class="ident">home</span>, <span class="ident">n</span>) <span class="kw">in</span> <span class="ident">popdat::distribute_population_to_homes</span>(
+            <span class="ident">geo::Polygon::from</span>(<span class="ident">region</span>),
+            <span class="ident">shape</span>.<span class="ident">attributes</span>[<span class="string">&quot;num_residents&quot;</span>].<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>(),
+            <span class="ident">map</span>,
+            <span class="kw-2">&amp;mut</span> <span class="ident">rng</span>,
+        ) {
+            <span class="kw">let</span> <span class="ident">bldg_type</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">map</span>.<span class="ident">get_b</span>(<span class="ident">home</span>).<span class="ident">bldg_type</span> {
+                <span class="ident">BuildingType::Residential</span> {
                     <span class="ident">num_housing_units</span>, ..
-                } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BuildingType</span>::<span class="ident">Residential</span> {
+                } =&gt; <span class="ident">BuildingType::Residential</span> {
                     <span class="ident">num_housing_units</span>,
                     <span class="ident">num_residents</span>: <span class="ident">n</span>,
                 },
-                <span class="ident">BuildingType</span>::<span class="ident">ResidentialCommercial</span>(<span class="kw">_</span>, <span class="ident">worker_cap</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">BuildingType</span>::<span class="ident">ResidentialCommercial</span>(<span class="ident">n</span>, <span class="ident">worker_cap</span>)
+                <span class="ident">BuildingType::ResidentialCommercial</span>(<span class="kw">_</span>, <span class="ident">worker_cap</span>) =&gt; {
+                    <span class="ident">BuildingType::ResidentialCommercial</span>(<span class="ident">n</span>, <span class="ident">worker_cap</span>)
                 }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+                <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(),
             };
-            <span class="ident">map</span>.<span class="ident">hack_override_bldg_type</span>(<span class="ident">b</span>, <span class="ident">bldg_type</span>);
+            <span class="ident">map</span>.<span class="ident">hack_override_bldg_type</span>(<span class="ident">home</span>, <span class="ident">bldg_type</span>);
         }
     }
 
     <span class="ident">map</span>.<span class="ident">save</span>();
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "importer";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="importer" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>

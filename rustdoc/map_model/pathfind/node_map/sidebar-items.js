@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["deserialize_nodemap",""]],"struct":[["NodeMap",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["deserialize_nodemap",""]],"struct":[["InnerNodeMap",""],["NodeMap","A bidirectional mapping between fast_paths NodeId and some custom ID type."]]};

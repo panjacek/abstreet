@@ -1,206 +1,876 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `map_gui/src/tools/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../map_gui/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
-                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `map_gui/src/tools/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../map_gui/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../map_gui/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../map_gui/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! Assorted tools and UI states that&#39;re useful for applications built to display maps.</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Assorted tools and UI states that&#39;re useful for applications built to display maps.</span>
 
-<span class="kw">use</span> <span class="ident">abstio</span>::<span class="ident">MapName</span>;
-<span class="kw">use</span> <span class="ident">geom</span>::<span class="ident">Polygon</span>;
-<span class="kw">use</span> <span class="ident">widgetry</span>::{<span class="ident">GfxCtx</span>, <span class="ident">Line</span>, <span class="ident">Text</span>};
+<span class="kw">use</span> <span class="ident">std::collections::BTreeSet</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">camera</span>::<span class="ident">CameraState</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">city_picker</span>::<span class="ident">CityPicker</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">colors</span>::{<span class="ident">ColorDiscrete</span>, <span class="ident">ColorLegend</span>, <span class="ident">ColorNetwork</span>, <span class="ident">ColorScale</span>, <span class="ident">DivergingScale</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">heatmap</span>::{<span class="ident">make_heatmap</span>, <span class="ident">Grid</span>, <span class="ident">HeatmapOptions</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">minimap</span>::{<span class="ident">Minimap</span>, <span class="ident">MinimapControls</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">navigate</span>::<span class="ident">Navigator</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">turn_explorer</span>::<span class="ident">TurnExplorer</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">ui</span>::{<span class="ident">ChooseSomething</span>, <span class="ident">PopupMsg</span>, <span class="ident">PromptInput</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">AppLike</span>;
+<span class="kw">use</span> <span class="ident">abstio::MapName</span>;
+<span class="kw">use</span> <span class="ident">geom::Polygon</span>;
+<span class="kw">use</span> <span class="ident">map_model</span>::{<span class="ident">IntersectionID</span>, <span class="ident">Map</span>, <span class="ident">RoadID</span>};
+<span class="kw">use</span> <span class="ident">widgetry</span>::{<span class="ident">lctrl</span>, <span class="ident">EventCtx</span>, <span class="ident">GfxCtx</span>, <span class="ident">Key</span>, <span class="ident">Line</span>, <span class="ident">Text</span>, <span class="ident">Widget</span>};
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::camera</span>::{<span class="ident">CameraState</span>, <span class="ident">DefaultMap</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::city_picker::CityPicker</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::colors</span>::{<span class="ident">ColorDiscrete</span>, <span class="ident">ColorNetwork</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::draw_overlapping_paths::draw_overlapping_paths</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::heatmap</span>::{<span class="ident">draw_isochrone</span>, <span class="ident">make_heatmap</span>, <span class="ident">Grid</span>, <span class="ident">HeatmapOptions</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::icons</span>::{<span class="ident">goal_marker</span>, <span class="ident">start_marker</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::labels</span>::{<span class="ident">DrawRoadLabels</span>, <span class="ident">DrawSimpleRoadLabels</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::minimap</span>::{<span class="ident">Minimap</span>, <span class="ident">MinimapControls</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::navigate::Navigator</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::polygon::EditPolygon</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::title_screen</span>::{<span class="ident">Executable</span>, <span class="ident">TitleScreen</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::trip_files</span>::{<span class="ident">TripManagement</span>, <span class="ident">TripManagementState</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::turn_explorer::TurnExplorer</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::ui</span>::{
+    <span class="ident">checkbox_per_mode</span>, <span class="ident">cmp_count</span>, <span class="ident">cmp_dist</span>, <span class="ident">cmp_duration</span>, <span class="ident">color_for_mode</span>, <span class="ident">percentage_bar</span>,
+    <span class="ident">FilePicker</span>,
+};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::waypoints</span>::{<span class="ident">InputWaypoints</span>, <span class="ident">WaypointID</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::AppLike</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::command::RunCommand</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::updater::prompt_to_download_missing_data</span>;
 
 <span class="kw">mod</span> <span class="ident">camera</span>;
 <span class="kw">mod</span> <span class="ident">city_picker</span>;
 <span class="kw">mod</span> <span class="ident">colors</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
+<span class="kw">mod</span> <span class="ident">command</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">compare_counts</span>;
+<span class="kw">mod</span> <span class="ident">draw_overlapping_paths</span>;
 <span class="kw">mod</span> <span class="ident">heatmap</span>;
+<span class="kw">mod</span> <span class="ident">icons</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
+<span class="kw">mod</span> <span class="ident">importer</span>;
+<span class="kw">mod</span> <span class="ident">labels</span>;
 <span class="kw">mod</span> <span class="ident">minimap</span>;
 <span class="kw">mod</span> <span class="ident">navigate</span>;
+<span class="kw">mod</span> <span class="ident">polygon</span>;
+<span class="kw">mod</span> <span class="ident">title_screen</span>;
+<span class="kw">mod</span> <span class="ident">trip_files</span>;
 <span class="kw">mod</span> <span class="ident">turn_explorer</span>;
 <span class="kw">mod</span> <span class="ident">ui</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;wasm32&quot;</span>))]</span>
 <span class="kw">mod</span> <span class="ident">updater</span>;
+<span class="kw">mod</span> <span class="ident">waypoints</span>;
+
+<span class="comment">// Update this ___before___ pushing the commit with &quot;[rebuild] [release]&quot;.</span>
+<span class="kw">const</span> <span class="ident">NEXT_RELEASE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;0.3.34&quot;</span>;
+
+<span class="doccomment">/// Returns the version of A/B Street to link to. When building for a release, this points to that</span>
+<span class="doccomment">/// new release. Otherwise it points to the current dev version.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">version</span>() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+    <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;release_s3&quot;</span>) {
+        <span class="ident">NEXT_RELEASE</span>
+    } <span class="kw">else</span> {
+        <span class="string">&quot;dev&quot;</span>
+    }
+}
 
 <span class="comment">// TODO This is A/B Street specific</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">loading_tips</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Text</span> {
-    <span class="ident">Text</span>::<span class="ident">from_multiline</span>(<span class="macro">vec</span><span class="macro">!</span>[
-        <span class="ident">Line</span>(<span class="string">&quot;Recent changes (November 8)&quot;</span>),
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">loading_tips</span>() -&gt; <span class="ident">Text</span> {
+    <span class="ident">Text::from_multiline</span>(<span class="macro">vec!</span>[
+        <span class="ident">Line</span>(<span class="string">&quot;Have you tried...&quot;</span>),
         <span class="ident">Line</span>(<span class="string">&quot;&quot;</span>),
-        <span class="ident">Line</span>(<span class="string">&quot;- Download more cities from within the game&quot;</span>),
-        <span class="ident">Line</span>(<span class="string">&quot;- You can now click agents while zoomed out&quot;</span>),
-        <span class="ident">Line</span>(<span class="string">&quot;- New OpenStreetMap viewer, open it from the splash screen&quot;</span>),
-        <span class="ident">Line</span>(<span class="string">&quot;- A web version has launched!&quot;</span>),
-        <span class="ident">Line</span>(<span class="string">&quot;- Slow segments of a trip shown in the info panel&quot;</span>),
-        <span class="ident">Line</span>(<span class="string">&quot;- Alleyways are now included in the map&quot;</span>),
-        <span class="ident">Line</span>(<span class="string">&quot;- Check out the trip tables and summary changes (press &#39;q&#39;)&quot;</span>),
-        <span class="ident">Line</span>(<span class="string">&quot;- Try out the new traffic signal editor!&quot;</span>),
+        <span class="ident">Line</span>(<span class="string">&quot;- simulating cities in Britain, Taiwan, Poland, and more?&quot;</span>),
+        <span class="ident">Line</span>(<span class="string">&quot;- the 15-minute neighborhood tool?&quot;</span>),
+        <span class="ident">Line</span>(<span class="string">&quot;- exploring all of the map layers?&quot;</span>),
+        <span class="ident">Line</span>(<span class="string">&quot;- playing 15-minute Santa, our arcade game spin-off?&quot;</span>),
     ])
 }
 
 <span class="doccomment">/// Make it clear the map can&#39;t be interacted with right now.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">grey_out_map</span>(<span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GfxCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="ident">dyn</span> <span class="ident">AppLike</span>) {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">grey_out_map</span>(<span class="ident">g</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GfxCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">AppLike</span>) {
     <span class="ident">g</span>.<span class="ident">fork_screenspace</span>();
     <span class="comment">// TODO - OSD height</span>
     <span class="ident">g</span>.<span class="ident">draw_polygon</span>(
         <span class="ident">app</span>.<span class="ident">cs</span>().<span class="ident">fade_map_dark</span>,
-        <span class="ident">Polygon</span>::<span class="ident">rectangle</span>(<span class="ident">g</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span>, <span class="ident">g</span>.<span class="ident">canvas</span>.<span class="ident">window_height</span>),
+        <span class="ident">Polygon::rectangle</span>(<span class="ident">g</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span>, <span class="ident">g</span>.<span class="ident">canvas</span>.<span class="ident">window_height</span>),
     );
     <span class="ident">g</span>.<span class="ident">unfork</span>();
 }
 
 <span class="comment">// TODO Associate this with maps, but somehow avoid reading the entire file when listing them.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nice_map_name</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">MapName</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
-    <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;ballard&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Ballard&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;downtown&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Downtown Seattle&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;huge_seattle&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Seattle (entire area)&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;lakeslice&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Lake Washington corridor&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;montlake&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Montlake and Eastlake&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;north_seattle&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;North Seattle&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;phinney&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Phinney Ridge&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;qa&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Queen Anne&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;slu&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;South Lake Union&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;south_seattle&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;South Seattle&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;udistrict&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;University District&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;udistrict_ravenna&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;University District / Ravenna&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;wallingford&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Wallingford&quot;</span>,
-        (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;west_seattle&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;West Seattle&quot;</span>,
-        (<span class="string">&quot;bellevue&quot;</span>, <span class="string">&quot;huge&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Bellevue&quot;</span>,
-        (<span class="string">&quot;berlin&quot;</span>, <span class="string">&quot;center&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Berlin (city center)&quot;</span>,
-        (<span class="string">&quot;cambridge&quot;</span>, <span class="string">&quot;trumpington&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Trumpington (outside Cambridge)&quot;</span>,
-        (<span class="string">&quot;krakow&quot;</span>, <span class="string">&quot;center&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Kraków (city center)&quot;</span>,
-        (<span class="string">&quot;leeds&quot;</span>, <span class="string">&quot;huge&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Leeds (entire area inside motorways)&quot;</span>,
-        (<span class="string">&quot;leeds&quot;</span>, <span class="string">&quot;north&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;North Leeds&quot;</span>,
-        (<span class="string">&quot;leeds&quot;</span>, <span class="string">&quot;west&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;West Leeds&quot;</span>,
-        (<span class="string">&quot;leeds&quot;</span>, <span class="string">&quot;central&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Leeds (city center)&quot;</span>,
-        (<span class="string">&quot;london&quot;</span>, <span class="string">&quot;southbank&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;London (Southbank)&quot;</span>,
-        (<span class="string">&quot;nyc&quot;</span>, <span class="string">&quot;lower_manhattan&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Lower Manhattan&quot;</span>,
-        (<span class="string">&quot;nyc&quot;</span>, <span class="string">&quot;midtown_manhattan&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Midtown Manhattan&quot;</span>,
-        (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;center&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Paris (city center)&quot;</span>,
-        (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;north&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Paris (north)&quot;</span>,
-        (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;south&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Paris (south)&quot;</span>,
-        (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;east&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Paris (east)&quot;</span>,
-        (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;west&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Paris (west)&quot;</span>,
-        (<span class="string">&quot;salzburg&quot;</span>, <span class="string">&quot;north&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Salzburg (north)&quot;</span>,
-        (<span class="string">&quot;salzburg&quot;</span>, <span class="string">&quot;south&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Salzburg (south)&quot;</span>,
-        (<span class="string">&quot;salzburg&quot;</span>, <span class="string">&quot;east&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Salzburg (east)&quot;</span>,
-        (<span class="string">&quot;salzburg&quot;</span>, <span class="string">&quot;west&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Salzburg (west)&quot;</span>,
-        (<span class="string">&quot;tel_aviv&quot;</span>, <span class="string">&quot;center&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Tel Aviv (city center)&quot;</span>,
-        (<span class="string">&quot;xian&quot;</span>, <span class="string">&quot;center&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Xi&#39;an (city center)&quot;</span>,
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nice_map_name</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">MapName</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">match</span> <span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">country</span>.<span class="ident">as_ref</span>() {
+        <span class="string">&quot;au&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;melbourne&quot;</span>, <span class="string">&quot;brunswick&quot;</span>) =&gt; <span class="string">&quot;Melbourne (Brunswick)&quot;</span>,
+            (<span class="string">&quot;melbourne&quot;</span>, <span class="string">&quot;dandenong&quot;</span>) =&gt; <span class="string">&quot;Melbourne (Dandenong)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;at&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;salzburg&quot;</span>, <span class="string">&quot;north&quot;</span>) =&gt; <span class="string">&quot;Salzburg (north)&quot;</span>,
+            (<span class="string">&quot;salzburg&quot;</span>, <span class="string">&quot;south&quot;</span>) =&gt; <span class="string">&quot;Salzburg (south)&quot;</span>,
+            (<span class="string">&quot;salzburg&quot;</span>, <span class="string">&quot;east&quot;</span>) =&gt; <span class="string">&quot;Salzburg (east)&quot;</span>,
+            (<span class="string">&quot;salzburg&quot;</span>, <span class="string">&quot;west&quot;</span>) =&gt; <span class="string">&quot;Salzburg (west)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;br&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;sao_paulo&quot;</span>, <span class="string">&quot;aricanduva&quot;</span>) =&gt; <span class="string">&quot;São Paulo (Avenue Aricanduva)&quot;</span>,
+            (<span class="string">&quot;sao_paulo&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;São Paulo (city center)&quot;</span>,
+            (<span class="string">&quot;sao_paulo&quot;</span>, <span class="string">&quot;sao_miguel_paulista&quot;</span>) =&gt; <span class="string">&quot;São Miguel Paulista&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;ca&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;montreal&quot;</span>, <span class="string">&quot;plateau&quot;</span>) =&gt; <span class="string">&quot;Montréal (Plateau)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;ch&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;geneva&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Geneva&quot;</span>,
+            (<span class="string">&quot;zurich&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Zürich (city center)&quot;</span>,
+            (<span class="string">&quot;zurich&quot;</span>, <span class="string">&quot;north&quot;</span>) =&gt; <span class="string">&quot;Zürich (north)&quot;</span>,
+            (<span class="string">&quot;zurich&quot;</span>, <span class="string">&quot;south&quot;</span>) =&gt; <span class="string">&quot;Zürich (south)&quot;</span>,
+            (<span class="string">&quot;zurich&quot;</span>, <span class="string">&quot;east&quot;</span>) =&gt; <span class="string">&quot;Zürich (east)&quot;</span>,
+            (<span class="string">&quot;zurich&quot;</span>, <span class="string">&quot;west&quot;</span>) =&gt; <span class="string">&quot;Zürich (west)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;cz&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;frytek_mistek&quot;</span>, <span class="string">&quot;huge&quot;</span>) =&gt; <span class="string">&quot;Frýdek-Místek (entire area)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;de&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;berlin&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Berlin (city center)&quot;</span>,
+            (<span class="string">&quot;berlin&quot;</span>, <span class="string">&quot;neukolln&quot;</span>) =&gt; <span class="string">&quot;Berlin-Neukölln&quot;</span>,
+            (<span class="string">&quot;bonn&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Bonn (city center)&quot;</span>,
+            (<span class="string">&quot;bonn&quot;</span>, <span class="string">&quot;nordstadt&quot;</span>) =&gt; <span class="string">&quot;Bonn (Nordstadt)&quot;</span>,
+            (<span class="string">&quot;bonn&quot;</span>, <span class="string">&quot;venusberg&quot;</span>) =&gt; <span class="string">&quot;Bonn (Venusberg)&quot;</span>,
+            (<span class="string">&quot;rostock&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Rostock&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;fr&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;charleville_mezieres&quot;</span>, <span class="string">&quot;secteur1&quot;</span>) =&gt; <span class="string">&quot;Charleville-Mézières (secteur 1)&quot;</span>,
+            (<span class="string">&quot;charleville_mezieres&quot;</span>, <span class="string">&quot;secteur2&quot;</span>) =&gt; <span class="string">&quot;Charleville-Mézières (secteur 2)&quot;</span>,
+            (<span class="string">&quot;charleville_mezieres&quot;</span>, <span class="string">&quot;secteur3&quot;</span>) =&gt; <span class="string">&quot;Charleville-Mézières (secteur 3)&quot;</span>,
+            (<span class="string">&quot;charleville_mezieres&quot;</span>, <span class="string">&quot;secteur4&quot;</span>) =&gt; <span class="string">&quot;Charleville-Mézières (secteur 4)&quot;</span>,
+            (<span class="string">&quot;charleville_mezieres&quot;</span>, <span class="string">&quot;secteur5&quot;</span>) =&gt; <span class="string">&quot;Charleville-Mézières (secteur 5)&quot;</span>,
+            (<span class="string">&quot;lyon&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Lyon&quot;</span>,
+            (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Paris (city center)&quot;</span>,
+            (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;north&quot;</span>) =&gt; <span class="string">&quot;Paris (north)&quot;</span>,
+            (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;south&quot;</span>) =&gt; <span class="string">&quot;Paris (south)&quot;</span>,
+            (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;east&quot;</span>) =&gt; <span class="string">&quot;Paris (east)&quot;</span>,
+            (<span class="string">&quot;paris&quot;</span>, <span class="string">&quot;west&quot;</span>) =&gt; <span class="string">&quot;Paris (west)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;gb&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;allerton_bywater&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Allerton Bywater&quot;</span>,
+            (<span class="string">&quot;ashton_park&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Ashton Park&quot;</span>,
+            (<span class="string">&quot;aylesbury&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Aylesbury&quot;</span>,
+            (<span class="string">&quot;aylesham&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Aylesham&quot;</span>,
+            (<span class="string">&quot;bailrigg&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Bailrigg (Lancaster)&quot;</span>,
+            (<span class="string">&quot;bath_riverside&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Bath Riverside&quot;</span>,
+            (<span class="string">&quot;bicester&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Bicester&quot;</span>,
+            (<span class="string">&quot;bradford&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Bradford&quot;</span>,
+            (<span class="string">&quot;brighton&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Brighton&quot;</span>,
+            (<span class="string">&quot;bristol&quot;</span>, <span class="string">&quot;east&quot;</span>) =&gt; <span class="string">&quot;East Bristol&quot;</span>,
+            (<span class="string">&quot;cambridge&quot;</span>, <span class="string">&quot;north&quot;</span>) =&gt; <span class="string">&quot;North Cambridge&quot;</span>,
+            (<span class="string">&quot;castlemead&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Castlemead&quot;</span>,
+            (<span class="string">&quot;chapelford&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Chapelford (Cheshire)&quot;</span>,
+            (<span class="string">&quot;chapeltown_cohousing&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Chapeltown Cohousing&quot;</span>,
+            (<span class="string">&quot;chorlton&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Chorlton&quot;</span>,
+            (<span class="string">&quot;clackers_brook&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Clackers Brook&quot;</span>,
+            (<span class="string">&quot;cricklewood&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Cricklewood&quot;</span>,
+            (<span class="string">&quot;culm&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Culm&quot;</span>,
+            (<span class="string">&quot;derby&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Derby&quot;</span>,
+            (<span class="string">&quot;dickens_heath&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Dickens Heath&quot;</span>,
+            (<span class="string">&quot;didcot&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Didcot (Harwell)&quot;</span>,
+            (<span class="string">&quot;dunton_hills&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Dunton Hills&quot;</span>,
+            (<span class="string">&quot;ebbsfleet&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Ebbsfleet (Dartford)&quot;</span>,
+            (<span class="string">&quot;exeter_red_cow_village&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Exeter Red Cow Village&quot;</span>,
+            (<span class="string">&quot;glenrothes&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Glenrothes (Scotland)&quot;</span>,
+            (<span class="string">&quot;great_kneighton&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Great Kneighton (Cambridge)&quot;</span>,
+            (<span class="string">&quot;halsnhead&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Halsnead&quot;</span>,
+            (<span class="string">&quot;hampton&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Hampton&quot;</span>,
+            (<span class="string">&quot;kergilliack&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Kergilliack&quot;</span>,
+            (<span class="string">&quot;keighley&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Keighley&quot;</span>,
+            (<span class="string">&quot;kidbrooke_village&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Kidbrooke Village&quot;</span>,
+            (<span class="string">&quot;lcid&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Leeds Climate Innovation District&quot;</span>,
+            (<span class="string">&quot;leeds&quot;</span>, <span class="string">&quot;central&quot;</span>) =&gt; <span class="string">&quot;Leeds (city center)&quot;</span>,
+            (<span class="string">&quot;leeds&quot;</span>, <span class="string">&quot;huge&quot;</span>) =&gt; <span class="string">&quot;Leeds (entire area inside motorways)&quot;</span>,
+            (<span class="string">&quot;leeds&quot;</span>, <span class="string">&quot;north&quot;</span>) =&gt; <span class="string">&quot;North Leeds&quot;</span>,
+            (<span class="string">&quot;leeds&quot;</span>, <span class="string">&quot;west&quot;</span>) =&gt; <span class="string">&quot;West Leeds&quot;</span>,
+            (<span class="string">&quot;lockleaze&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Lockleaze&quot;</span>,
+            (<span class="string">&quot;london&quot;</span>, <span class="string">&quot;camden&quot;</span>) =&gt; <span class="string">&quot;Camden&quot;</span>,
+            (<span class="string">&quot;london&quot;</span>, <span class="string">&quot;central&quot;</span>) =&gt; <span class="string">&quot;Central London&quot;</span>,
+            (<span class="string">&quot;london&quot;</span>, <span class="string">&quot;hackney&quot;</span>) =&gt; <span class="string">&quot;Hackney&quot;</span>,
+            (<span class="string">&quot;london&quot;</span>, <span class="string">&quot;kennington&quot;</span>) =&gt; <span class="string">&quot;Kennington (London)&quot;</span>,
+            (<span class="string">&quot;london&quot;</span>, <span class="string">&quot;kingston_upon_thames&quot;</span>) =&gt; <span class="string">&quot;Kingston upon Thames&quot;</span>,
+            (<span class="string">&quot;london&quot;</span>, <span class="string">&quot;southwark&quot;</span>) =&gt; <span class="string">&quot;Southwark&quot;</span>,
+            (<span class="string">&quot;long_marston&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Long Marston (Stratford)&quot;</span>,
+            (<span class="string">&quot;manchester&quot;</span>, <span class="string">&quot;levenshulme&quot;</span>) =&gt; <span class="string">&quot;Levenshulme (Manchester)&quot;</span>,
+            (<span class="string">&quot;marsh_barton&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Marsh Barton&quot;</span>,
+            (<span class="string">&quot;micklefield&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Micklefield&quot;</span>,
+            (<span class="string">&quot;newborough_road&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Newborough Road&quot;</span>,
+            (<span class="string">&quot;newcastle_great_park&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Newcastle Great Park&quot;</span>,
+            (<span class="string">&quot;newcastle_upon_tyne&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Newcastle upon Tyne&quot;</span>,
+            (<span class="string">&quot;nottingham&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Nottingham (city center)&quot;</span>,
+            (<span class="string">&quot;nottingham&quot;</span>, <span class="string">&quot;huge&quot;</span>) =&gt; <span class="string">&quot;Nottingham (entire area)&quot;</span>,
+            (<span class="string">&quot;northwick_park&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Northwick Park&quot;</span>,
+            (<span class="string">&quot;oxford&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Oxford&quot;</span>,
+            (<span class="string">&quot;poundbury&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Poundbury&quot;</span>,
+            (<span class="string">&quot;priors_hall&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Priors Hall&quot;</span>,
+            (<span class="string">&quot;st_albans&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;St Albans&quot;</span>,
+            (<span class="string">&quot;taunton_firepool&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Taunton Firepool&quot;</span>,
+            (<span class="string">&quot;taunton_garden&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Taunton Garden&quot;</span>,
+            (<span class="string">&quot;tresham&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Tresham&quot;</span>,
+            (<span class="string">&quot;trumpington_meadows&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Trumpington Meadows&quot;</span>,
+            (<span class="string">&quot;tyersal_lane&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Tyersal Lane&quot;</span>,
+            (<span class="string">&quot;upton&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Upton&quot;</span>,
+            (<span class="string">&quot;water_lane&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Water Lane&quot;</span>,
+            (<span class="string">&quot;wichelstowe&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Wichelstowe&quot;</span>,
+            (<span class="string">&quot;wixams&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Wixams&quot;</span>,
+            (<span class="string">&quot;wokingham&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Wokingham&quot;</span>,
+            (<span class="string">&quot;wynyard&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Wynyard&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;il&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;tel_aviv&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Tel Aviv (city center)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;in&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;pune&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Pune&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;ir&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;tehran&quot;</span>, <span class="string">&quot;parliament&quot;</span>) =&gt; <span class="string">&quot;Tehran (near Parliament)&quot;</span>,
+            <span class="comment">// TODO I&#39;m not naming the other 9 maps in Tehran, because I&#39;m not sure yet the</span>
+            <span class="comment">// boundaries are the ones that a researcher needs.</span>
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;jp&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;hiroshima&quot;</span>, <span class="string">&quot;uni&quot;</span>) =&gt; <span class="string">&quot;Hiroshima University&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;ly&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;tripoli&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Tripoli&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;nl&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;groningen&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Groningen (city center)&quot;</span>,
+            (<span class="string">&quot;groningen&quot;</span>, <span class="string">&quot;huge&quot;</span>) =&gt; <span class="string">&quot;Groningen (entire area)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;nz&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;auckland&quot;</span>, <span class="string">&quot;mangere&quot;</span>) =&gt; <span class="string">&quot;Māngere (Auckland)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;pl&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;krakow&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Kraków (city center)&quot;</span>,
+            (<span class="string">&quot;warsaw&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Warsaw (city center)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;pt&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;lisbon&quot;</span>, <span class="string">&quot;huge&quot;</span>) =&gt; <span class="string">&quot;Lisbon (entire area)&quot;</span>,
+            (<span class="string">&quot;lisbon&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Lisbon (city center)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;sg&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;jurong&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Jurong&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;tw&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;keelung&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Keelung&quot;</span>,
+            (<span class="string">&quot;taipei&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Taipei (city center)&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="string">&quot;us&quot;</span> =&gt; <span class="kw">match</span> (<span class="ident">name</span>.<span class="ident">city</span>.<span class="ident">city</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">map</span>.<span class="ident">as_ref</span>()) {
+            (<span class="string">&quot;anchorage&quot;</span>, <span class="string">&quot;downtown&quot;</span>) =&gt; <span class="string">&quot;Anchorage&quot;</span>,
+            (<span class="string">&quot;bellevue&quot;</span>, <span class="string">&quot;huge&quot;</span>) =&gt; <span class="string">&quot;Bellevue&quot;</span>,
+            (<span class="string">&quot;beltsville&quot;</span>, <span class="string">&quot;i495&quot;</span>) =&gt; <span class="string">&quot;I-495 in Beltsville, MD&quot;</span>,
+            (<span class="string">&quot;detroit&quot;</span>, <span class="string">&quot;downtown&quot;</span>) =&gt; <span class="string">&quot;Detroit&quot;</span>,
+            (<span class="string">&quot;milwaukee&quot;</span>, <span class="string">&quot;downtown&quot;</span>) =&gt; <span class="string">&quot;Downtown Milwaukee&quot;</span>,
+            (<span class="string">&quot;milwaukee&quot;</span>, <span class="string">&quot;oak_creek&quot;</span>) =&gt; <span class="string">&quot;Oak Creek&quot;</span>,
+            (<span class="string">&quot;mt_vernon&quot;</span>, <span class="string">&quot;burlington&quot;</span>) =&gt; <span class="string">&quot;Burlington&quot;</span>,
+            (<span class="string">&quot;mt_vernon&quot;</span>, <span class="string">&quot;downtown&quot;</span>) =&gt; <span class="string">&quot;Mt. Vernon&quot;</span>,
+            (<span class="string">&quot;nyc&quot;</span>, <span class="string">&quot;fordham&quot;</span>) =&gt; <span class="string">&quot;Fordham&quot;</span>,
+            (<span class="string">&quot;nyc&quot;</span>, <span class="string">&quot;lower_manhattan&quot;</span>) =&gt; <span class="string">&quot;Lower Manhattan&quot;</span>,
+            (<span class="string">&quot;nyc&quot;</span>, <span class="string">&quot;midtown_manhattan&quot;</span>) =&gt; <span class="string">&quot;Midtown Manhattan&quot;</span>,
+            (<span class="string">&quot;nyc&quot;</span>, <span class="string">&quot;downtown_brooklyn&quot;</span>) =&gt; <span class="string">&quot;Downtown Brooklyn&quot;</span>,
+            (<span class="string">&quot;phoenix&quot;</span>, <span class="string">&quot;gilbert&quot;</span>) =&gt; <span class="string">&quot;Gilbert&quot;</span>,
+            (<span class="string">&quot;phoenix&quot;</span>, <span class="string">&quot;tempe&quot;</span>) =&gt; <span class="string">&quot;Tempe&quot;</span>,
+            (<span class="string">&quot;providence&quot;</span>, <span class="string">&quot;downtown&quot;</span>) =&gt; <span class="string">&quot;Providence&quot;</span>,
+            (<span class="string">&quot;san_francisco&quot;</span>, <span class="string">&quot;downtown&quot;</span>) =&gt; <span class="string">&quot;San Francisco&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;arboretum&quot;</span>) =&gt; <span class="string">&quot;Arboretum&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;central_seattle&quot;</span>) =&gt; <span class="string">&quot;Central Seattle&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;downtown&quot;</span>) =&gt; <span class="string">&quot;Downtown Seattle&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;huge_seattle&quot;</span>) =&gt; <span class="string">&quot;Seattle (entire area)&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;lakeslice&quot;</span>) =&gt; <span class="string">&quot;Lake Washington corridor&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;montlake&quot;</span>) =&gt; <span class="string">&quot;Montlake and Eastlake&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;north_seattle&quot;</span>) =&gt; <span class="string">&quot;North Seattle&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;phinney&quot;</span>) =&gt; <span class="string">&quot;Phinney Ridge&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;qa&quot;</span>) =&gt; <span class="string">&quot;Queen Anne&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;slu&quot;</span>) =&gt; <span class="string">&quot;South Lake Union&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;south_seattle&quot;</span>) =&gt; <span class="string">&quot;South Seattle&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;udistrict_ravenna&quot;</span>) =&gt; <span class="string">&quot;University District&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;wallingford&quot;</span>) =&gt; <span class="string">&quot;Wallingford&quot;</span>,
+            (<span class="string">&quot;seattle&quot;</span>, <span class="string">&quot;west_seattle&quot;</span>) =&gt; <span class="string">&quot;West Seattle&quot;</span>,
+            (<span class="string">&quot;tucson&quot;</span>, <span class="string">&quot;center&quot;</span>) =&gt; <span class="string">&quot;Tucson&quot;</span>,
+            <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
+        },
+        <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">map</span>,
     }
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">open_browser</span>(<span class="ident">url</span>: <span class="ident">String</span>) {
-    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">webbrowser</span>::<span class="ident">open</span>(<span class="kw-2">&amp;</span><span class="ident">url</span>);
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nice_country_name</span>(<span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="comment">// If you add something here, please also add the flag to data/system/assets/flags.</span>
+    <span class="comment">// https://github.com/hampusborgos/country-flags/tree/master/svg</span>
+    <span class="kw">match</span> <span class="ident">code</span> {
+        <span class="string">&quot;au&quot;</span> =&gt; <span class="string">&quot;Australia&quot;</span>,
+        <span class="string">&quot;at&quot;</span> =&gt; <span class="string">&quot;Austria&quot;</span>,
+        <span class="string">&quot;br&quot;</span> =&gt; <span class="string">&quot;Brazil&quot;</span>,
+        <span class="string">&quot;ca&quot;</span> =&gt; <span class="string">&quot;Canada&quot;</span>,
+        <span class="string">&quot;ch&quot;</span> =&gt; <span class="string">&quot;Switzerland&quot;</span>,
+        <span class="string">&quot;cz&quot;</span> =&gt; <span class="string">&quot;Czech Republic&quot;</span>,
+        <span class="string">&quot;de&quot;</span> =&gt; <span class="string">&quot;Germany&quot;</span>,
+        <span class="string">&quot;fr&quot;</span> =&gt; <span class="string">&quot;France&quot;</span>,
+        <span class="string">&quot;gb&quot;</span> =&gt; <span class="string">&quot;Great Britain&quot;</span>,
+        <span class="string">&quot;il&quot;</span> =&gt; <span class="string">&quot;Israel&quot;</span>,
+        <span class="string">&quot;in&quot;</span> =&gt; <span class="string">&quot;India&quot;</span>,
+        <span class="string">&quot;ir&quot;</span> =&gt; <span class="string">&quot;Iran&quot;</span>,
+        <span class="string">&quot;jp&quot;</span> =&gt; <span class="string">&quot;Japan&quot;</span>,
+        <span class="string">&quot;ly&quot;</span> =&gt; <span class="string">&quot;Libya&quot;</span>,
+        <span class="string">&quot;nl&quot;</span> =&gt; <span class="string">&quot;Netherlands&quot;</span>,
+        <span class="string">&quot;nz&quot;</span> =&gt; <span class="string">&quot;New Zealand&quot;</span>,
+        <span class="string">&quot;pl&quot;</span> =&gt; <span class="string">&quot;Poland&quot;</span>,
+        <span class="string">&quot;pt&quot;</span> =&gt; <span class="string">&quot;Portugal&quot;</span>,
+        <span class="string">&quot;sg&quot;</span> =&gt; <span class="string">&quot;Singapore&quot;</span>,
+        <span class="string">&quot;tw&quot;</span> =&gt; <span class="string">&quot;Taiwan&quot;</span>,
+        <span class="string">&quot;us&quot;</span> =&gt; <span class="string">&quot;United States of America&quot;</span>,
+        <span class="kw">_</span> =&gt; <span class="ident">code</span>,
+    }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "map_gui";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+
+<span class="doccomment">/// Returns the path to an executable. Native-only.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_exe</span>(<span class="ident">cmd</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">String</span> {
+    <span class="kw">for</span> <span class="ident">dir</span> <span class="kw">in</span> [
+        <span class="comment">// When running from source, prefer release builds, but fallback to debug. This might be</span>
+        <span class="comment">// confusing when developing and not recompiling in release mode.</span>
+        <span class="string">&quot;./target/release&quot;</span>,
+        <span class="string">&quot;../target/release&quot;</span>,
+        <span class="string">&quot;../../target/release&quot;</span>,
+        <span class="string">&quot;./target/debug&quot;</span>,
+        <span class="string">&quot;../target/debug&quot;</span>,
+        <span class="string">&quot;../../target/debug&quot;</span>,
+        <span class="comment">// When running from the .zip release</span>
+        <span class="string">&quot;.&quot;</span>,
+    ] {
+        <span class="comment">// Apparently std::path on Windows doesn&#39;t do any of this correction. We could build up a</span>
+        <span class="comment">// PathBuf properly, I guess</span>
+        <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">windows</span>) {
+            <span class="macro">format!</span>(<span class="string">&quot;{}/{}.exe&quot;</span>, <span class="ident">dir</span>, <span class="ident">cmd</span>).<span class="ident">replace</span>(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;\\&quot;</span>)
+        } <span class="kw">else</span> {
+            <span class="macro">format!</span>(<span class="string">&quot;{}/{}&quot;</span>, <span class="ident">dir</span>, <span class="ident">cmd</span>)
+        };
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">metadata</span>) <span class="op">=</span> <span class="ident">fs_err::metadata</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>) {
+            <span class="kw">if</span> <span class="ident">metadata</span>.<span class="ident">is_file</span>() {
+                <span class="kw">return</span> <span class="ident">path</span>;
+            } <span class="kw">else</span> {
+                <span class="macro">debug!</span>(
+                    <span class="string">&quot;found matching path: {}/{} but it&#39;s not a file.&quot;</span>,
+                    <span class="kw-2">&amp;</span><span class="ident">path</span>, <span class="ident">cmd</span>
+                );
+            }
+        }
+    }
+    <span class="macro">panic!</span>(<span class="string">&quot;Couldn&#39;t find the {} executable. Is it built?&quot;</span>, <span class="ident">cmd</span>);
+}
+
+<span class="doccomment">/// A button to change maps, with default keybindings</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">change_map_btn</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">AppLike</span>) -&gt; <span class="ident">Widget</span> {
+    <span class="ident">ctx</span>.<span class="ident">style</span>()
+        .<span class="ident">btn_popup_icon_text</span>(
+            <span class="string">&quot;system/assets/tools/map.svg&quot;</span>,
+            <span class="ident">nice_map_name</span>(<span class="ident">app</span>.<span class="ident">map</span>().<span class="ident">get_name</span>()),
+        )
+        .<span class="ident">hotkey</span>(<span class="ident">lctrl</span>(<span class="ident">Key::L</span>))
+        .<span class="ident">build_widget</span>(<span class="ident">ctx</span>, <span class="string">&quot;change map&quot;</span>)
+}
+
+<span class="doccomment">/// A button to return to the title screen</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">home_btn</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>) -&gt; <span class="ident">Widget</span> {
+    <span class="ident">ctx</span>.<span class="ident">style</span>()
+        .<span class="ident">btn_plain</span>
+        .<span class="ident">btn</span>()
+        .<span class="ident">image_path</span>(<span class="string">&quot;system/assets/pregame/logo.svg&quot;</span>)
+        .<span class="ident">image_dims</span>(<span class="number">50.0</span>)
+        .<span class="ident">build_widget</span>(<span class="ident">ctx</span>, <span class="string">&quot;Home&quot;</span>)
+}
+
+<span class="doccomment">/// A standard way to group a home button back to the title screen, the title of the current app,</span>
+<span class="doccomment">/// and a button to change maps. Callers must handle the `change map` and `home` click events.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">app_header</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">AppLike</span>, <span class="ident">title</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">Widget</span> {
+    <span class="ident">Widget::col</span>(<span class="macro">vec!</span>[
+        <span class="ident">Widget::row</span>(<span class="macro">vec!</span>[
+            <span class="ident">home_btn</span>(<span class="ident">ctx</span>),
+            <span class="ident">Line</span>(<span class="ident">title</span>).<span class="ident">small_heading</span>().<span class="ident">into_widget</span>(<span class="ident">ctx</span>).<span class="ident">centered_vert</span>(),
+        ]),
+        <span class="ident">change_map_btn</span>(<span class="ident">ctx</span>, <span class="ident">app</span>),
+    ])
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">intersections_from_roads</span>(<span class="ident">roads</span>: <span class="kw-2">&amp;</span><span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">RoadID</span><span class="op">&gt;</span>, <span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="ident">Map</span>) -&gt; <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">IntersectionID</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">BTreeSet::new</span>();
+    <span class="kw">for</span> <span class="ident">r</span> <span class="kw">in</span> <span class="ident">roads</span> {
+        <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> <span class="ident">map</span>.<span class="ident">get_r</span>(<span class="kw-2">*</span><span class="ident">r</span>);
+        <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> [<span class="ident">r</span>.<span class="ident">src_i</span>, <span class="ident">r</span>.<span class="ident">dst_i</span>] {
+            <span class="kw">if</span> <span class="ident">results</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">i</span>) {
+                <span class="kw">continue</span>;
+            }
+            <span class="kw">if</span> <span class="ident">map</span>.<span class="ident">get_i</span>(<span class="ident">i</span>).<span class="ident">roads</span>.<span class="ident">iter</span>().<span class="ident">all</span>(<span class="op">|</span><span class="ident">r</span><span class="op">|</span> <span class="ident">roads</span>.<span class="ident">contains</span>(<span class="ident">r</span>)) {
+                <span class="ident">results</span>.<span class="ident">insert</span>(<span class="ident">i</span>);
+            }
+        }
+    }
+    <span class="ident">results</span>
+}
+
+<span class="doccomment">/// Modify the current URL to set the first free parameter to the current map name.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update_url_map_name</span>(<span class="ident">app</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">AppLike</span>) {
+    <span class="ident">widgetry::tools::URLManager::update_url_free_param</span>(
+        <span class="ident">app</span>.<span class="ident">map</span>()
+            .<span class="ident">get_name</span>()
+            .<span class="ident">path</span>()
+            .<span class="ident">strip_prefix</span>(<span class="kw-2">&amp;</span><span class="ident">abstio::path</span>(<span class="string">&quot;&quot;</span>))
+            .<span class="ident">unwrap</span>()
+            .<span class="ident">to_string</span>(),
+    );
+}
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="map_gui" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>

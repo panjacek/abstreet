@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["SpeedSetting",""]],"struct":[["SpeedControls",""],["TimePanel",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["SpeedSetting",""]],"struct":[["TimePanel",""]]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["make_agent_toggles","`is_enabled`: are (car, bike, bus, pedestrian) toggles enabled returns Widgets for (car, bike, bus, pedestrian)"],["make_tool_panel",""]],"struct":[["MinimapController",""]]};

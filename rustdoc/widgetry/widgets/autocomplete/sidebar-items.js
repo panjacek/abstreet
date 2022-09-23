@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["NUM_SEARCH_RESULTS",""]],"struct":[["Autocomplete",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["Autocomplete",""]]};

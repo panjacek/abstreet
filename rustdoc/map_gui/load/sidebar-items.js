@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["native_loader",""]],"struct":[["FileLoader",""],["FutureLoader",""],["MapAlreadyLoaded",""],["MapLoader",""]]});
+window.SIDEBAR_ITEMS = {"struct":[["MapAlreadyLoaded",""],["MapLoader",""]]};

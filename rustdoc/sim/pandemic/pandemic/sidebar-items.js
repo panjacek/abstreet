@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["Cmd",""]],"struct":[["PandemicModel",""],["SharedSpace",""]]});

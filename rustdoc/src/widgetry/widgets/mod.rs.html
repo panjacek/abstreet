@@ -1,105 +1,102 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `widgetry/src/widgets/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../widgetry/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
-                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `widgetry/src/widgets/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../widgetry/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../widgetry/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../widgetry/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -768,79 +765,219 @@
 <span id="765">765</span>
 <span id="766">766</span>
 <span id="767">767</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashSet</span>;
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
 
-<span class="kw">use</span> <span class="ident">stretch</span>::<span class="ident">geometry</span>::{<span class="ident">Rect</span>, <span class="ident">Size</span>};
-<span class="kw">use</span> <span class="ident">stretch</span>::<span class="ident">node</span>::{<span class="ident">Node</span>, <span class="ident">Stretch</span>};
-<span class="kw">use</span> <span class="ident">stretch</span>::<span class="ident">number</span>::<span class="ident">Number</span>;
-<span class="kw">use</span> <span class="ident">stretch</span>::<span class="ident">style</span>::{
+<span class="kw">use</span> <span class="ident">taffy::geometry</span>::{<span class="ident">Rect</span>, <span class="ident">Size</span>};
+<span class="kw">use</span> <span class="ident">taffy::node</span>::{<span class="ident">Node</span>, <span class="ident">Taffy</span>};
+<span class="kw">use</span> <span class="ident">taffy::number::Number</span>;
+<span class="kw">use</span> <span class="ident">taffy::style</span>::{
     <span class="ident">AlignItems</span>, <span class="ident">Dimension</span>, <span class="ident">FlexDirection</span>, <span class="ident">FlexWrap</span>, <span class="ident">JustifyContent</span>, <span class="ident">PositionType</span>, <span class="ident">Style</span>,
 };
 
-<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Distance</span>, <span class="ident">Percent</span>, <span class="ident">Polygon</span>};
+<span class="kw">use</span> <span class="ident">abstutil::CloneableAny</span>;
+<span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">CornerRadii</span>, <span class="ident">Distance</span>, <span class="ident">Percent</span>, <span class="ident">Polygon</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">widgets</span>::<span class="ident">containers</span>::{<span class="ident">Container</span>, <span class="ident">Nothing</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">widgets</span>::<span class="ident">panel</span>::<span class="ident">Panel</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::widgets::containers</span>::{<span class="ident">Container</span>, <span class="ident">Nothing</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::widgets::panel</span>::{<span class="ident">Panel</span>, <span class="ident">PanelBuilder</span>, <span class="ident">PanelDims</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">Button</span>, <span class="ident">Checkbox</span>, <span class="ident">Choice</span>, <span class="ident">Color</span>, <span class="ident">DeferDraw</span>, <span class="ident">DrawWithTooltips</span>, <span class="ident">Drawable</span>, <span class="ident">Dropdown</span>, <span class="ident">EventCtx</span>,
-    <span class="ident">GeomBatch</span>, <span class="ident">GfxCtx</span>, <span class="ident">JustDraw</span>, <span class="ident">Menu</span>, <span class="ident">RewriteColor</span>, <span class="ident">ScreenDims</span>, <span class="ident">ScreenPt</span>, <span class="ident">ScreenRectangle</span>, <span class="ident">Text</span>,
-    <span class="ident">TextBox</span>,
+    <span class="ident">Button</span>, <span class="ident">Choice</span>, <span class="ident">Color</span>, <span class="ident">DeferDraw</span>, <span class="ident">Drawable</span>, <span class="ident">Dropdown</span>, <span class="ident">EventCtx</span>, <span class="ident">GeomBatch</span>, <span class="ident">GfxCtx</span>, <span class="ident">JustDraw</span>,
+    <span class="ident">OutlineStyle</span>, <span class="ident">ScreenDims</span>, <span class="ident">ScreenPt</span>, <span class="ident">ScreenRectangle</span>, <span class="ident">Text</span>, <span class="ident">Toggle</span>,
 };
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">autocomplete</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">button</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">checkbox</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">compare_times</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">containers</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">drag_drop</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">dropdown</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">fan_chart</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">filler</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">image</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">just_draw</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">line_plot</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">menu</span>;
 <span class="kw">mod</span> <span class="ident">panel</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">persistent_split</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">plots</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">scatter_plot</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">slider</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">spinner</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">stash</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">table</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tabs</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">text_box</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">toggle</span>;
+
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">DEFAULT_CORNER_RADIUS</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="number">5.0</span>;
 
 <span class="doccomment">/// Create a new widget by implementing this trait. You can instantiate your widget by calling</span>
 <span class="doccomment">/// `Widget::new(Box::new(instance of your new widget))`, which gives you the usual style options.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">WidgetImpl</span>: <span class="ident">downcast_rs</span>::<span class="ident">Downcast</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">WidgetImpl</span>: <span class="ident">downcast_rs::Downcast</span> {
     <span class="doccomment">/// What width and height does the widget occupy? If this changes, be sure to set</span>
     <span class="doccomment">/// `redo_layout` to true in `event`.</span>
-    <span class="kw">fn</span> <span class="ident">get_dims</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ScreenDims</span>;
+    <span class="kw">fn</span> <span class="ident">get_dims</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">ScreenDims</span>;
     <span class="doccomment">/// Your widget&#39;s top left corner should be here. Handle mouse events and draw appropriately.</span>
-    <span class="kw">fn</span> <span class="ident">set_pos</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">top_left</span>: <span class="ident">ScreenPt</span>);
+    <span class="kw">fn</span> <span class="ident">set_pos</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">top_left</span>: <span class="ident">ScreenPt</span>);
     <span class="doccomment">/// Your chance to react to an event. Any side effects outside of this widget are communicated</span>
     <span class="doccomment">/// through the output.</span>
-    <span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">WidgetOutput</span>);
+    <span class="kw">fn</span> <span class="ident">event</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">EventCtx</span>, <span class="ident">output</span>: <span class="kw-2">&amp;mut</span> <span class="ident">WidgetOutput</span>);
     <span class="doccomment">/// Draw the widget. Be sure to draw relative to the top-left specified by `set_pos`.</span>
-    <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GfxCtx</span>);
+    <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GfxCtx</span>);
     <span class="doccomment">/// If a new Panel is being created to replace an older one, all widgets have the chance to</span>
     <span class="doccomment">/// preserve state from the previous version.</span>
-    <span class="kw">fn</span> <span class="ident">can_restore</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">can_restore</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="bool-val">false</span>
     }
     <span class="doccomment">/// Restore state from the previous version of this widget, with the same ID. Implementors must</span>
     <span class="doccomment">/// downcast.</span>
-    <span class="kw">fn</span> <span class="ident">restore</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">_prev</span>: <span class="kw-2">&amp;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">WidgetImpl</span><span class="op">&gt;</span>) {
-        <span class="macro">unreachable</span><span class="macro">!</span>()
+    <span class="kw">fn</span> <span class="ident">restore</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut</span> <span class="ident">EventCtx</span>, <span class="ident">_prev</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">WidgetImpl</span>) {
+        <span class="macro">unreachable!</span>()
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="doccomment">/// The result of a Panel handling an event</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Outcome</span> {
     <span class="doccomment">/// An action was done</span>
     <span class="ident">Clicked</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// A dropdown, checkbox, spinner, etc changed values. Usually this triggers a refresh of</span>
-    <span class="doccomment">/// everything, so not useful to plumb along what changed.</span>
-    <span class="ident">Changed</span>,
+    <span class="doccomment">/// An action was done, with custom data. The caller must cast to the proper type.</span>
+    <span class="ident">ClickCustom</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">CloneableAny</span><span class="op">&gt;</span>),
+    <span class="doccomment">/// A dropdown, checkbox, spinner, etc changed values. The name of the changed widget is</span>
+    <span class="doccomment">/// returned, but not the value, since its type is generic.</span>
+    <span class="ident">Changed</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// On a DragDrop widget, a member was clicked on and released. Its position may have changed.</span>
+    <span class="doccomment">/// (name, orig_idx, new_idx)</span>
+    <span class="ident">DragDropReleased</span>(<span class="ident">String</span>, <span class="ident">usize</span>, <span class="ident">usize</span>),
+    <span class="doccomment">/// Some named widget currently holds focus</span>
+    <span class="ident">Focused</span>(<span class="ident">String</span>),
     <span class="doccomment">/// Nothing happened</span>
     <span class="ident">Nothing</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">Outcome</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">describe</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">Outcome::Clicked</span>(<span class="ident">x</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;Outcome::Clicked({x})&quot;</span>),
+            <span class="ident">Outcome::ClickCustom</span>(<span class="kw">_</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;Outcome::ClickCustom(???)&quot;</span>),
+            <span class="ident">Outcome::Changed</span>(<span class="ident">x</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;Outcome::Changed({x})&quot;</span>),
+            <span class="ident">Outcome::DragDropReleased</span>(<span class="ident">x</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;Outcome::DragDropReleased({x}, ...)&quot;</span>),
+            <span class="ident">Outcome::Focused</span>(<span class="ident">x</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;Outcome::Focused({x})&quot;</span>),
+            <span class="ident">Outcome::Nothing</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;Outcome::Nothing&quot;</span>),
+        }
+    }
+}
+
+<span class="doccomment">/// When an action happens through a button-like widget, what data is plumbed back?</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ClickOutcome</span> {
+    <span class="ident">Label</span>(<span class="ident">String</span>),
+    <span class="ident">Custom</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">CloneableAny</span><span class="op">&gt;</span>),
 }
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">WidgetOutput</span> {
@@ -852,19 +989,19 @@
 }
 
 <span class="kw">impl</span> <span class="ident">WidgetOutput</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">WidgetOutput</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">WidgetOutput</span> {
         <span class="ident">WidgetOutput</span> {
             <span class="ident">redo_layout</span>: <span class="bool-val">false</span>,
-            <span class="ident">outcome</span>: <span class="ident">Outcome</span>::<span class="ident">Nothing</span>,
+            <span class="ident">outcome</span>: <span class="ident">Outcome::Nothing</span>,
         }
     }
 }
 
-<span class="ident">downcast_rs</span>::<span class="macro">impl_downcast</span><span class="macro">!</span>(<span class="ident">WidgetImpl</span>);
+<span class="macro">downcast_rs::impl_downcast!</span>(<span class="ident">WidgetImpl</span>);
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Widget</span> {
     <span class="comment">// TODO pub just for Container. Just move that here?</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">widget</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">WidgetImpl</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">widget</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">WidgetImpl</span><span class="op">&gt;</span>,
     <span class="ident">layout</span>: <span class="ident">LayoutStyle</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">rect</span>: <span class="ident">ScreenRectangle</span>,
     <span class="ident">bg</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Drawable</span><span class="op">&gt;</span>,
@@ -873,12 +1010,35 @@
     <span class="ident">id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 }
 
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CornerRounding</span> {
+    <span class="ident">CornerRadii</span>(<span class="ident">CornerRadii</span>),
+    <span class="ident">FullyRounded</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">std::convert::From</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CornerRounding</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">uniform</span>: <span class="ident">f64</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident">CornerRounding::CornerRadii</span>(<span class="ident">uniform</span>.<span class="ident">into</span>())
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">std::convert::From</span><span class="op">&lt;</span><span class="ident">CornerRadii</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CornerRounding</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">radii</span>: <span class="ident">CornerRadii</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident">CornerRounding::CornerRadii</span>(<span class="ident">radii</span>)
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">CornerRounding</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
+        <span class="ident">CornerRounding::CornerRadii</span>(<span class="ident">CornerRadii::default</span>())
+    }
+}
+
 <span class="kw">struct</span> <span class="ident">LayoutStyle</span> {
     <span class="ident">bg_color</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Color</span><span class="op">&gt;</span>,
     <span class="comment">// (thickness, color)</span>
     <span class="ident">outline</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">f64</span>, <span class="ident">Color</span>)<span class="op">&gt;</span>,
-    <span class="comment">// If None, as round as possible</span>
-    <span class="ident">rounded_radius</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
+    <span class="ident">corner_rounding</span>: <span class="ident">CornerRounding</span>,
     <span class="ident">style</span>: <span class="ident">Style</span>,
 }
 
@@ -887,424 +1047,455 @@
 <span class="comment">// apply margin to everything in a row or column.</span>
 <span class="comment">// TODO Row and columns feel backwards when using them.</span>
 <span class="kw">impl</span> <span class="ident">Widget</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">centered</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">align_items</span> <span class="op">=</span> <span class="ident">AlignItems</span>::<span class="ident">Center</span>;
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">justify_content</span> <span class="op">=</span> <span class="ident">JustifyContent</span>::<span class="ident">SpaceAround</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">centered</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">align_items</span> <span class="op">=</span> <span class="ident">AlignItems::Center</span>;
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">justify_content</span> <span class="op">=</span> <span class="ident">JustifyContent::SpaceAround</span>;
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">centered_horiz</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">Widget</span>::<span class="ident">row</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="self">self</span>]).<span class="ident">centered</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">centered_horiz</span>(<span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident">Widget::row</span>(<span class="macro">vec!</span>[<span class="self">self</span>]).<span class="ident">centered</span>()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">centered_vert</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">Widget</span>::<span class="ident">col</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="self">self</span>]).<span class="ident">centered</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">centered_vert</span>(<span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident">Widget::col</span>(<span class="macro">vec!</span>[<span class="self">self</span>]).<span class="ident">centered</span>()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">centered_cross</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">align_items</span> <span class="op">=</span> <span class="ident">AlignItems</span>::<span class="ident">Center</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">centered_cross</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">align_items</span> <span class="op">=</span> <span class="ident">AlignItems::Center</span>;
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">evenly_spaced</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">justify_content</span> <span class="op">=</span> <span class="ident">JustifyContent</span>::<span class="ident">SpaceBetween</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">evenly_spaced</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">justify_content</span> <span class="op">=</span> <span class="ident">JustifyContent::SpaceBetween</span>;
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fill_width</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span>.<span class="ident">width</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Percent</span>(<span class="number">1.0</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fill_width</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span>.<span class="ident">width</span> <span class="op">=</span> <span class="ident">Dimension::Percent</span>(<span class="number">1.0</span>);
         <span class="self">self</span>
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fill_height</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span>.<span class="ident">height</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Percent</span>(<span class="number">1.0</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fill_height</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span>.<span class="ident">height</span> <span class="op">=</span> <span class="ident">Dimension::Percent</span>(<span class="number">1.0</span>);
         <span class="self">self</span>
     }
 
-    <span class="comment">// This one is really weird. percent_width should be LESS than the max_size_percent given to</span>
-    <span class="comment">// the overall Panel, otherwise weird things happen.</span>
-    <span class="comment">// Only makes sense for rows/columns.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flex_wrap</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">width</span>: <span class="ident">Percent</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
+    <span class="doccomment">/// This one is really weird. percent_width should be LESS than the max_size_percent given to</span>
+    <span class="doccomment">/// the overall Panel, otherwise weird things happen.</span>
+    <span class="doccomment">/// Only makes sense for rows/columns.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flex_wrap</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">width</span>: <span class="ident">Percent</span>) -&gt; <span class="ident">Widget</span> {
         <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">Size</span> {
-            <span class="ident">width</span>: <span class="ident">Dimension</span>::<span class="ident">Points</span>((<span class="ident">ctx</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span> <span class="op">*</span> <span class="ident">width</span>.<span class="ident">inner</span>()) <span class="kw">as</span> <span class="ident">f32</span>),
-            <span class="ident">height</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
+            <span class="ident">width</span>: <span class="ident">Dimension::Points</span>((<span class="ident">ctx</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span> <span class="op">*</span> <span class="ident">width</span>.<span class="ident">inner</span>()) <span class="kw">as</span> <span class="ident">f32</span>),
+            <span class="ident">height</span>: <span class="ident">Dimension::Undefined</span>,
         };
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">flex_wrap</span> <span class="op">=</span> <span class="ident">FlexWrap</span>::<span class="ident">Wrap</span>;
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">justify_content</span> <span class="op">=</span> <span class="ident">JustifyContent</span>::<span class="ident">SpaceAround</span>;
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">flex_wrap</span> <span class="op">=</span> <span class="ident">FlexWrap::Wrap</span>;
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">justify_content</span> <span class="op">=</span> <span class="ident">JustifyContent::SpaceAround</span>;
         <span class="self">self</span>
     }
-    <span class="comment">// Only for rows/columns. Used to force table columns to line up.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">force_width</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">width</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span>.<span class="ident">width</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">width</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="doccomment">/// Like flex_wrap, but doesn&#39;t horizontally space out widgets on the same row.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flex_wrap_no_inner_spacing</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">width</span>: <span class="ident">Percent</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">Size</span> {
+            <span class="ident">width</span>: <span class="ident">Dimension::Points</span>((<span class="ident">ctx</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span> <span class="op">*</span> <span class="ident">width</span>.<span class="ident">inner</span>()) <span class="kw">as</span> <span class="ident">f32</span>),
+            <span class="ident">height</span>: <span class="ident">Dimension::Undefined</span>,
+        };
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">flex_wrap</span> <span class="op">=</span> <span class="ident">FlexWrap::Wrap</span>;
         <span class="self">self</span>
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">force_width_pct</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">width</span>: <span class="ident">Percent</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
+    <span class="doccomment">/// Only for rows/columns. Used to force table columns to line up.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">force_width</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">width</span>: <span class="ident">f64</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span>.<span class="ident">width</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">width</span> <span class="kw">as</span> <span class="ident">f32</span>);
+        <span class="self">self</span>
+    }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">force_width_window_pct</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">width</span>: <span class="ident">Percent</span>) -&gt; <span class="ident">Widget</span> {
         <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span>.<span class="ident">width</span> <span class="op">=</span>
-            <span class="ident">Dimension</span>::<span class="ident">Points</span>((<span class="ident">ctx</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span> <span class="op">*</span> <span class="ident">width</span>.<span class="ident">inner</span>()) <span class="kw">as</span> <span class="ident">f32</span>);
+            <span class="ident">Dimension::Points</span>((<span class="ident">ctx</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span> <span class="op">*</span> <span class="ident">width</span>.<span class="ident">inner</span>()) <span class="kw">as</span> <span class="ident">f32</span>);
+        <span class="self">self</span>
+    }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">force_width_parent_pct</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">width</span>: <span class="ident">f64</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">size</span>.<span class="ident">width</span> <span class="op">=</span> <span class="ident">Dimension::Percent</span>(<span class="ident">width</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
 
-    <span class="comment">// Needed for force_width.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_width_for_forcing</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+    <span class="doccomment">/// Needed for force_width.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_width_for_forcing</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
         <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">get_dims</span>().<span class="ident">width</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bg</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bg</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) -&gt; <span class="ident">Widget</span> {
         <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">bg_color</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>);
         <span class="self">self</span>
     }
 
-    <span class="comment">// Callers have to adjust padding too, probably</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">outline</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">thickness</span>: <span class="ident">f64</span>, <span class="ident">color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">outline</span> <span class="op">=</span> <span class="prelude-val">Some</span>((<span class="ident">thickness</span>, <span class="ident">color</span>));
-        <span class="self">self</span>
-    }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fully_rounded</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">rounded_radius</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+    <span class="doccomment">/// Callers have to adjust padding too, probably</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">outline</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">style</span>: <span class="ident">OutlineStyle</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">outline</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">style</span>);
         <span class="self">self</span>
     }
 
-    <span class="comment">// Things like padding don&#39;t work on many widgets, so just make a convenient way to wrap in a</span>
-    <span class="comment">// row/column first</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">container</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">Widget</span>::<span class="ident">row</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="self">self</span>])
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">corner_rounding</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">CornerRounding</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">R</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">corner_rounding</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Things like padding don&#39;t work on many widgets, so just make a convenient way to wrap in a</span>
+    <span class="doccomment">/// row/column first</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">container</span>(<span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident">Widget::row</span>(<span class="macro">vec!</span>[<span class="self">self</span>])
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">section</span>(<span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">bg</span>(<span class="ident">ctx</span>.<span class="ident">style</span>().<span class="ident">section_bg</span>)
+            .<span class="ident">padding</span>(<span class="number">16</span>)
+            .<span class="ident">outline</span>(<span class="ident">ctx</span>.<span class="ident">style</span>().<span class="ident">section_outline</span>)
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tab_body</span>(<span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tab_body</span> <span class="op">=</span>
+            <span class="self">self</span>.<span class="ident">bg</span>(<span class="ident">ctx</span>.<span class="ident">style</span>().<span class="ident">section_bg</span>)
+                .<span class="ident">padding</span>(<span class="number">16</span>)
+                .<span class="ident">corner_rounding</span>(<span class="ident">CornerRadii</span> {
+                    <span class="ident">top_left</span>: <span class="number">0.0</span>,
+                    <span class="ident">top_right</span>: <span class="ident">DEFAULT_CORNER_RADIUS</span>,
+                    <span class="ident">bottom_left</span>: <span class="ident">DEFAULT_CORNER_RADIUS</span>,
+                    <span class="ident">bottom_right</span>: <span class="ident">DEFAULT_CORNER_RADIUS</span>,
+                });
+
+        <span class="comment">// really short tab bodies look out of place in the panels</span>
+        <span class="ident">tab_body</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">min_size</span>.<span class="ident">height</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="number">200.0</span>);
+        <span class="ident">tab_body</span>
     }
 
     <span class="comment">// TODO Maybe panic if we call this on a non-container</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">EdgeInsets</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">insets</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">EdgeInsets</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">insets</span>: <span class="ident">I</span>) -&gt; <span class="ident">Widget</span> {
         <span class="kw">let</span> <span class="ident">insets</span> <span class="op">=</span> <span class="ident">insets</span>.<span class="ident">into</span>();
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span> <span class="op">=</span> <span class="ident">Rect</span>::<span class="ident">from</span>(<span class="ident">insets</span>);
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span> <span class="op">=</span> <span class="ident">Rect::from</span>(<span class="ident">insets</span>);
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding_top</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span>.<span class="ident">top</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding_top</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span>.<span class="ident">top</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding_left</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span>.<span class="ident">start</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding_left</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span>.<span class="ident">start</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding_bottom</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span>.<span class="ident">bottom</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding_bottom</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span>.<span class="ident">bottom</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding_right</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span>.<span class="ident">end</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">padding_right</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">padding</span>.<span class="ident">end</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">EdgeInsets</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">insets</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">EdgeInsets</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">insets</span>: <span class="ident">I</span>) -&gt; <span class="ident">Widget</span> {
         <span class="kw">let</span> <span class="ident">insets</span> <span class="op">=</span> <span class="ident">insets</span>.<span class="ident">into</span>();
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span> <span class="op">=</span> <span class="ident">Rect</span>::<span class="ident">from</span>(<span class="ident">insets</span>);
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span> <span class="op">=</span> <span class="ident">Rect::from</span>(<span class="ident">insets</span>);
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_above</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">top</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_above</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">top</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_below</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">bottom</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_below</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">bottom</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_left</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">start</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_left</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">start</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_right</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">end</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_right</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">end</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_horiz</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">start</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">end</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_horiz</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">start</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">end</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_vert</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">top</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">bottom</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
-        <span class="self">self</span>
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align_left</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">end</span> <span class="op">=</span> <span class="ident">Dimension</span>::<span class="ident">Auto</span>;
-        <span class="self">self</span>
-    }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align_right</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span> <span class="op">=</span> <span class="ident">Rect</span> {
-            <span class="ident">start</span>: <span class="ident">Dimension</span>::<span class="ident">Auto</span>,
-            <span class="ident">end</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
-            <span class="ident">top</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
-            <span class="ident">bottom</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
-        };
-        <span class="self">self</span>
-    }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align_bottom</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span> <span class="op">=</span> <span class="ident">Rect</span> {
-            <span class="ident">start</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
-            <span class="ident">end</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
-            <span class="ident">top</span>: <span class="ident">Dimension</span>::<span class="ident">Auto</span>,
-            <span class="ident">bottom</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
-        };
-        <span class="self">self</span>
-    }
-    <span class="comment">// This doesn&#39;t count against the entire container</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align_vert_center</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span> <span class="op">=</span> <span class="ident">Rect</span> {
-            <span class="ident">start</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
-            <span class="ident">end</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
-            <span class="ident">top</span>: <span class="ident">Dimension</span>::<span class="ident">Auto</span>,
-            <span class="ident">bottom</span>: <span class="ident">Dimension</span>::<span class="ident">Auto</span>,
-        };
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">margin_vert</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">pixels</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">top</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">bottom</span> <span class="op">=</span> <span class="ident">Dimension::Points</span>(<span class="ident">pixels</span> <span class="kw">as</span> <span class="ident">f32</span>);
         <span class="self">self</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">abs</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">y</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">position_type</span> <span class="op">=</span> <span class="ident">PositionType</span>::<span class="ident">Absolute</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align_left</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span>.<span class="ident">end</span> <span class="op">=</span> <span class="ident">Dimension::Auto</span>;
+        <span class="self">self</span>
+    }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align_right</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span> <span class="op">=</span> <span class="ident">Rect</span> {
+            <span class="ident">start</span>: <span class="ident">Dimension::Auto</span>,
+            <span class="ident">end</span>: <span class="ident">Dimension::Undefined</span>,
+            <span class="ident">top</span>: <span class="ident">Dimension::Undefined</span>,
+            <span class="ident">bottom</span>: <span class="ident">Dimension::Undefined</span>,
+        };
+        <span class="self">self</span>
+    }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align_bottom</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span> <span class="op">=</span> <span class="ident">Rect</span> {
+            <span class="ident">start</span>: <span class="ident">Dimension::Undefined</span>,
+            <span class="ident">end</span>: <span class="ident">Dimension::Undefined</span>,
+            <span class="ident">top</span>: <span class="ident">Dimension::Auto</span>,
+            <span class="ident">bottom</span>: <span class="ident">Dimension::Undefined</span>,
+        };
+        <span class="self">self</span>
+    }
+    <span class="doccomment">/// This doesn&#39;t count against the entire container</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">align_vert_center</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">margin</span> <span class="op">=</span> <span class="ident">Rect</span> {
+            <span class="ident">start</span>: <span class="ident">Dimension::Undefined</span>,
+            <span class="ident">end</span>: <span class="ident">Dimension::Undefined</span>,
+            <span class="ident">top</span>: <span class="ident">Dimension::Auto</span>,
+            <span class="ident">bottom</span>: <span class="ident">Dimension::Auto</span>,
+        };
+        <span class="self">self</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">abs</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="ident">f64</span>, <span class="ident">y</span>: <span class="ident">f64</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">position_type</span> <span class="op">=</span> <span class="ident">PositionType::Absolute</span>;
         <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">position</span> <span class="op">=</span> <span class="ident">Rect</span> {
-            <span class="ident">start</span>: <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">x</span> <span class="kw">as</span> <span class="ident">f32</span>),
-            <span class="ident">end</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
-            <span class="ident">top</span>: <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">y</span> <span class="kw">as</span> <span class="ident">f32</span>),
-            <span class="ident">bottom</span>: <span class="ident">Dimension</span>::<span class="ident">Undefined</span>,
+            <span class="ident">start</span>: <span class="ident">Dimension::Points</span>(<span class="ident">x</span> <span class="kw">as</span> <span class="ident">f32</span>),
+            <span class="ident">end</span>: <span class="ident">Dimension::Undefined</span>,
+            <span class="ident">top</span>: <span class="ident">Dimension::Points</span>(<span class="ident">y</span> <span class="kw">as</span> <span class="ident">f32</span>),
+            <span class="ident">bottom</span>: <span class="ident">Dimension::Undefined</span>,
         };
         <span class="self">self</span>
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">named</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">named</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">I</span>) -&gt; <span class="ident">Widget</span> {
         <span class="self">self</span>.<span class="ident">id</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">id</span>.<span class="ident">into</span>());
         <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// If the argument is true, don&#39;t actually create this widget. May be more readable than an</span>
+    <span class="doccomment">/// if/else block.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hide</span>(<span class="self">self</span>, <span class="ident">x</span>: <span class="ident">bool</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="kw">if</span> <span class="ident">x</span> {
+            <span class="ident">Widget::nothing</span>()
+        } <span class="kw">else</span> {
+            <span class="self">self</span>
+        }
     }
 }
 
 <span class="comment">// Convenient?? constructors</span>
 <span class="kw">impl</span> <span class="ident">Widget</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">widget</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">WidgetImpl</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">widget</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">WidgetImpl</span><span class="op">&gt;</span>) -&gt; <span class="ident">Widget</span> {
         <span class="ident">Widget</span> {
             <span class="ident">widget</span>,
             <span class="ident">layout</span>: <span class="ident">LayoutStyle</span> {
                 <span class="ident">bg_color</span>: <span class="prelude-val">None</span>,
                 <span class="ident">outline</span>: <span class="prelude-val">None</span>,
-                <span class="ident">rounded_radius</span>: <span class="prelude-val">Some</span>(<span class="number">5.0</span>),
+                <span class="ident">corner_rounding</span>: <span class="ident">CornerRounding::from</span>(<span class="ident">DEFAULT_CORNER_RADIUS</span>),
                 <span class="ident">style</span>: <span class="ident">Style</span> {
-                    ..<span class="ident">Default</span>::<span class="ident">default</span>()
+                    ..<span class="ident">Default::default</span>()
                 },
             },
-            <span class="ident">rect</span>: <span class="ident">ScreenRectangle</span>::<span class="ident">placeholder</span>(),
+            <span class="ident">rect</span>: <span class="ident">ScreenRectangle::placeholder</span>(),
             <span class="ident">bg</span>: <span class="prelude-val">None</span>,
             <span class="ident">bg_batch</span>: <span class="prelude-val">None</span>,
             <span class="ident">id</span>: <span class="prelude-val">None</span>,
         }
     }
 
-    <span class="comment">// TODO These are literally just convenient APIs to avoid importing JustDraw. Do we want this</span>
-    <span class="comment">// or not?</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">draw_batch</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">batch</span>: <span class="ident">GeomBatch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">JustDraw</span>::<span class="ident">wrap</span>(<span class="ident">ctx</span>, <span class="ident">batch</span>)
-    }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">draw_svg</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">filename</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">JustDraw</span>::<span class="ident">svg</span>(<span class="ident">ctx</span>, <span class="ident">filename</span>.<span class="ident">into</span>())
-    }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">draw_svg_transform</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">filename</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">rewrite</span>: <span class="ident">RewriteColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">JustDraw</span>::<span class="ident">svg_transform</span>(<span class="ident">ctx</span>, <span class="ident">filename</span>, <span class="ident">rewrite</span>)
-    }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">draw_svg_with_tooltip</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>,
-        <span class="ident">filename</span>: <span class="ident">I</span>,
-        <span class="ident">tooltip</span>: <span class="ident">Text</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">batch</span>, <span class="ident">bounds</span>) <span class="op">=</span> <span class="kw">crate</span>::<span class="ident">svg</span>::<span class="ident">load_svg</span>(<span class="ident">ctx</span>.<span class="ident">prerender</span>, <span class="kw-2">&amp;</span><span class="ident">filename</span>.<span class="ident">into</span>());
-        <span class="comment">// Preserve the whitespace in the SVG.</span>
-        <span class="comment">// TODO Maybe always do this, add a way to autocrop() to remove it if needed.</span>
-        <span class="ident">batch</span>.<span class="ident">push</span>(<span class="ident">Color</span>::<span class="ident">INVISIBLE</span>, <span class="ident">bounds</span>.<span class="ident">get_rectangle</span>());
-        <span class="ident">DrawWithTooltips</span>::<span class="ident">new</span>(
-            <span class="ident">ctx</span>,
-            <span class="ident">batch</span>,
-            <span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">bounds</span>.<span class="ident">get_rectangle</span>(), <span class="ident">tooltip</span>)],
-            <span class="ident">Box</span>::<span class="ident">new</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">GeomBatch</span>::<span class="ident">new</span>()),
-        )
-    }
-
-    <span class="comment">// TODO Likewise</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">text_entry</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">prefilled</span>: <span class="ident">String</span>, <span class="ident">exclusive_focus</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="comment">// TODO Hardcoded style, max chars</span>
-        <span class="ident">Widget</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">TextBox</span>::<span class="ident">new</span>(<span class="ident">ctx</span>, <span class="number">50</span>, <span class="ident">prefilled</span>, <span class="ident">exclusive_focus</span>)))
-    }
-
-    <span class="comment">// TODO Likewise</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dropdown</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span>, <span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="comment">// TODO Change this to Dropdown::widget</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dropdown</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">std::fmt::Debug</span>, <span class="ident">I</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>,
         <span class="ident">label</span>: <span class="ident">I</span>,
         <span class="ident">default_value</span>: <span class="ident">T</span>,
         <span class="ident">choices</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Choice</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="kw">let</span> <span class="ident">label</span> <span class="op">=</span> <span class="ident">label</span>.<span class="ident">into</span>();
-        <span class="ident">Widget</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Dropdown</span>::<span class="ident">new</span>(
+    ) -&gt; <span class="ident">Widget</span> {
+        <span class="kw">let</span> <span class="ident">label</span> <span class="op">=</span> <span class="ident">label</span>.<span class="ident">as_ref</span>();
+        <span class="ident">Widget::new</span>(<span class="ident">Box::new</span>(<span class="ident">Dropdown::new</span>(
             <span class="ident">ctx</span>,
-            <span class="kw-2">&amp;</span><span class="ident">label</span>,
+            <span class="ident">label</span>,
             <span class="ident">default_value</span>,
             <span class="ident">choices</span>,
             <span class="bool-val">false</span>,
         )))
         .<span class="ident">named</span>(<span class="ident">label</span>)
-        <span class="comment">// Why is this still required? The button Dropdown uses *already* has an outline</span>
-        .<span class="ident">outline</span>(<span class="ident">ctx</span>.<span class="ident">style</span>().<span class="ident">outline_thickness</span>, <span class="ident">ctx</span>.<span class="ident">style</span>().<span class="ident">outline_color</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">custom_row</span>(<span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">Widget</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Container</span>::<span class="ident">new</span>(<span class="bool-val">true</span>, <span class="ident">widgets</span>)))
+    <span class="doccomment">/// Creates a row with the specified widgets. No margins or other layouting is applied.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">custom_row</span>(<span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident">Widget::new</span>(<span class="ident">Box::new</span>(<span class="ident">Container::new</span>(<span class="bool-val">true</span>, <span class="ident">widgets</span>)))
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">row</span>(<span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+
+    <span class="doccomment">/// Creates a row with the specified widgets. Every member gets a default horizontal margin.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">row</span>(<span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident">Widget::evenly_spaced_row</span>(<span class="number">10</span>, <span class="ident">widgets</span>)
+    }
+
+    <span class="doccomment">/// Creates a row with the specified widgets, with a `spacing` sized margin between members</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">evenly_spaced_row</span>(<span class="ident">spacing</span>: <span class="ident">usize</span>, <span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">widgets</span>.<span class="ident">len</span>();
         <span class="comment">// TODO Time for that is_last iterator?</span>
         <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">w</span>) <span class="kw">in</span> <span class="ident">widgets</span>.<span class="ident">into_iter</span>().<span class="ident">enumerate</span>() {
-            <span class="kw">if</span> <span class="ident">idx</span> <span class="op">=</span><span class="op">=</span> <span class="ident">len</span> <span class="op">-</span> <span class="number">1</span> {
+            <span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="ident">len</span> <span class="op">-</span> <span class="number">1</span> {
                 <span class="ident">new</span>.<span class="ident">push</span>(<span class="ident">w</span>);
             } <span class="kw">else</span> {
-                <span class="ident">new</span>.<span class="ident">push</span>(<span class="ident">w</span>.<span class="ident">margin_right</span>(<span class="number">10</span>));
+                <span class="ident">new</span>.<span class="ident">push</span>(<span class="ident">w</span>.<span class="ident">margin_right</span>(<span class="ident">spacing</span>));
             }
         }
-        <span class="ident">Widget</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Container</span>::<span class="ident">new</span>(<span class="bool-val">true</span>, <span class="ident">new</span>)))
+        <span class="ident">Widget::new</span>(<span class="ident">Box::new</span>(<span class="ident">Container::new</span>(<span class="bool-val">true</span>, <span class="ident">new</span>)))
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">custom_col</span>(<span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">Widget</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Container</span>::<span class="ident">new</span>(<span class="bool-val">false</span>, <span class="ident">widgets</span>)))
+    <span class="doccomment">/// Creates a column with the specified widgets. No margins or other layouting is applied.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">custom_col</span>(<span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident">Widget::new</span>(<span class="ident">Box::new</span>(<span class="ident">Container::new</span>(<span class="bool-val">false</span>, <span class="ident">widgets</span>)))
     }
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">col</span>(<span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+
+    <span class="doccomment">/// Creates a column with the specified widgets, with a `spacing` sized margin between members</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">evenly_spaced_col</span>(<span class="ident">spacing</span>: <span class="ident">usize</span>, <span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">widgets</span>.<span class="ident">len</span>();
         <span class="comment">// TODO Time for that is_last iterator?</span>
         <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">w</span>) <span class="kw">in</span> <span class="ident">widgets</span>.<span class="ident">into_iter</span>().<span class="ident">enumerate</span>() {
-            <span class="kw">if</span> <span class="ident">idx</span> <span class="op">=</span><span class="op">=</span> <span class="ident">len</span> <span class="op">-</span> <span class="number">1</span> {
+            <span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="ident">len</span> <span class="op">-</span> <span class="number">1</span> {
                 <span class="ident">new</span>.<span class="ident">push</span>(<span class="ident">w</span>);
             } <span class="kw">else</span> {
-                <span class="ident">new</span>.<span class="ident">push</span>(<span class="ident">w</span>.<span class="ident">margin_below</span>(<span class="number">10</span>));
+                <span class="ident">new</span>.<span class="ident">push</span>(<span class="ident">w</span>.<span class="ident">margin_below</span>(<span class="ident">spacing</span>));
             }
         }
-        <span class="ident">Widget</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Container</span>::<span class="ident">new</span>(<span class="bool-val">false</span>, <span class="ident">new</span>)))
+        <span class="ident">Widget::new</span>(<span class="ident">Box::new</span>(<span class="ident">Container::new</span>(<span class="bool-val">false</span>, <span class="ident">new</span>)))
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nothing</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">Widget</span>::<span class="ident">new</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Nothing</span> {}))
+    <span class="doccomment">/// Creates a column with the specified widgets. Every member gets a default vertical margin.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">col</span>(<span class="ident">widgets</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident"><span class="self">Self</span>::evenly_spaced_col</span>(<span class="number">10</span>, <span class="ident">widgets</span>)
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nothing</span>() -&gt; <span class="ident">Widget</span> {
+        <span class="ident">Widget::new</span>(<span class="ident">Box::new</span>(<span class="ident">Nothing</span> {}))
     }
 
     <span class="comment">// Also returns the hitbox of the entire widget</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_geom</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">exact_pct_width</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">GeomBatch</span>, <span class="ident">Polygon</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_geom</span>(
+        <span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>,
+        <span class="ident">exact_pct_width</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
+    ) -&gt; (<span class="ident">GeomBatch</span>, <span class="ident">Polygon</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">w</span>) <span class="op">=</span> <span class="ident">exact_pct_width</span> {
             <span class="comment">// TODO 35 is a sad magic number. By default, Panels have padding of 16, so assuming</span>
             <span class="comment">// this geometry is going in one of those, it makes sense to subtract 32. But that still</span>
             <span class="comment">// caused some scrolling in a test, so snip away a few more pixels.</span>
             <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">min_size</span>.<span class="ident">width</span> <span class="op">=</span>
-                <span class="ident">Dimension</span>::<span class="ident">Points</span>((<span class="ident">w</span> <span class="op">*</span> <span class="ident">ctx</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span>) <span class="kw">as</span> <span class="ident">f32</span> <span class="op">-</span> <span class="number">35.0</span>);
+                <span class="ident">Dimension::Points</span>((<span class="ident">w</span> <span class="op">*</span> <span class="ident">ctx</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span>) <span class="kw">as</span> <span class="ident">f32</span> <span class="op">-</span> <span class="number">35.0</span>);
         }
 
         <span class="comment">// Pretend we&#39;re in a Panel and basically copy recompute_layout</span>
         {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stretch</span> <span class="op">=</span> <span class="ident">Stretch</span>::<span class="ident">new</span>();
-            <span class="kw">let</span> <span class="ident">root</span> <span class="op">=</span> <span class="ident">stretch</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">taffy</span> <span class="op">=</span> <span class="ident">Taffy::new</span>();
+            <span class="kw">let</span> <span class="ident">root</span> <span class="op">=</span> <span class="ident">taffy</span>
                 .<span class="ident">new_node</span>(
                     <span class="ident">Style</span> {
-                        ..<span class="ident">Default</span>::<span class="ident">default</span>()
+                        ..<span class="ident">Default::default</span>()
                     },
-                    <span class="ident">Vec</span>::<span class="ident">new</span>(),
+                    <span class="kw-2">&amp;</span>[],
                 )
                 .<span class="ident">unwrap</span>();
 
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">nodes</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[];
-            <span class="self">self</span>.<span class="ident">get_flexbox</span>(<span class="ident">root</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stretch</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">nodes</span>);
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">nodes</span> <span class="op">=</span> <span class="macro">vec!</span>[];
+            <span class="self">self</span>.<span class="ident">get_flexbox</span>(<span class="ident">root</span>, <span class="kw-2">&amp;mut</span> <span class="ident">taffy</span>, <span class="kw-2">&amp;mut</span> <span class="ident">nodes</span>);
             <span class="ident">nodes</span>.<span class="ident">reverse</span>();
 
             <span class="kw">let</span> <span class="ident">container_size</span> <span class="op">=</span> <span class="ident">Size</span> {
-                <span class="ident">width</span>: <span class="ident">Number</span>::<span class="ident">Undefined</span>,
-                <span class="ident">height</span>: <span class="ident">Number</span>::<span class="ident">Undefined</span>,
+                <span class="ident">width</span>: <span class="ident">Number::Undefined</span>,
+                <span class="ident">height</span>: <span class="ident">Number::Undefined</span>,
             };
-            <span class="ident">stretch</span>.<span class="ident">compute_layout</span>(<span class="ident">root</span>, <span class="ident">container_size</span>).<span class="ident">unwrap</span>();
+            <span class="ident">taffy</span>.<span class="ident">compute_layout</span>(<span class="ident">root</span>, <span class="ident">container_size</span>).<span class="ident">unwrap</span>();
 
-            <span class="self">self</span>.<span class="ident">apply_flexbox</span>(<span class="kw-2">&amp;</span><span class="ident">stretch</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">nodes</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, (<span class="number">0.0</span>, <span class="number">0.0</span>), <span class="ident">ctx</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>);
-            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">nodes</span>.<span class="ident">is_empty</span>());
+            <span class="self">self</span>.<span class="ident">apply_flexbox</span>(<span class="kw-2">&amp;</span><span class="ident">taffy</span>, <span class="kw-2">&amp;mut</span> <span class="ident">nodes</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, (<span class="number">0.0</span>, <span class="number">0.0</span>), <span class="ident">ctx</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>);
+            <span class="macro">assert!</span>(<span class="ident">nodes</span>.<span class="ident">is_empty</span>());
         }
 
         <span class="comment">// Now build one big batch from all of the geometry, which now has the correct top left</span>
         <span class="comment">// position.</span>
         <span class="kw">let</span> <span class="ident">hitbox</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">rect</span>.<span class="ident">to_polygon</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">batch</span> <span class="op">=</span> <span class="ident">GeomBatch</span>::<span class="ident">new</span>();
-        <span class="self">self</span>.<span class="ident">consume_geometry</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">batch</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">batch</span> <span class="op">=</span> <span class="ident">GeomBatch::new</span>();
+        <span class="self">self</span>.<span class="ident">consume_geometry</span>(<span class="kw-2">&amp;mut</span> <span class="ident">batch</span>);
         <span class="ident">batch</span>.<span class="ident">autocrop_dims</span> <span class="op">=</span> <span class="bool-val">false</span>;
         (<span class="ident">batch</span>, <span class="ident">hitbox</span>)
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">horiz_separator</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">pct_width</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
-            <span class="ident">ctx</span>,
-            <span class="ident">GeomBatch</span>::<span class="ident">from</span>(<span class="macro">vec</span><span class="macro">!</span>[(
-                <span class="ident">Color</span>::<span class="ident">WHITE</span>,
-                <span class="ident">Polygon</span>::<span class="ident">rectangle</span>(<span class="ident">pct_width</span> <span class="op">*</span> <span class="ident">ctx</span>.<span class="ident">canvas</span>.<span class="ident">window_width</span>, <span class="number">2.0</span>),
-            )]),
-        )
-        .<span class="ident">centered_horiz</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">horiz_separator</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">pct_container_width</span>: <span class="ident">f64</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident">GeomBatch::from</span>(<span class="macro">vec!</span>[(<span class="ident">Color::CLEAR</span>, <span class="ident">Polygon::rectangle</span>(<span class="number">0.1</span>, <span class="number">2.0</span>))])
+            .<span class="ident">into_widget</span>(<span class="ident">ctx</span>)
+            .<span class="ident">container</span>()
+            .<span class="ident">bg</span>(<span class="ident">ctx</span>.<span class="ident">style</span>().<span class="ident">section_outline</span>.<span class="number">1</span>)
+            .<span class="ident">force_width_parent_pct</span>(<span class="ident">pct_container_width</span>)
+            .<span class="ident">centered_horiz</span>()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">vert_separator</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">height_px</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Widget</span> {
-        <span class="ident">Widget</span>::<span class="ident">draw_batch</span>(
-            <span class="ident">ctx</span>,
-            <span class="ident">GeomBatch</span>::<span class="ident">from</span>(<span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">Color</span>::<span class="ident">WHITE</span>, <span class="ident">Polygon</span>::<span class="ident">rectangle</span>(<span class="number">2.0</span>, <span class="ident">height_px</span>))]),
-        )
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">vert_separator</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">height_px</span>: <span class="ident">f64</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident">GeomBatch::from</span>(<span class="macro">vec!</span>[(
+            <span class="ident">ctx</span>.<span class="ident">style</span>().<span class="ident">section_outline</span>.<span class="number">1</span>,
+            <span class="ident">Polygon::rectangle</span>(<span class="number">2.0</span>, <span class="ident">height_px</span>),
+        )])
+        .<span class="ident">into_widget</span>(<span class="ident">ctx</span>)
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">placeholder</span>(<span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="ident">EventCtx</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">Widget</span> {
+        <span class="ident">Text::new</span>().<span class="ident">into_widget</span>(<span class="ident">ctx</span>).<span class="ident">named</span>(<span class="ident">label</span>)
     }
 }
 
 <span class="comment">// Internals</span>
 <span class="kw">impl</span> <span class="ident">Widget</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GfxCtx</span>) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GfxCtx</span>) {
         <span class="comment">// Don&#39;t draw these yet; clipping is still in effect.</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;horiz scrollbar&quot;</span>.<span class="ident">to_string</span>())
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;vert scrollbar&quot;</span>.<span class="ident">to_string</span>())
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;horiz scrollbar&quot;</span>.<span class="ident">to_string</span>())
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;vert scrollbar&quot;</span>.<span class="ident">to_string</span>())
         {
             <span class="kw">return</span>;
         }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">bg</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">bg</span> {
-            <span class="ident">g</span>.<span class="ident">redraw_at</span>(<span class="ident">ScreenPt</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">rect</span>.<span class="ident">x1</span>, <span class="self">self</span>.<span class="ident">rect</span>.<span class="ident">y1</span>), <span class="ident">bg</span>);
+            <span class="ident">g</span>.<span class="ident">redraw_at</span>(<span class="ident">ScreenPt::new</span>(<span class="self">self</span>.<span class="ident">rect</span>.<span class="ident">x1</span>, <span class="self">self</span>.<span class="ident">rect</span>.<span class="ident">y1</span>), <span class="ident">bg</span>);
         }
 
         <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">draw</span>(<span class="ident">g</span>);
     }
 
     <span class="comment">// Populate a flattened list of Nodes, matching the traversal order</span>
-    <span class="kw">fn</span> <span class="ident">get_flexbox</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">parent</span>: <span class="ident">Node</span>, <span class="ident">stretch</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stretch</span>, <span class="ident">nodes</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&gt;</span>) {
+    <span class="kw">fn</span> <span class="ident">get_flexbox</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">parent</span>: <span class="ident">Node</span>, <span class="ident">taffy</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Taffy</span>, <span class="ident">nodes</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&gt;</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">style</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>;
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">container</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">Container</span><span class="op">&gt;</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">style</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">clone</span>();
             <span class="ident">style</span>.<span class="ident">flex_direction</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">container</span>.<span class="ident">is_row</span> {
-                <span class="ident">FlexDirection</span>::<span class="ident">Row</span>
+                <span class="ident">FlexDirection::Row</span>
             } <span class="kw">else</span> {
-                <span class="ident">FlexDirection</span>::<span class="ident">Column</span>
+                <span class="ident">FlexDirection::Column</span>
             };
-            <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="ident">stretch</span>.<span class="ident">new_node</span>(<span class="ident">style</span>, <span class="ident">Vec</span>::<span class="ident">new</span>()).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="ident">taffy</span>.<span class="ident">new_node</span>(<span class="ident">style</span>, <span class="kw-2">&amp;</span>[]).<span class="ident">unwrap</span>();
             <span class="ident">nodes</span>.<span class="ident">push</span>(<span class="ident">node</span>);
             <span class="kw">for</span> <span class="ident">widget</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">container</span>.<span class="ident">members</span> {
-                <span class="ident">widget</span>.<span class="ident">get_flexbox</span>(<span class="ident">node</span>, <span class="ident">stretch</span>, <span class="ident">nodes</span>);
+                <span class="ident">widget</span>.<span class="ident">get_flexbox</span>(<span class="ident">node</span>, <span class="ident">taffy</span>, <span class="ident">nodes</span>);
             }
-            <span class="ident">stretch</span>.<span class="ident">add_child</span>(<span class="ident">parent</span>, <span class="ident">node</span>).<span class="ident">unwrap</span>();
-            <span class="kw">return</span>;
+            <span class="ident">taffy</span>.<span class="ident">add_child</span>(<span class="ident">parent</span>, <span class="ident">node</span>).<span class="ident">unwrap</span>();
         } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">style</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">style</span>.<span class="ident">clone</span>();
             <span class="ident">style</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">Size</span> {
-                <span class="ident">width</span>: <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">get_dims</span>().<span class="ident">width</span> <span class="kw">as</span> <span class="ident">f32</span>),
-                <span class="ident">height</span>: <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">get_dims</span>().<span class="ident">height</span> <span class="kw">as</span> <span class="ident">f32</span>),
+                <span class="ident">width</span>: <span class="ident">Dimension::Points</span>(<span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">get_dims</span>().<span class="ident">width</span> <span class="kw">as</span> <span class="ident">f32</span>),
+                <span class="ident">height</span>: <span class="ident">Dimension::Points</span>(<span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">get_dims</span>().<span class="ident">height</span> <span class="kw">as</span> <span class="ident">f32</span>),
             };
-            <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="ident">stretch</span>.<span class="ident">new_node</span>(<span class="ident">style</span>, <span class="ident">Vec</span>::<span class="ident">new</span>()).<span class="ident">unwrap</span>();
-            <span class="ident">stretch</span>.<span class="ident">add_child</span>(<span class="ident">parent</span>, <span class="ident">node</span>).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="ident">taffy</span>.<span class="ident">new_node</span>(<span class="ident">style</span>, <span class="kw-2">&amp;</span>[]).<span class="ident">unwrap</span>();
+            <span class="ident">taffy</span>.<span class="ident">add_child</span>(<span class="ident">parent</span>, <span class="ident">node</span>).<span class="ident">unwrap</span>();
             <span class="ident">nodes</span>.<span class="ident">push</span>(<span class="ident">node</span>);
         }
     }
 
     <span class="comment">// TODO Clean up argument passing</span>
     <span class="kw">fn</span> <span class="ident">apply_flexbox</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">stretch</span>: <span class="kw-2">&amp;</span><span class="ident">Stretch</span>,
-        <span class="ident">nodes</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">taffy</span>: <span class="kw-2">&amp;</span><span class="ident">Taffy</span>,
+        <span class="ident">nodes</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Node</span><span class="op">&gt;</span>,
         <span class="ident">dx</span>: <span class="ident">f64</span>,
         <span class="ident">dy</span>: <span class="ident">f64</span>,
         <span class="ident">scroll_offset</span>: (<span class="ident">f64</span>, <span class="ident">f64</span>),
@@ -1312,38 +1503,48 @@
         <span class="ident">recompute_layout</span>: <span class="ident">bool</span>,
         <span class="ident">defer_draw</span>: <span class="ident">bool</span>,
     ) {
-        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">stretch</span>.<span class="ident">layout</span>(<span class="ident">nodes</span>.<span class="ident">pop</span>().<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">taffy</span>.<span class="ident">layout</span>(<span class="ident">nodes</span>.<span class="ident">pop</span>().<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">x</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">location</span>.<span class="ident">x</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">y</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">location</span>.<span class="ident">y</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">width</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">size</span>.<span class="ident">width</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">height</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">size</span>.<span class="ident">height</span>.<span class="ident">into</span>();
         <span class="comment">// Don&#39;t scroll the scrollbars</span>
-        <span class="kw">let</span> <span class="ident">top_left</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;horiz scrollbar&quot;</span>.<span class="ident">to_string</span>())
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="string">&quot;vert scrollbar&quot;</span>.<span class="ident">to_string</span>())
+        <span class="kw">let</span> <span class="ident">top_left</span> <span class="op">=</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;horiz scrollbar&quot;</span>.<span class="ident">to_string</span>())
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="string">&quot;vert scrollbar&quot;</span>.<span class="ident">to_string</span>())
         {
-            <span class="ident">ScreenPt</span>::<span class="ident">new</span>(<span class="ident">x</span>, <span class="ident">y</span>)
+            <span class="ident">ScreenPt::new</span>(<span class="ident">x</span>, <span class="ident">y</span>)
         } <span class="kw">else</span> {
-            <span class="ident">ScreenPt</span>::<span class="ident">new</span>(<span class="ident">x</span> <span class="op">+</span> <span class="ident">dx</span> <span class="op">-</span> <span class="ident">scroll_offset</span>.<span class="number">0</span>, <span class="ident">y</span> <span class="op">+</span> <span class="ident">dy</span> <span class="op">-</span> <span class="ident">scroll_offset</span>.<span class="number">1</span>)
+            <span class="ident">ScreenPt::new</span>(<span class="ident">x</span> <span class="op">+</span> <span class="ident">dx</span> <span class="op">-</span> <span class="ident">scroll_offset</span>.<span class="number">0</span>, <span class="ident">y</span> <span class="op">+</span> <span class="ident">dy</span> <span class="op">-</span> <span class="ident">scroll_offset</span>.<span class="number">1</span>)
         };
-        <span class="self">self</span>.<span class="ident">rect</span> <span class="op">=</span> <span class="ident">ScreenRectangle</span>::<span class="ident">top_left</span>(<span class="ident">top_left</span>, <span class="ident">ScreenDims</span>::<span class="ident">new</span>(<span class="ident">width</span>, <span class="ident">height</span>));
+        <span class="self">self</span>.<span class="ident">rect</span> <span class="op">=</span> <span class="ident">ScreenRectangle::top_left</span>(<span class="ident">top_left</span>, <span class="ident">ScreenDims::new</span>(<span class="ident">width</span>, <span class="ident">height</span>));
 
         <span class="comment">// Assume widgets don&#39;t dynamically change, so we just upload the background once.</span>
         <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">bg</span>.<span class="ident">is_none</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">recompute_layout</span>)
             <span class="op">&amp;&amp;</span> (<span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">bg_color</span>.<span class="ident">is_some</span>() <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">outline</span>.<span class="ident">is_some</span>())
         {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">batch</span> <span class="op">=</span> <span class="ident">GeomBatch</span>::<span class="ident">new</span>();
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">bg_color</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">batch</span> <span class="op">=</span> <span class="ident">GeomBatch::new</span>();
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">bg_color</span> {
                 <span class="ident">batch</span>.<span class="ident">push</span>(
-                    <span class="ident">c</span>,
-                    <span class="ident">Polygon</span>::<span class="ident">rounded_rectangle</span>(<span class="ident">width</span>, <span class="ident">height</span>, <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">rounded_radius</span>),
+                    <span class="ident">color</span>,
+                    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">corner_rounding</span> {
+                        <span class="ident">CornerRounding::CornerRadii</span>(<span class="ident">corner_radii</span>) =&gt; {
+                            <span class="ident">Polygon::rounded_rectangle</span>(<span class="ident">width</span>, <span class="ident">height</span>, <span class="ident">corner_radii</span>)
+                        }
+                        <span class="ident">CornerRounding::FullyRounded</span> =&gt; <span class="ident">Polygon::pill</span>(<span class="ident">width</span>, <span class="ident">height</span>),
+                    },
                 );
             }
+
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">thickness</span>, <span class="ident">color</span>)) <span class="op">=</span> <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">outline</span> {
                 <span class="ident">batch</span>.<span class="ident">push</span>(
                     <span class="ident">color</span>,
-                    <span class="ident">Polygon</span>::<span class="ident">rounded_rectangle</span>(<span class="ident">width</span>, <span class="ident">height</span>, <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">rounded_radius</span>)
-                        .<span class="ident">to_outline</span>(<span class="ident">Distance</span>::<span class="ident">meters</span>(<span class="ident">thickness</span>))
-                        .<span class="ident">unwrap</span>(),
+                    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">layout</span>.<span class="ident">corner_rounding</span> {
+                        <span class="ident">CornerRounding::CornerRadii</span>(<span class="ident">corner_radii</span>) =&gt; {
+                            <span class="ident">Polygon::rounded_rectangle</span>(<span class="ident">width</span>, <span class="ident">height</span>, <span class="ident">corner_radii</span>)
+                        }
+                        <span class="ident">CornerRounding::FullyRounded</span> =&gt; <span class="ident">Polygon::pill</span>(<span class="ident">width</span>, <span class="ident">height</span>),
+                    }
+                    .<span class="ident">to_outline</span>(<span class="ident">Distance::meters</span>(<span class="ident">thickness</span>)),
                 );
             }
             <span class="kw">if</span> <span class="ident">defer_draw</span> {
@@ -1355,9 +1556,9 @@
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">container</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_mut</span>::<span class="op">&lt;</span><span class="ident">Container</span><span class="op">&gt;</span>() {
             <span class="comment">// layout() doesn&#39;t return absolute position; it&#39;s relative to the container.</span>
-            <span class="kw">for</span> <span class="ident">widget</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">container</span>.<span class="ident">members</span> {
+            <span class="kw">for</span> <span class="ident">widget</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">container</span>.<span class="ident">members</span> {
                 <span class="ident">widget</span>.<span class="ident">apply_flexbox</span>(
-                    <span class="ident">stretch</span>,
+                    <span class="ident">taffy</span>,
                     <span class="ident">nodes</span>,
                     <span class="ident">x</span> <span class="op">+</span> <span class="ident">dx</span>,
                     <span class="ident">y</span> <span class="op">+</span> <span class="ident">dy</span>,
@@ -1372,12 +1573,14 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_all_click_actions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">actions</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) {
+    <span class="kw">fn</span> <span class="ident">get_all_click_actions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">actions</span>: <span class="kw-2">&amp;mut</span> <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">btn</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">Button</span><span class="op">&gt;</span>() {
-            <span class="kw">if</span> <span class="ident">actions</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">btn</span>.<span class="ident">action</span>) {
-                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Two buttons in one Panel both use action {}&quot;</span>, <span class="ident">btn</span>.<span class="ident">action</span>);
+            <span class="kw">if</span> <span class="ident">btn</span>.<span class="ident">is_enabled</span>() {
+                <span class="kw">if</span> <span class="ident">actions</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">btn</span>.<span class="ident">action</span>) {
+                    <span class="macro">panic!</span>(<span class="string">&quot;Two buttons in one Panel both use action {}&quot;</span>, <span class="ident">btn</span>.<span class="ident">action</span>);
+                }
+                <span class="ident">actions</span>.<span class="ident">insert</span>(<span class="ident">btn</span>.<span class="ident">action</span>.<span class="ident">clone</span>());
             }
-            <span class="ident">actions</span>.<span class="ident">insert</span>(<span class="ident">btn</span>.<span class="ident">action</span>.<span class="ident">clone</span>());
         } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">container</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">Container</span><span class="op">&gt;</span>() {
             <span class="kw">for</span> <span class="ident">w</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">container</span>.<span class="ident">members</span> {
                 <span class="ident">w</span>.<span class="ident">get_all_click_actions</span>(<span class="ident">actions</span>);
@@ -1385,12 +1588,12 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">currently_hovering</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">currently_hovering</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">btn</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">Button</span><span class="op">&gt;</span>() {
             <span class="kw">if</span> <span class="ident">btn</span>.<span class="ident">hovering</span> {
                 <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">btn</span>.<span class="ident">action</span>);
             }
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">checkbox</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">Checkbox</span><span class="op">&gt;</span>() {
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">checkbox</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">Toggle</span><span class="op">&gt;</span>() {
             <span class="kw">if</span> <span class="ident">checkbox</span>.<span class="ident">btn</span>.<span class="ident">hovering</span> {
                 <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">checkbox</span>.<span class="ident">btn</span>.<span class="ident">action</span>);
             }
@@ -1404,19 +1607,19 @@
         <span class="prelude-val">None</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">restore</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventCtx</span>, <span class="ident">prev</span>: <span class="kw-2">&amp;</span><span class="ident">Panel</span>) {
+    <span class="kw">fn</span> <span class="ident">restore</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">ctx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">EventCtx</span>, <span class="ident">prev</span>: <span class="kw-2">&amp;</span><span class="ident">Panel</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">container</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_mut</span>::<span class="op">&lt;</span><span class="ident">Container</span><span class="op">&gt;</span>() {
-            <span class="kw">for</span> <span class="ident">w</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">container</span>.<span class="ident">members</span> {
+            <span class="kw">for</span> <span class="ident">w</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">container</span>.<span class="ident">members</span> {
                 <span class="ident">w</span>.<span class="ident">restore</span>(<span class="ident">ctx</span>, <span class="ident">prev</span>);
             }
         } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">can_restore</span>() {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">other</span>) <span class="op">=</span> <span class="ident">prev</span>.<span class="ident">maybe_find</span>(<span class="self">self</span>.<span class="ident">id</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>()) {
-                <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">restore</span>(<span class="ident">ctx</span>, <span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">widget</span>);
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">other</span>) <span class="op">=</span> <span class="ident">prev</span>.<span class="ident">maybe_find_widget</span>(<span class="self">self</span>.<span class="ident">id</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>()) {
+                <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">restore</span>(<span class="ident">ctx</span>, <span class="ident">other</span>.<span class="ident">widget</span>.<span class="ident">as_ref</span>());
             }
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">consume_geometry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">batch</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">GeomBatch</span>) {
+    <span class="kw">fn</span> <span class="ident">consume_geometry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">batch</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GeomBatch</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">bg</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">bg_batch</span>.<span class="ident">take</span>() {
             <span class="ident">batch</span>.<span class="ident">append</span>(<span class="ident">bg</span>.<span class="ident">translate</span>(<span class="self">self</span>.<span class="ident">rect</span>.<span class="ident">x1</span>, <span class="self">self</span>.<span class="ident">rect</span>.<span class="ident">y1</span>));
         }
@@ -1431,19 +1634,12 @@
         } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">defer</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast</span>::<span class="op">&lt;</span><span class="ident">DeferDraw</span><span class="op">&gt;</span>() {
             <span class="ident">batch</span>.<span class="ident">append</span>(<span class="ident">defer</span>.<span class="ident">batch</span>.<span class="ident">translate</span>(<span class="ident">defer</span>.<span class="ident">top_left</span>.<span class="ident">x</span>, <span class="ident">defer</span>.<span class="ident">top_left</span>.<span class="ident">y</span>));
         } <span class="kw">else</span> {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;to_geom called on a widget tree that has something interactive&quot;</span>);
+            <span class="macro">panic!</span>(<span class="string">&quot;to_geom called on a widget tree that has something interactive&quot;</span>);
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_btn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">widget</span>
-            .<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="ident">Button</span><span class="op">&gt;</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">btn</span><span class="op">|</span> <span class="ident">btn</span>.<span class="ident">action</span> <span class="op">=</span><span class="op">=</span> <span class="ident">name</span>)
-            .<span class="ident">unwrap_or</span>(<span class="bool-val">false</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">find</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Widget</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">to_string</span>()) {
+    <span class="kw">fn</span> <span class="ident">find</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Widget</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">to_string</span>()) {
             <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="self">self</span>);
         }
 
@@ -1457,13 +1653,13 @@
 
         <span class="prelude-val">None</span>
     }
-    <span class="kw">fn</span> <span class="ident">find_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Widget</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">to_string</span>()) {
+    <span class="kw">fn</span> <span class="ident">find_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">Widget</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">to_string</span>()) {
             <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="self">self</span>);
         }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">container</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_mut</span>::<span class="op">&lt;</span><span class="ident">Container</span><span class="op">&gt;</span>() {
-            <span class="kw">for</span> <span class="ident">widget</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">container</span>.<span class="ident">members</span> {
+            <span class="kw">for</span> <span class="ident">widget</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">container</span>.<span class="ident">members</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">w</span>) <span class="op">=</span> <span class="ident">widget</span>.<span class="ident">find_mut</span>(<span class="ident">name</span>) {
                     <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">w</span>);
                 }
@@ -1473,16 +1669,16 @@
         <span class="prelude-val">None</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">to_string</span>()) {
-            <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Can&#39;t take({}), it&#39;s a top-level widget&quot;</span>, <span class="ident">name</span>);
+    <span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Widget</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">id</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">to_string</span>()) {
+            <span class="macro">panic!</span>(<span class="string">&quot;Can&#39;t take({}), it&#39;s a top-level widget&quot;</span>, <span class="ident">name</span>);
         }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">container</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast_mut</span>::<span class="op">&lt;</span><span class="ident">Container</span><span class="op">&gt;</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">members</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">members</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found</span> <span class="op">=</span> <span class="prelude-val">None</span>;
             <span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">widget</span> <span class="kw">in</span> <span class="ident">container</span>.<span class="ident">members</span>.<span class="ident">drain</span>(..) {
-                <span class="kw">if</span> <span class="ident">widget</span>.<span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">to_string</span>()) {
+                <span class="kw">if</span> <span class="ident">widget</span>.<span class="ident">id</span> <span class="op">==</span> <span class="prelude-val">Some</span>(<span class="ident">name</span>.<span class="ident">to_string</span>()) {
                     <span class="ident">found</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">widget</span>);
                 } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">w</span>) <span class="op">=</span> <span class="ident">widget</span>.<span class="ident">take</span>(<span class="ident">name</span>) {
                     <span class="ident">found</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">w</span>);
@@ -1497,44 +1693,60 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">take_btn</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Button</span> {
-        <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast</span>::<span class="op">&lt;</span><span class="ident">Button</span><span class="op">&gt;</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>()
-    }
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">take_menu</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Menu</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast</span>::<span class="op">&lt;</span><span class="ident">Menu</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>()
-    }
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">take_just_draw</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">JustDraw</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">take_just_draw</span>(<span class="self">self</span>) -&gt; <span class="ident">JustDraw</span> {
         <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">widget</span>.<span class="ident">downcast</span>::<span class="op">&lt;</span><span class="ident">JustDraw</span><span class="op">&gt;</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>()
     }
 }
 
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EdgeInsets</span> {
-    <span class="kw">pub</span> <span class="ident">top</span>: <span class="ident">f32</span>,
-    <span class="kw">pub</span> <span class="ident">left</span>: <span class="ident">f32</span>,
-    <span class="kw">pub</span> <span class="ident">bottom</span>: <span class="ident">f32</span>,
-    <span class="kw">pub</span> <span class="ident">right</span>: <span class="ident">f32</span>,
+    <span class="kw">pub</span> <span class="ident">top</span>: <span class="ident">f64</span>,
+    <span class="kw">pub</span> <span class="ident">left</span>: <span class="ident">f64</span>,
+    <span class="kw">pub</span> <span class="ident">bottom</span>: <span class="ident">f64</span>,
+    <span class="kw">pub</span> <span class="ident">right</span>: <span class="ident">f64</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">EdgeInsets</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">zero</span>() -&gt; <span class="self">Self</span> {
+        <span class="ident">EdgeInsets</span> {
+            <span class="ident">top</span>: <span class="number">0.0</span>,
+            <span class="ident">left</span>: <span class="number">0.0</span>,
+            <span class="ident">bottom</span>: <span class="number">0.0</span>,
+            <span class="ident">right</span>: <span class="number">0.0</span>,
+        }
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">uniform</span>(<span class="ident">inset</span>: <span class="ident">f64</span>) -&gt; <span class="self">Self</span> {
+        <span class="ident">EdgeInsets</span> {
+            <span class="ident">top</span>: <span class="ident">inset</span>,
+            <span class="ident">left</span>: <span class="ident">inset</span>,
+            <span class="ident">bottom</span>: <span class="ident">inset</span>,
+            <span class="ident">right</span>: <span class="ident">inset</span>,
+        }
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">EdgeInsets</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">uniform_size</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">EdgeInsets</span> {
-        <span class="ident">EdgeInsets</span> {
-            <span class="ident">top</span>: <span class="ident">uniform_size</span> <span class="kw">as</span> <span class="ident">f32</span>,
-            <span class="ident">left</span>: <span class="ident">uniform_size</span> <span class="kw">as</span> <span class="ident">f32</span>,
-            <span class="ident">bottom</span>: <span class="ident">uniform_size</span> <span class="kw">as</span> <span class="ident">f32</span>,
-            <span class="ident">right</span>: <span class="ident">uniform_size</span> <span class="kw">as</span> <span class="ident">f32</span>,
-        }
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">uniform_size</span>: <span class="ident">usize</span>) -&gt; <span class="ident">EdgeInsets</span> {
+        <span class="ident">EdgeInsets::uniform</span>(<span class="ident">uniform_size</span> <span class="kw">as</span> <span class="ident">f64</span>)
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">EdgeInsets</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">uniform_size</span>: <span class="ident">f64</span>) -&gt; <span class="ident">EdgeInsets</span> {
+        <span class="ident">EdgeInsets::uniform</span>(<span class="ident">uniform_size</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">EdgeInsets</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Rect</span><span class="op">&lt;</span><span class="ident">Dimension</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">insets</span>: <span class="ident">EdgeInsets</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Rect</span><span class="op">&lt;</span><span class="ident">Dimension</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">insets</span>: <span class="ident">EdgeInsets</span>) -&gt; <span class="ident">Rect</span><span class="op">&lt;</span><span class="ident">Dimension</span><span class="op">&gt;</span> {
         <span class="ident">Rect</span> {
-            <span class="ident">start</span>: <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">insets</span>.<span class="ident">left</span>),
-            <span class="ident">end</span>: <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">insets</span>.<span class="ident">right</span>),
-            <span class="ident">top</span>: <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">insets</span>.<span class="ident">top</span>),
-            <span class="ident">bottom</span>: <span class="ident">Dimension</span>::<span class="ident">Points</span>(<span class="ident">insets</span>.<span class="ident">bottom</span>),
+            <span class="ident">start</span>: <span class="ident">Dimension::Points</span>(<span class="ident">insets</span>.<span class="ident">left</span> <span class="kw">as</span> <span class="ident">f32</span>),
+            <span class="ident">end</span>: <span class="ident">Dimension::Points</span>(<span class="ident">insets</span>.<span class="ident">right</span> <span class="kw">as</span> <span class="ident">f32</span>),
+            <span class="ident">top</span>: <span class="ident">Dimension::Points</span>(<span class="ident">insets</span>.<span class="ident">top</span> <span class="kw">as</span> <span class="ident">f32</span>),
+            <span class="ident">bottom</span>: <span class="ident">Dimension::Points</span>(<span class="ident">insets</span>.<span class="ident">bottom</span> <span class="kw">as</span> <span class="ident">f32</span>),
         }
     }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "widgetry";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="widgetry" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["DrivingSide",""]],"struct":[["MapConfig",""]]});
+window.SIDEBAR_ITEMS = {};

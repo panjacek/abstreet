@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["config_for_map","Given the name of a map, configure its import."]]};

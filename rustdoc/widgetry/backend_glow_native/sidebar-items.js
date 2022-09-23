@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["compile_shaders",""],["setup",""]],"struct":[["WindowAdapter",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["setup",""]],"struct":[["WindowAdapter",""]]};

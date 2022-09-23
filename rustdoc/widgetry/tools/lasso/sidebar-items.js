@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["Lasso","Draw freehand polygons"],["PolyLineLasso","Draw freehand PolyLine"]]};

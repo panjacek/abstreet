@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["make_controls",""]],"struct":[["ProblemTypes",""],["RelativeProblemMap",""]],"type":[["Options",""]]};
