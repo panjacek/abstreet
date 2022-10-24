@@ -337,6 +337,17 @@
 <span id="337">337</span>
 <span id="338">338</span>
 <span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">abstio::MapName</span>;
 <span class="kw">use</span> <span class="ident">abstutil::Timer</span>;
 <span class="kw">use</span> <span class="ident">geom</span>::{<span class="ident">Distance</span>, <span class="ident">Duration</span>, <span class="ident">Pt2D</span>, <span class="ident">Time</span>};
@@ -348,6 +359,7 @@
 <span class="kw">use</span> <span class="ident">map_gui::tools::DrawSimpleRoadLabels</span>;
 <span class="kw">use</span> <span class="ident">map_gui</span>::{<span class="ident">AppLike</span>, <span class="ident">ID</span>};
 <span class="kw">use</span> <span class="ident">map_model</span>::{<span class="ident">AmenityType</span>, <span class="ident">IntersectionID</span>, <span class="ident">Map</span>, <span class="ident">RoutingParams</span>};
+<span class="kw">use</span> <span class="ident">osm2streets::CrossingType</span>;
 <span class="kw">use</span> <span class="ident">widgetry::tools::URLManager</span>;
 <span class="kw">use</span> <span class="ident">widgetry</span>::{
     <span class="ident">Canvas</span>, <span class="ident">Color</span>, <span class="ident">Drawable</span>, <span class="ident">EventCtx</span>, <span class="ident">GeomBatch</span>, <span class="ident">GfxCtx</span>, <span class="ident">RewriteColor</span>, <span class="ident">SharedAppState</span>, <span class="ident">State</span>,
@@ -370,11 +382,6 @@
     <span class="kw">pub</span> <span class="ident">map</span>: <span class="ident">Map</span>,
     <span class="kw">pub</span> <span class="ident">draw_map</span>: <span class="ident">DrawMap</span>,
 
-    <span class="comment">// These come from a save::Proposal</span>
-    <span class="kw">pub</span> <span class="ident">proposal_name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">partitioning</span>: <span class="ident">Partitioning</span>,
-    <span class="kw">pub</span> <span class="ident">edits</span>: <span class="ident">Edits</span>,
-
     <span class="comment">// The last edited neighbourhood</span>
     <span class="kw">pub</span> <span class="ident">current_neighbourhood</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NeighbourhoodID</span><span class="op">&gt;</span>,
 
@@ -382,15 +389,14 @@
     <span class="comment">// in the &quot;before changes&quot; case, we have to use these. Do NOT use the map&#39;s built-in</span>
     <span class="comment">// pathfinder. (https://github.com/a-b-street/abstreet/issues/852 would make this more clear)</span>
     <span class="kw">pub</span> <span class="ident">routing_params_before_changes</span>: <span class="ident">RoutingParams</span>,
-    <span class="kw">pub</span> <span class="ident">alt_proposals</span>: <span class="ident"><span class="kw">crate</span>::save::AltProposals</span>,
+    <span class="kw">pub</span> <span class="ident">proposals</span>: <span class="ident"><span class="kw">crate</span>::save::Proposals</span>,
     <span class="kw">pub</span> <span class="ident">impact</span>: <span class="ident"><span class="kw">crate</span>::impact::Impact</span>,
 
     <span class="kw">pub</span> <span class="ident">consultation</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NeighbourhoodID</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">consultation_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="comment">// The current consultation should always be based off a built-in proposal</span>
-    <span class="kw">pub</span> <span class="ident">consultation_proposal_path</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="kw">pub</span> <span class="ident">draw_all_filters</span>: <span class="ident">Toggle3Zoomed</span>,
+    <span class="kw">pub</span> <span class="ident">draw_major_road_labels</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DrawSimpleRoadLabels</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">draw_all_road_labels</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DrawSimpleRoadLabels</span><span class="op">&gt;</span>,
     <span class="kw">pub</span> <span class="ident">draw_poi_icons</span>: <span class="ident">Drawable</span>,
     <span class="kw">pub</span> <span class="ident">draw_bus_routes</span>: <span class="ident">Drawable</span>,
@@ -410,31 +416,30 @@
         <span class="kw">let</span> <span class="ident">draw_poi_icons</span> <span class="op">=</span> <span class="ident">render_poi_icons</span>(<span class="ident">ctx</span>, <span class="kw-2">&amp;</span><span class="ident">map</span>);
         <span class="kw">let</span> <span class="ident">draw_bus_routes</span> <span class="op">=</span> <span class="ident">render_bus_routes</span>(<span class="ident">ctx</span>, <span class="kw-2">&amp;</span><span class="ident">map</span>);
 
+        <span class="kw">let</span> <span class="ident">proposals</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::save::Proposals::new</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>, <span class="ident">timer</span>);
+
         <span class="kw">let</span> <span class="ident">per_map</span> <span class="op">=</span> <span class="self">Self</span> {
             <span class="ident">map</span>,
             <span class="ident">draw_map</span>,
 
-            <span class="ident">proposal_name</span>: <span class="prelude-val">None</span>,
-            <span class="ident">partitioning</span>: <span class="ident">Partitioning::empty</span>(),
-            <span class="ident">edits</span>: <span class="ident">Edits::default</span>(),
-
             <span class="ident">current_neighbourhood</span>: <span class="prelude-val">None</span>,
 
             <span class="ident">routing_params_before_changes</span>: <span class="ident">RoutingParams::default</span>(),
-            <span class="ident">alt_proposals</span>: <span class="ident"><span class="kw">crate</span>::save::AltProposals::new</span>(),
+            <span class="ident">proposals</span>,
             <span class="ident">impact</span>: <span class="ident"><span class="kw">crate</span>::impact::Impact::empty</span>(<span class="ident">ctx</span>),
 
             <span class="ident">consultation</span>: <span class="prelude-val">None</span>,
             <span class="ident">consultation_id</span>: <span class="prelude-val">None</span>,
-            <span class="ident">consultation_proposal_path</span>: <span class="prelude-val">None</span>,
 
             <span class="ident">draw_all_filters</span>: <span class="ident">Toggle3Zoomed::empty</span>(<span class="ident">ctx</span>),
+            <span class="ident">draw_major_road_labels</span>: <span class="prelude-val">None</span>,
             <span class="ident">draw_all_road_labels</span>: <span class="prelude-val">None</span>,
             <span class="ident">draw_poi_icons</span>,
             <span class="ident">draw_bus_routes</span>,
 
             <span class="ident">current_trip_name</span>: <span class="prelude-val">None</span>,
         };
+
         <span class="kw">if</span> <span class="op">!</span><span class="ident">CameraState::load</span>(<span class="ident">ctx</span>, <span class="ident">per_map</span>.<span class="ident">map</span>.<span class="ident">get_name</span>()) {
             <span class="comment">// If we didn&#39;t restore a previous camera position, start zoomed out, centered on the</span>
             <span class="comment">// map&#39;s center.</span>
@@ -449,12 +454,11 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Session</span> {
     <span class="kw">pub</span> <span class="ident">edit_mode</span>: <span class="ident"><span class="kw">crate</span>::edit::EditMode</span>,
     <span class="kw">pub</span> <span class="ident">filter_type</span>: <span class="ident">FilterType</span>,
+    <span class="kw">pub</span> <span class="ident">crossing_type</span>: <span class="ident">CrossingType</span>,
 
     <span class="comment">// Remember form settings in different tabs.</span>
     <span class="comment">// Pick areas:</span>
     <span class="kw">pub</span> <span class="ident">draw_neighbourhood_style</span>: <span class="ident"><span class="kw">crate</span>::pick_area::Style</span>,
-    <span class="comment">// Editing:</span>
-    <span class="kw">pub</span> <span class="ident">heuristic</span>: <span class="ident"><span class="kw">crate</span>::filters::auto::Heuristic</span>,
     <span class="comment">// Pathfinding</span>
     <span class="kw">pub</span> <span class="ident">main_road_penalty</span>: <span class="ident">f64</span>,
     <span class="kw">pub</span> <span class="ident">show_walking_cycling_routes</span>: <span class="ident">bool</span>,
@@ -502,6 +506,17 @@
         <span class="ident">CameraState::save</span>(<span class="ident">ctx</span>.<span class="ident">canvas</span>, <span class="self">self</span>.<span class="ident">per_map</span>.<span class="ident">map</span>.<span class="ident">get_name</span>());
         <span class="self">self</span>.<span class="ident">per_map</span> <span class="op">=</span> <span class="ident">PerMap::new</span>(<span class="ident">ctx</span>, <span class="ident">map</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">opts</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cs</span>, <span class="ident">timer</span>);
         <span class="self">self</span>.<span class="ident">opts</span>.<span class="ident">units</span>.<span class="ident">metric</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">per_map</span>.<span class="ident">map</span>.<span class="ident">get_name</span>().<span class="ident">city</span>.<span class="ident">uses_metric</span>();
+
+        <span class="comment">// These two logically belong in PerMap::new, but it&#39;s easier to have the full App</span>
+        <span class="ident"><span class="kw">crate</span>::filters::transform_existing_filters</span>(<span class="ident">ctx</span>, <span class="self">self</span>, <span class="ident">timer</span>);
+        <span class="self">self</span>.<span class="ident">per_map</span>.<span class="ident">draw_all_filters</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">per_map</span>
+            .<span class="ident">proposals</span>
+            .<span class="ident">current_proposal</span>
+            .<span class="ident">edits</span>
+            .<span class="ident">draw</span>(<span class="ident">ctx</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">per_map</span>.<span class="ident">map</span>);
+
+        <span class="ident"><span class="kw">crate</span>::crossings::populate_existing_crossings</span>(<span class="self">self</span>);
     }
 
     <span class="kw">fn</span> <span class="ident">draw_with_opts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">g</span>: <span class="kw-2">&amp;mut</span> <span class="ident">GfxCtx</span>, <span class="ident">_l</span>: <span class="ident">DrawOptions</span>) {
@@ -560,9 +575,9 @@
         <span class="kw">let</span> <span class="ident">session</span> <span class="op">=</span> <span class="ident">Session</span> {
             <span class="ident">edit_mode</span>: <span class="ident"><span class="kw">crate</span>::edit::EditMode::Filters</span>,
             <span class="ident">filter_type</span>: <span class="ident">FilterType::WalkCycleOnly</span>,
+            <span class="ident">crossing_type</span>: <span class="ident">CrossingType::Unsignalized</span>,
 
             <span class="ident">draw_neighbourhood_style</span>: <span class="ident"><span class="kw">crate</span>::pick_area::Style::Simple</span>,
-            <span class="ident">heuristic</span>: <span class="ident"><span class="kw">crate</span>::filters::auto::Heuristic::SplitCells</span>,
             <span class="ident">main_road_penalty</span>: <span class="number">1.0</span>,
             <span class="ident">show_walking_cycling_routes</span>: <span class="bool-val">false</span>,
 
@@ -612,6 +627,13 @@
         );
         <span class="ident">g</span>.<span class="ident">redraw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">per_map</span>.<span class="ident">draw_map</span>.<span class="ident">draw_all_buildings</span>);
         <span class="ident">g</span>.<span class="ident">redraw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">per_map</span>.<span class="ident">draw_map</span>.<span class="ident">draw_all_building_outlines</span>);
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">edits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Edits</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">per_map</span>.<span class="ident">proposals</span>.<span class="ident">current_proposal</span>.<span class="ident">edits</span>
+    }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">partitioning</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Partitioning</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">per_map</span>.<span class="ident">proposals</span>.<span class="ident">current_proposal</span>.<span class="ident">partitioning</span>
     }
 }
 
